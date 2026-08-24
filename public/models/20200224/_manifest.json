@@ -1,0 +1,834 @@
+{
+  "id": "20200224",
+  "name": "Medium Office - Simple",
+  "description": "Medium office building based on NECB/DOE building program archetypes, 1,660 m2 floorplate, ideal air loads with direct HVAC calculations",
+  "base-idf": "NZN_Medium_Office_v26.idf",
+  "climate-file": "CAN_BC_Victoria.717990_CWEC.epw",
+  "tf-models": [
+    {
+      "path": "model_new/model.json",
+      "selection": {
+        "HVAC_DELIVERY_SYSTEM_TYPE": "Typical VAV",
+        "HVAC_PLANT_TYPE": "Conventional Boiler/Chiller"
+      },
+      "features": [
+        {
+          "ui": {
+            "position": 0,
+            "control": "categorical"
+          },
+          "default": "Victoria, BC",
+          "feature": {"id": "LOCATION"},
+          "kind": "exterior-context",
+          "units": "n/a"
+        },
+        {
+          "ui": {
+            "position": 1,
+            "control": "categorical"
+          },
+          "default": "Medium Office",
+          "feature": { "id": "BUILDING_TYPE"},
+          "kind": "exterior-context",
+          "units": "n/a"
+        },
+        {
+          "ui": {
+            "position": 2,
+            "control": "continuous"
+          },
+          "default": 1660,
+          "feature": {"id": "FLOOR_AREA"},
+          "kind": "exterior-context",
+          "units": "m2"
+        },
+        {
+          "ui": {
+            "position": 3
+          },
+          "default": 0.18,
+          "feature": {"id": "GHG_INTENSITY_NG"},
+          "kind": "exterior-context",
+          "units": "kgCO2/kWh"
+        },
+        {
+          "ui": {
+            "position": 4
+          },
+          "default": 0,
+          "feature": {"id": "GHG_INTENSITY_OTHER"},
+          "kind": "exterior-context",
+          "units": "kgCO2/kWh"
+        },
+        {
+          "ui": {
+            "position": 5
+          },
+          "default": 0.02,
+          "feature": {"id": "GHG_INTENSITY_GRID"},
+          "kind": "exterior-context",
+          "units": "kgCO2/kWh"
+        },
+        {
+          "ui": {
+            "position": 6
+          },
+          "default": 0.03,
+          "feature": {"id": "FUEL_PRICE_NG"},
+          "kind": "exterior-context",
+          "units": "$/kWh"
+        },
+        {
+          "ui": {
+            "position": 7
+          },
+          "default": 0.09,
+          "feature": {"id": "FUEL_PRICE_OTHER"},
+          "kind": "exterior-context",
+          "units": "$/kWh"
+        },
+        {
+          "ui": {
+            "position": 8
+          },
+          "default": 0.08,
+          "feature": {"id": "FUEL_PRICE_GRID"},
+          "kind": "exterior-context",
+          "units": "$/kWh"
+        },
+        {
+          "ui": {
+            "position": 0,
+            "control": "categorical"
+          },
+          "default": "typical VAV",
+          "feature": {"id": "HVAC_DELIVERY_SYSTEM_TYPE"},
+          "kind": "exterior-selection",
+          "notes": "controls a set of parameters in a predefined way",
+          "units": "n/a"
+        },
+        {
+          "ui": {
+            "position": 1,
+            "control": "categorical"
+          },
+          "default": "conventional boiler/chiller",
+          "feature": {"id": "HVAC_PLANT_TYPE"},
+          "kind": "exterior-selection",
+          "notes": "controls a set of parameters in a predefined way",
+          "units": "n/a"
+        },
+        {
+          "energy-plus-label": "North Axis",
+          "tf": {
+            "position": 0,
+            "training-max": 359.92606386920426,
+            "training-scale": 104.02631548541432,
+            "training-mean": 179.7791911304746,
+            "training-variance": 10821.474313470952,
+            "training-min": 0.029660055104692287
+          },
+          "ui": {
+            "position": 0,
+            "control": "continuous"
+          },
+          "default": 1,
+          "feature": {"id": "ORIENTATION"},
+          "kind": "surrogate-input",
+          "units": "degree"
+        },
+        {
+          "energy-plus-label": "Thickness_0",
+          "tf": {
+            "position": 1,
+            "training-max": 0.9998746182829388,
+            "training-scale": 0.25953856195506975,
+            "training-mean": 0.5491311859380626,
+            "training-variance": 0.06736026514170557,
+            "training-min": 0.1000607911456688
+          },
+          "ui": {
+            "position": 1,
+            "control": "continuous"
+          },
+          "default": 0.16,
+          "feature": {"id": "WALL_INSULATION_THICKNESS"},
+          "kind": "surrogate-input",
+          "notes": "0.07-2.84 W/m2K ",
+          "units": "m"
+        },
+        {
+          "energy-plus-label": "Thickness_1",
+          "tf": {
+            "position": 2,
+            "training-max": 0.7999967371885739,
+            "training-scale": 0.17159146643253886,
+            "training-mean": 0.4990653706815217,
+            "training-variance": 0.029443631352469114,
+            "training-min": 0.2001450204220951
+          },
+          "ui": {
+            "position": 2,
+            "control": "continuous"
+          },
+          "default": 0.32,
+          "feature": {"id": "ROOF_INSULATION_THICKNESS"},
+          "kind": "surrogate-input",
+          "units": "m"
+        },
+        {
+          "energy-plus-label": "U-Factor",
+          "tf": {
+            "position": 3,
+            "training-max": 2.499405810408061,
+            "training-scale": 0.4354612152638879,
+            "training-mean": 1.753475930192473,
+            "training-variance": 0.18962646999910215,
+            "training-min": 1.0009313758552276
+          },
+          "ui": {
+            "position": 3,
+            "control": "continuous"
+          },
+          "default": 2.2,
+          "feature": {"id": "WINDOW_U_VALUE"},
+          "kind": "surrogate-input",
+          "notes": "simple glazing properties",
+          "units": "(W/m2)/K"
+        },
+        {
+          "energy-plus-label": "Solar Heat Gain Coefficient",
+          "tf": {
+            "position": 4,
+            "training-max": 0.7997217064244639,
+            "training-scale": 0.17464876587589498,
+            "training-mean": 0.49999155565448006,
+            "training-variance": 0.03050219142197318,
+            "training-min": 0.2002272783520834
+          },
+          "ui": {
+            "position": 4,
+            "control": "continuous"
+          },
+          "default": 0.4,
+          "feature": {"id": "WINDOW_SHGC"},
+          "kind": "surrogate-input",
+          "notes": "simple glazing properties",
+          "units": "ratio"
+        },
+        {
+          "energy-plus-label": "Thickness_2",
+          "tf": {
+            "position": 5,
+            "training-max": 0.09995252809786874,
+            "training-scale": 0.02611583122509359,
+            "training-mean": 0.055227525771463205,
+            "training-variance": 0.0006820366405775733,
+            "training-min": 0.010005138439758593
+          },
+          "ui": {
+            "position": 5,
+            "control": "continuous"
+          },
+          "default": 0.1,
+          "feature": {"id": "FLOOR_MASS_THICKNESS"},
+          "kind": "surrogate-input",
+          "notes": "thermal mass - concrete slab",
+          "units": "m"
+        },
+        {
+          "energy-plus-label": "Thickness_3",
+          "tf": {
+            "position": 6,
+            "training-max": 0.07997258494776051,
+            "training-scale": 0.020222968941421025,
+            "training-mean": 0.04499767174973773,
+            "training-variance": 0.0004089684728056795,
+            "training-min": 0.010039171805493574
+          },
+          "ui": {
+            "position": 6,
+            "control": "continuous"
+          },
+          "default": 0.08,
+          "feature": {"id": "WALL_MASS_THICKNESS"},
+          "kind": "surrogate-input",
+          "notes": "thermal mass - concrete",
+          "units": "m"
+        },
+        {
+          "energy-plus-label": "Zone Floor Area per Person",
+          "tf": {
+            "position": 7,
+            "training-max": 99.9870673492655,
+            "training-scale": 26.22460617184309,
+            "training-mean": 55.40245546098593,
+            "training-variance": 687.7299688682707,
+            "training-min": 10.042311347977543
+          },
+          "ui": {
+            "position": 7,
+            "control": "continuous"
+          },
+          "default": 25,
+          "feature": {"id": "OCCUPANCY"},
+          "kind": "surrogate-input",
+          "units": "m2/occ"
+        },
+        {
+          "energy-plus-label": "Watts per Zone Floor Area_0",
+          "tf": {
+            "position": 8,
+            "training-max": 19.99485778740816,
+            "training-scale": 5.7535428090935445,
+            "training-mean": 10.00346929677341,
+            "training-variance": 33.103254856072034,
+            "training-min": 0.006806348459351022
+          },
+          "ui": {
+            "position": 8,
+            "control": "continuous"
+          },
+          "default": 7.5,
+          "feature": {"id": "PLUG_LOADS"},
+          "kind": "surrogate-input",
+          "units": "W/m2"
+        },
+        {
+          "energy-plus-label": "Design Level",
+          "tf": {
+            "position": 9,
+            "training-max": 99980.75289270208,
+            "training-scale": 28937.213742450618,
+            "training-mean": 48913.986285747604,
+            "training-variance": 837362339.1762729,
+            "training-min": 49.372453909727014
+          },
+          "ui": {
+            "position": 9,
+            "control": "continuous"
+          },
+          "default": 50,
+          "feature": {"id": "SERVER_ROOM_LOADS"},
+          "kind": "surrogate-input",
+          "notes": "dedicated IT room with FCU",
+          "units": "W"
+        },
+        {
+          "energy-plus-label": "Watts per Zone Floor Area_1",
+          "tf": {
+            "position": 10,
+            "training-max": 14.999011891632032,
+            "training-scale": 3.464898119225973,
+            "training-mean": 9.028677550749546,
+            "training-variance": 12.005518976615683,
+            "training-min": 3.004479871538809
+          },
+          "ui": {
+            "position": 10,
+            "control": "continuous"
+          },
+          "default": 7.5,
+          "feature": {"id": "LIGHTING_POWER_DENSITY"},
+          "kind": "surrogate-input",
+          "notes": "whole building average",
+          "units": "W/m2"
+        },
+        {
+          "energy-plus-label": "Peak Use Flow Rate",
+          "tf": {
+            "position": 11,
+            "training-max": 0.00019999376714909605,
+            "training-scale": 4.619980775606867e-5,
+            "training-mean": 0.00012061207497517886,
+            "training-variance": 2.1344222366977033e-9,
+            "training-min": 4.010333318501379e-5
+          },
+          "ui": {
+            "position": 11,
+            "control": "continuous"
+          },
+          "default": 0.0001,
+          "feature": {"id": "DHW"},
+          "kind": "surrogate-input",
+          "units": "m3/s"
+        },
+        {
+          "energy-plus-label": "Flow per Exterior Surface Area",
+          "tf": {
+            "position": 12,
+            "training-max": 0.0004998278157461174,
+            "training-scale": 0.0001150442110839987,
+            "training-mean": 0.00030207297121304344,
+            "training-variance": 1.3235170503939648e-8,
+            "training-min": 0.00010019385747955056
+          },
+          "ui": {
+            "position": 12,
+            "control": "continuous"
+          },
+          "default": 0.00025,
+          "feature": {"id": "INFILTRATION_RATE"},
+          "kind": "surrogate-input",
+          "notes": "per exterior surface area",
+          "units": "(m3/s)/m2"
+        },
+        {
+          "energy-plus-label": "Zone Air Distribution Effectiveness in Cooling Mode",
+          "tf": {
+            "position": 13,
+            "training-max": 1.4997110664987252,
+            "training-scale": 0.2894884030183191,
+            "training-mean": 0.9964898425144119,
+            "training-variance": 0.08380353548209674,
+            "training-min": 0.5001303910814787
+          },
+          "ui": {
+            "position": 13,
+            "control": "continuous"
+          },
+          "default": 1,
+          "feature": {"id": "VENTILATION_EFFECTIVENESS_CLG"},
+          "kind": "surrogate-input",
+          "notes": "OA rate (ratio of min OA)",
+          "units": "ratio"
+        },
+        {
+          "energy-plus-label": "Zone Air Distribution Effectiveness in Heating Mode",
+          "tf": {
+            "position": 14,
+            "training-max": 1.4999747631506055,
+            "training-scale": 0.2880716591436548,
+            "training-mean": 0.9930153450659888,
+            "training-variance": 0.08298528080177801,
+            "training-min": 0.5005215153158344
+          },
+          "ui": {
+            "position": 14,
+            "control": "continuous"
+          },
+          "default": 1,
+          "feature": {"id": "VENTILATION_EFFECTIVENESS_HTG"},
+          "kind": "surrogate-input",
+          "notes": "OA rate (ratio of min OA)",
+          "units": "ratio"
+        },
+        {
+          "energy-plus-label": "Value Until Time 2",
+          "tf": {
+            "position": 15,
+            "training-max": 25.998917211902622,
+            "training-scale": 1.1204452169286594,
+            "training-mean": 24.05273229216613,
+            "training-variance": 1.2553974841383104,
+            "training-min": 22.101196310433803
+          },
+          "ui": {
+            "position": 15,
+            "control": "continuous"
+          },
+          "default": 23,
+          "feature": {"id": "COOLING_SETPOINT"},
+          "kind": "surrogate-input",
+          "units": "C"
+        },
+        {
+          "energy-plus-label": "Hourly Value_0",
+          "tf": {
+            "position": 16,
+            "training-max": 39.97647472361299,
+            "training-scale": 11.638045922032612,
+            "training-mean": 20.05995698437052,
+            "training-variance": 135.4441128833399,
+            "training-min": 0.024663485417289608
+          },
+          "ui": {
+            "position": 16,
+            "control": "continuous"
+          },
+          "default": 0.3,
+          "feature": {"id": "MIN_HUMIDITY_SETPOINT"},
+          "kind": "surrogate-input",
+          "units": "RH"
+        },
+        {
+          "energy-plus-label": "Hourly Value_1",
+          "tf": {
+            "position": 17,
+            "training-max": 99.98118391085282,
+            "training-scale": 14.583149401598918,
+            "training-mean": 75.16396685713705,
+            "training-variance": 212.66824646935487,
+            "training-min": 50.021539811022045
+          },
+          "ui": {
+            "position": 17,
+            "control": "continuous"
+          },
+          "default": 51,
+          "feature": {"id": "MAX_HUMIDITY_SETPOINT"},
+          "kind": "surrogate-input",
+          "units": "RH"
+        },
+        {
+          "energy-plus-label": "Coefficient2 x_0",
+          "tf": {
+            "position": 18,
+            "training-max": 0.9998642376095372,
+            "training-scale": 0.28853887882613494,
+            "training-mean": 0.49422294076004697,
+            "training-variance": 0.08325468459424298,
+            "training-min": 0.0006432880194419653
+          },
+          "ui": {
+            "position": 18,
+            "control": "continuous"
+          },
+          "default": 0.494,
+          "feature": {"id": "FAN_POWER"},
+          "kind": "surrogate-input",
+          "units": "W/(m3/s)"
+        },
+        {
+          "energy-plus-label": "Coefficient2 x_1",
+          "tf": {
+            "position": 19,
+            "training-max": 0.999546612636028,
+            "training-scale": 0.2901267988255579,
+            "training-mean": 0.500428283724034,
+            "training-variance": 0.08417355939676574,
+            "training-min": 0.0006533578922026084
+          },
+          "ui": {
+            "position": 19,
+            "control": "continuous"
+          },
+          "default": 1,
+          "feature": {"id": "AIR_SIDE_CONDITIONING_RATIO"},
+          "kind": "surrogate-input",
+          "notes": "ratio convective vs radiant",
+          "units": "ratio (of total)"
+        },
+        {
+          "energy-plus-label": "Coefficient2 x_2",
+          "tf": {
+            "position": 20,
+            "training-max": 5.598285954144036,
+            "training-scale": 1.3245924940713845,
+            "training-mean": 3.2843183589816265,
+            "training-variance": 1.7545452753502506,
+            "training-min": 1.0025133453592026
+          },
+          "ui": {
+            "position": 20,
+            "control": "continuous"
+          },
+          "default": 1.1,
+          "feature": {"id": "HEATING_PLANT_FUEL_ELEC"},
+          "kind": "surrogate-input",
+          "notes": "heating plant fuel mix",
+          "units": "ratio (of total)"
+        },
+        {
+          "energy-plus-label": "Coefficient2 x_3",
+          "tf": {
+            "position": 21,
+            "training-max": 0.9599678056083312,
+            "training-scale": 0.10450957360396376,
+            "training-mean": 0.7809668251889649,
+            "training-variance": 0.01092225097488232,
+            "training-min": 0.6000884417784467
+          },
+          "ui": {
+            "position": 21,
+            "control": "continuous"
+          },
+          "default": 0.9,
+          "feature": {"id": "HEATING_FUEL_NG_OTHER"},
+          "kind": "surrogate-input",
+          "units": "ratio (of total)"
+        },
+        {
+          "energy-plus-label": "Coefficient2 x_4",
+          "tf": {
+            "position": 22,
+            "training-max": 12.396615260191355,
+            "training-scale": 3.2402928667519837,
+            "training-mean": 6.792599576415636,
+            "training-variance": 10.499497862323787,
+            "training-min": 1.2037609388672872
+          },
+          "ui": {
+            "position": 22,
+            "control": "continuous"
+          },
+          "default": 1.3,
+          "feature": {"id": "HEATING_PLANT_PERFORMANCE_FUEL"},
+          "kind": "surrogate-input",
+          "notes": "plant performance",
+          "units": "COP"
+        },
+        {
+          "energy-plus-label": "Window to Wall Ratio",
+          "tf": {
+            "position": 23,
+            "training-max": 0.8996709503795122,
+            "training-scale": 0.17173873629552397,
+            "training-mean": 0.5959723174281362,
+            "training-variance": 0.029494193544383526,
+            "training-min": 0.3003015898968382
+          },
+          "ui": {
+            "position": 23,
+            "control": "continuous"
+          },
+          "default": 0.4,
+          "feature": {"id": "WINDOW_TO_WALL_RATIO"},
+          "kind": "surrogate-input",
+          "units": "ratio"
+        },
+        {
+          "energy-plus-label": "Depth",
+          "tf": {
+            "position": 24,
+            "training-max": 0.999569485721176,
+            "training-scale": 0.284487458792764,
+            "training-mean": 0.507307783311115,
+            "training-variance": 0.08093311421036459,
+            "training-min": 0.010095422840333249
+          },
+          "ui": {
+            "position": 24,
+            "control": "continuous"
+          },
+          "default": 0.01,
+          "feature": {"id": "HORIZONTAL_SHADING"},
+          "kind": "surrogate-input",
+          "units": "m"
+        },
+        {
+          "energy-plus-label": "Fraction of Zone Controlled by Reference Point 1",
+          "tf": {
+            "position": 25,
+            "training-max": 0.999461187979962,
+            "training-scale": 0.2891376222746212,
+            "training-mean": 0.5003817114517307,
+            "training-variance": 0.08360056461462152,
+            "training-min": 0.0003078435245371156
+          },
+          "ui": {
+            "position": 25,
+            "control": "continuous"
+          },
+          "default": 0.4,
+          "feature": {"id": "DAYLIGHTING_SENSORS"},
+          "kind": "surrogate-input",
+          "notes": "fraction of lighting controlled",
+          "units": "ratio"
+        },
+        {
+          "energy-plus-label": "Multiplier",
+          "tf": {
+            "position": 26,
+            "training-max": 19,
+            "training-scale": 5.509360721132312,
+            "training-mean": 9.983333333333333,
+            "training-variance": 30.353055555555553,
+            "training-min": 1
+          },
+          "ui": {
+            "position": 26,
+            "control": "discrete"
+          },
+          "default": 8,
+          "feature": {"id": "BUILDING_STOREYS"},
+          "kind": "surrogate-input",
+          "notes": "Storeys = Multiplier + 2",
+          "units": "storeys"
+        },
+        {
+          "energy-plus-label": "Sensible Heat Recovery Effectiveness",
+          "tf": {
+            "position": 27,
+            "training-max": 0.9499246821970488,
+            "training-scale": 0.2755490439910554,
+            "training-mean": 0.47756901879435226,
+            "training-variance": 0.07592727564438458,
+            "training-min": 0.0006291142814587148
+          },
+          "ui": {
+            "position": 27,
+            "control": "continuous"
+          },
+          "default": 0.5,
+          "feature": {"id": "SENSIBLE_HEAT_RECOVERY"},
+          "kind": "surrogate-input",
+          "units": "eff %"
+        },
+        {
+          "energy-plus-label": "Latent Heat Recovery Effectiveness",
+          "tf": {
+            "position": 28,
+            "training-max": 0.7496165517638049,
+            "training-scale": 0.21733696050557447,
+            "training-mean": 0.372920209094008,
+            "training-variance": 0.04723535440180164,
+            "training-min": 0.00037671677474362166
+          },
+          "ui": {
+            "position": 28,
+            "control": "continuous"
+          },
+          "default": 0.1,
+          "feature": {"id": "LATENT_HEAT_RECOVERY"},
+          "kind": "surrogate-input",
+          "units": "eff %"
+        },
+        {
+          "energy-plus-label": "EMSOutHeatingDemand",
+          "tf": {
+            "position": 0,
+            "training-scale": 0.7728748460042951,
+            "training-mean": 27.357729660056794,
+            "training-variance": 0.5973355275861629
+          },
+          "ui": {
+            "position": 0
+          },
+          "feature": {"id": "HEATING_DEMAND"},
+          "kind": "surrogate-output",
+          "units": "J"
+        },
+        {
+          "energy-plus-label": "EMSOutCoolingDemand",
+          "tf": {
+            "position": 1,
+            "training-scale": 0.5438103301400289,
+            "training-mean": 28.912551103684994,
+            "training-variance": 0.29572967516700727
+          },
+          "ui": {
+            "position": 1
+          },
+          "feature": {"id": "COOLING_DEMAND"},
+          "kind": "surrogate-output",
+          "units": "J"
+        },
+        {
+          "energy-plus-label": "EMSOutHeatingNG",
+          "tf": {
+            "position": 2,
+            "training-scale": 1.6634976398145027,
+            "training-mean": 25.57879937809372,
+            "training-variance": 2.767224397668421
+          },
+          "ui": {
+            "position": 2
+          },
+          "feature": {"id": "HEATING_NG"},
+          "kind": "surrogate-output",
+          "notes": "NG End Uses",
+          "units": "J"
+        },
+        {
+          "energy-plus-label": "EMSOutHeatingOther",
+          "tf": {
+            "position": 3,
+            "training-scale": 1.624281379492476,
+            "training-mean": 25.559785743936168,
+            "training-variance": 2.6382899997659806
+          },
+          "ui": {
+            "position": 3
+          },
+          "feature": {"id": "HEATING_OTHER"},
+          "kind": "surrogate-output",
+          "notes": "Other End Uses",
+          "units": "J"
+        },
+        {
+          "energy-plus-label": "EMSOutHeatingElec",
+          "tf": {
+            "position": 4,
+            "training-scale": 1.353499649252116,
+            "training-mean": 25.30202347479893,
+            "training-variance": 1.8319613005256012
+          },
+          "ui": {
+            "position": 4
+          },
+          "feature": {"id": "HEATING_ELEC"},
+          "kind": "surrogate-output",
+          "notes": "Elec End Uses",
+          "units": "J"
+        },
+        {
+          "energy-plus-label": "EMSOutCoolingElec",
+          "tf": {
+            "position": 5,
+            "training-scale": 0.7944227839539395,
+            "training-mean": 27.136084466237378,
+            "training-variance": 0.6311075596651277
+          },
+          "ui": {
+            "position": 5
+          },
+          "feature": {"id": "COOLING_ELEC"},
+          "kind": "surrogate-output",
+          "notes": "Elec End Uses",
+          "units": "J"
+        },
+        {
+          "ui": {
+            "position": 0
+          },
+          "default": 0,
+          "feature": {"id": "TEDI"},
+          "kind": "derived-output",
+          "formula": "= ('Heating Demand' / 'Floor Area') / 3600000",
+          "units": "kWh/m2"
+        },
+        {
+          "ui": {
+            "position": 1
+          },
+          "default": 0,
+          "feature": {"id": "CEDI"},
+          "kind": "derived-output",
+          "formula": "= ('Cooling Demand' / 'Floor Area') / 3600000",
+          "units": "kWh/m2"
+        },
+        {
+          "ui": {
+            "position": 2
+          },
+          "default": 0,
+          "feature": {"id": "EUI"},
+          "kind": "derived-output",
+          "formula": "= ((SUM('End Uses') - 'PV Generarion') / 'Floor Area') / 3600000",
+          "units": "kWh/m2"
+        },
+        {
+          "ui": {
+            "position": 3
+          },
+          "default": 0,
+          "feature": {"id": "GHGI"},
+          "kind": "derived-output",
+          "formula": "= (((SUM('NG End Uses') * 'GHG Intensity - NG') + (SUM('Other End Uses') * 'GHG Intensity - Other') + ((SUM('Elec End Uses')-'PV Generarion') * 'GHG Intensity - Grid')) / 'Floor Area') / 3600000",
+          "units": "kgCO2/m2"
+        },
+        {
+          "ui": {
+            "position": 4
+          },
+          "default": 0,
+          "feature": {"id": "OPERATING_COST"},
+          "kind": "derived-output",
+          "formula": "= (((SUM('NG End Uses') * 'Fuel Price - NG') + (SUM('Other End Uses') * 'Fuel Price - Other') + ((SUM('Elec End Uses')-'PV Generarion') * 'Fuel Price - Grid')) / 'Floor Area') / 3600000",
+          "units": "$/m2"
+        }
+      ]
+    }
+  ]
+}
