@@ -5,7 +5,7 @@ import SurrogatePage from './pages/SurrogatePage'
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+      <div data-theme="glacier" className="dashboard-shell min-h-screen antialiased">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/s/:surrogateId" element={<SurrogatePage />} />

@@ -26,7 +26,7 @@ export function ConfigurationBar({
 }: ConfigurationBarProps) {
   if (features.length === 0) return null
   return (
-    <div className="mb-4 flex flex-wrap items-end gap-4 border-b border-zinc-800/60 pb-4">
+    <div className="dash-divider mb-4 flex flex-wrap items-end gap-4 border-b pb-4">
       {features.map((f) => {
         const id = f.feature.id
         const opts = options[id] ?? []
@@ -34,12 +34,12 @@ export function ConfigurationBar({
         const label = LABELS[id] ?? t(id)
         return (
           <div key={id} className="min-w-[12rem] flex-1">
-            <label className="mb-1 block text-xs font-medium text-zinc-400" htmlFor={`cfg-${id}`}>
+            <label className="dash-text mb-1 block text-xs font-medium" htmlFor={`cfg-${id}`}>
               {label}
             </label>
             <select
               id={`cfg-${id}`}
-              className="w-full rounded border border-zinc-600 bg-zinc-950 px-2 py-1.5 text-sm text-zinc-100"
+              className="dash-select w-full rounded border px-2 py-1.5 text-sm"
               value={v}
               onChange={(e) => onChange(id, e.target.value)}
               disabled={noAlternatives && opts.length <= 1}
@@ -52,7 +52,7 @@ export function ConfigurationBar({
               ))}
             </select>
             {noAlternatives && opts.length <= 1 ? (
-              <p className="mt-1 text-[10px] text-zinc-500">
+              <p className="dash-muted mt-1 text-[10px]">
                 Only this configuration is bundled for this model.
               </p>
             ) : null}

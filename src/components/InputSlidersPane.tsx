@@ -86,77 +86,76 @@ ${f.description && typeof f.description === 'string' ? f.description : f.notes &
 
   return (
     <li
-      className="rounded border border-zinc-800/80 bg-zinc-900/40 px-2.5 py-1.5 sm:px-3"
+      className="dash-card min-w-0 rounded border px-2.5 py-2.5 sm:px-3"
     >
-      <div className="flex items-center gap-1.5">
-        <div
-          className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-200"
-          title={t(id)}
-        >
-          {t(id)}
+      {/* Row 1: full label + help, with value and unit right-aligned. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+        <div className="flex min-w-0 flex-1 items-baseline gap-1">
+          <div className="dash-text text-sm font-medium">{t(id)}</div>
+          <button
+            type="button"
+            className="dash-accent-text shrink-0 rounded p-0.5 text-sm hover:opacity-80"
+            title={info}
+            aria-label={`Details for ${t(id)}`}
+          >
+            ⓘ
+          </button>
         </div>
-        <input
-          type="number"
-          className={`w-24 shrink-0 rounded border bg-zinc-950 px-1.5 py-0.5 font-mono text-sm text-zinc-100 ${
-            oob
-              ? 'border-amber-500/80'
-              : 'border-zinc-700'
-          }`}
-          min={numMin}
-          max={numMax}
-          step={stepForFeatureId(id)}
-          value={dVal.text}
-          onChange={(e) => {
-            const raw = e.target.value
-            const p = parseFloat(raw)
-            if (Number.isNaN(p)) return
-            onChange(
-              id,
-              isDhwId(id) || isFlowPerM2(id) ? displayToModelFlow(id, p) : p,
-            )
-          }}
-          title={oob ? 'Value outside training range' : undefined}
-          aria-invalid={oob}
-          aria-label={`${t(id)} value${unitShown ? ` (${unitShown})` : ''}`}
-        />
-        {unitShown ? (
-          <span className="shrink-0 text-xs text-zinc-500">
-            [<span className="text-zinc-400">{unitShown}</span>]
-          </span>
-        ) : null}
-        <button
-          type="button"
-          className="shrink-0 rounded p-0.5 text-sm text-amber-500/90 hover:bg-zinc-800/80"
-          title={info}
-          aria-label={`Details for ${t(id)}`}
-        >
-          ⓘ
-        </button>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <input
+            type="number"
+            className={`dash-control w-24 rounded border px-2 py-1 font-mono text-sm ${
+              oob
+                ? 'dash-oob'
+                : ''
+            }`}
+            min={numMin}
+            max={numMax}
+            step={stepForFeatureId(id)}
+            value={dVal.text}
+            onChange={(e) => {
+              const raw = e.target.value
+              const p = parseFloat(raw)
+              if (Number.isNaN(p)) return
+              onChange(
+                id,
+                isDhwId(id) || isFlowPerM2(id) ? displayToModelFlow(id, p) : p,
+              )
+            }}
+            title={oob ? 'Value outside training range' : undefined}
+            aria-invalid={oob}
+            aria-label={`${t(id)} value${unitShown ? ` (${unitShown})` : ''}`}
+          />
+          {unitShown ? (
+            <span className="dash-muted text-xs">
+              [<span className="dash-text">{unitShown}</span>]
+            </span>
+          ) : null}
+        </div>
       </div>
-      <div className="mt-1 flex min-w-0 items-center gap-1">
-        <span className="w-9 shrink-0 text-[10px] text-zinc-500 sm:text-[10px]">
+      {/* Row 2: track spans the card, training bounds pinned to each end. */}
+      <div className="mt-2 flex w-full min-w-0 items-center gap-2">
+        <span className="dash-muted shrink-0 text-[10px] tabular-nums">
           {dMin.text}
         </span>
-        <div className="min-w-0 flex-1">
-          <input
-            id={rangeId}
-            type="range"
-            className="w-full accent-amber-500"
-            min={min}
-            max={max}
-            step={rangeStepFinal}
-            value={vForSlider}
-            aria-label={`${t(id)} (${unitShown || t(id)})`}
-            aria-valuemin={min}
-            aria-valuemax={max}
-            aria-valuenow={value}
-            onInput={(e) => {
-              const n = parseFloat((e.target as HTMLInputElement).value)
-              if (!Number.isNaN(n)) onChange(id, n)
-            }}
-          />
-        </div>
-        <span className="w-9 shrink-0 text-right text-[10px] text-zinc-500">
+        <input
+          id={rangeId}
+          type="range"
+          className="dash-range min-w-0 flex-1"
+          min={min}
+          max={max}
+          step={rangeStepFinal}
+          value={vForSlider}
+          aria-label={`${t(id)} (${unitShown || t(id)})`}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          onInput={(e) => {
+            const n = parseFloat((e.target as HTMLInputElement).value)
+            if (!Number.isNaN(n)) onChange(id, n)
+          }}
+        />
+        <span className="dash-muted shrink-0 text-right text-[10px] tabular-nums">
           {dMax.text}
         </span>
       </div>
@@ -186,20 +185,20 @@ export function InputSlidersPane({
   return (
     <div className="min-w-0 pr-1">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-zinc-100">Inputs (tensor)</h3>
+        <h3 className="dash-heading text-sm font-semibold">Inputs (tensor)</h3>
         <button
           type="button"
           onClick={onResetToDefaults}
-          className="rounded border border-zinc-600 px-2.5 py-1 text-xs text-zinc-200 hover:border-zinc-500"
+          className="dash-control rounded border px-2.5 py-1 text-xs"
         >
           Reset all to defaults
         </button>
       </div>
-      <p className="mb-4 text-xs text-zinc-500">
+      <p className="dash-muted mb-4 text-xs">
         Adjust inputs; outputs update after {EXPLORATION_DEBOUNCE_MS} ms
         debounce. Training bounds
         are shown on each slider; values can still be set outside the range
-        (highlighted in amber).
+        (highlighted with the warning colour).
       </p>
       <div className="space-y-2">
         {groups.map((g) => {
@@ -207,22 +206,22 @@ export function InputSlidersPane({
           return (
             <div
               key={g.title}
-              className="rounded border border-zinc-800/50 bg-zinc-950/30"
+              className="dash-group rounded border"
             >
               <button
                 type="button"
                 onClick={() =>
                   setOpen((o) => ({ ...o, [g.title]: !expanded }))
                 }
-                className="flex w-full items-center justify-between gap-2 px-2.5 py-2 text-left text-sm font-medium text-zinc-200"
+                className="dash-text flex w-full items-center justify-between gap-2 px-2.5 py-2 text-left text-sm font-medium"
                 aria-expanded={expanded}
               >
                 <span>{g.title}</span>
-                <span className="text-zinc-500">{expanded ? '−' : '+'}</span>
+                <span className="dash-muted">{expanded ? '−' : '+'}</span>
               </button>
               {expanded ? (
                 <ul
-                  className="grid list-none grid-cols-1 gap-2 border-t border-zinc-800/50 px-2.5 py-2 min-[640px]:grid-cols-2"
+                  className="dash-divider grid list-none grid-cols-1 gap-2 border-t px-2.5 py-2 min-[640px]:grid-cols-2"
                   style={{ maxWidth: '100%' }}
                 >
                   {g.items.map((f) => {

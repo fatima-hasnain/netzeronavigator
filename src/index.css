@@ -8,3 +8,107 @@ body {
 #root {
   min-height: 100svh;
 }
+
+/*
+ * Dashboard palettes. Change data-theme on the App shell to one of:
+ * glacier (default), viridis, or daylight.
+ */
+[data-theme='glacier'] {
+  --dash-canvas: #07111f;
+  --dash-surface: #0e1b2b;
+  --dash-surface-raised: #14243a;
+  --dash-border: #334a63;
+  --dash-text: #f1f5f9;
+  --dash-text-soft: #cbd5e1;
+  --dash-text-muted: #94a3b8;
+  --dash-accent: #38bdf8;
+  --dash-accent-strong: #0284c7;
+  --dash-accent-soft: #bae6fd;
+  --dash-warning: #fbbf24;
+  --dash-ok: #34d399;
+  --dash-error: #f87171;
+}
+
+[data-theme='viridis'] {
+  --dash-canvas: #101713;
+  --dash-surface: #17231e;
+  --dash-surface-raised: #203129;
+  --dash-border: #436052;
+  --dash-text: #f4f7f5;
+  --dash-text-soft: #d5e2dc;
+  --dash-text-muted: #9cb4a8;
+  --dash-accent: #5ec962;
+  --dash-accent-strong: #21918c;
+  --dash-accent-soft: #d8f3b2;
+  --dash-warning: #fde725;
+  --dash-ok: #86efac;
+  --dash-error: #fca5a5;
+}
+
+[data-theme='daylight'] {
+  --dash-canvas: #f4f7fa;
+  --dash-surface: #ffffff;
+  --dash-surface-raised: #e8eef5;
+  --dash-border: #9aaabc;
+  --dash-text: #14213d;
+  --dash-text-soft: #263b5e;
+  --dash-text-muted: #52657a;
+  --dash-accent: #006d77;
+  --dash-accent-strong: #00545c;
+  --dash-accent-soft: #d3f0ee;
+  --dash-warning: #9a6700;
+  --dash-ok: #047857;
+  --dash-error: #b91c1c;
+}
+
+.dashboard-shell { background: var(--dash-canvas); color: var(--dash-text); }
+.dash-card { border-color: var(--dash-border); background: var(--dash-surface); }
+.dash-group { border-color: var(--dash-border); background: color-mix(in srgb, var(--dash-surface) 72%, transparent); }
+.dash-divider { border-color: var(--dash-border); }
+.dash-heading { color: var(--dash-text); }
+.dash-text { color: var(--dash-text-soft); }
+.dash-muted { color: var(--dash-text-muted); }
+.dash-accent-text { color: var(--dash-accent-soft); }
+.dash-warning { color: var(--dash-warning); }
+.dash-control { border-color: var(--dash-border); background: var(--dash-canvas); color: var(--dash-text); }
+.dash-control:hover { border-color: var(--dash-text-muted); }
+.dash-accent-bg { background: color-mix(in srgb, var(--dash-accent-strong) 38%, transparent); color: var(--dash-accent-soft); }
+.dash-bar { background: var(--dash-accent-strong); }
+.dash-range { accent-color: var(--dash-accent); }
+.dash-range:focus-visible, .dash-control:focus-visible, .dash-select:focus-visible { outline: 2px solid var(--dash-accent); outline-offset: 2px; }
+.dash-oob { border-color: var(--dash-warning); }
+
+/* Panels, chrome and links */
+.dash-panel { border-color: var(--dash-border); background: var(--dash-surface-raised); }
+.dash-chip { border-color: var(--dash-border); background: var(--dash-surface-raised); color: var(--dash-text-muted); }
+.dash-select { border-color: var(--dash-border); background: var(--dash-canvas); color: var(--dash-text); }
+.dash-link { color: var(--dash-accent); }
+.dash-link:hover { text-decoration: underline; }
+.dash-btn { background: var(--dash-accent-strong); color: var(--dash-accent-soft); }
+.dash-btn:hover { background: var(--dash-accent); color: var(--dash-canvas); }
+
+/* Semantic state */
+.dash-ok { color: var(--dash-ok); }
+.dash-error { color: var(--dash-error); }
+.dash-error-panel {
+  border-color: color-mix(in srgb, var(--dash-error) 50%, transparent);
+  background: color-mix(in srgb, var(--dash-error) 12%, transparent);
+  color: var(--dash-error);
+}
+.dash-dot-ok { background: var(--dash-ok); }
+.dash-dot-busy { background: var(--dash-warning); }
+.dash-dot-error { background: var(--dash-error); }
+
+/* Tabs */
+.dash-tab { color: var(--dash-text-muted); }
+.dash-tab:hover { color: var(--dash-text); }
+.dash-tab-active { color: var(--dash-text); border-bottom-color: var(--dash-accent); }
+
+/* Meters and level badges (never colour-only - each carries a text label) */
+.dash-track { background: color-mix(in srgb, var(--dash-border) 55%, transparent); }
+.dash-skeleton { background: color-mix(in srgb, var(--dash-border) 70%, transparent); }
+.dash-badge-neutral { background: color-mix(in srgb, var(--dash-border) 65%, transparent); color: var(--dash-text); }
+.dash-badge-low { background: color-mix(in srgb, var(--dash-ok) 26%, transparent); color: var(--dash-ok); }
+.dash-badge-high { background: color-mix(in srgb, var(--dash-warning) 26%, transparent); color: var(--dash-warning); }
+.dash-chart-grid { stroke: var(--dash-border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dash-chart-line { fill: none; stroke: var(--dash-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }

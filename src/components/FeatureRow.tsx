@@ -69,12 +69,12 @@ export function FeatureRow({ feature }: { feature: ManifestFeature }) {
         : '—'
 
   return (
-    <tr className="border-b border-zinc-800/80">
-      <td className="py-2 pr-4 font-medium text-zinc-100">{t(id)}</td>
-      <td className="py-2 pr-4 font-mono text-xs text-zinc-500">{id}</td>
-      <td className="py-2 pr-4 text-sm text-zinc-400">{unit}</td>
-      <td className="py-2 pr-4 text-sm text-zinc-300">{defaultDisplay(feature)}</td>
-      <td className="py-2 text-sm text-zinc-500">{range ?? '—'}</td>
+    <tr className="dash-divider border-b">
+      <td className="dash-heading py-2 pr-4 font-medium">{t(id)}</td>
+      <td className="dash-muted py-2 pr-4 font-mono text-xs">{id}</td>
+      <td className="dash-text py-2 pr-4 text-sm">{unit}</td>
+      <td className="dash-text py-2 pr-4 text-sm">{defaultDisplay(feature)}</td>
+      <td className="dash-muted py-2 text-sm">{range ?? '—'}</td>
     </tr>
   )
 }

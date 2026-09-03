@@ -26,10 +26,10 @@ export function ModelStatusBar({
 
   const stateDot =
     loadState.status === 'error'
-      ? 'bg-red-500'
+      ? 'dash-dot-error'
       : loadState.status === 'loading' || loadState.status === 'idle'
-        ? 'bg-amber-500'
-        : 'bg-emerald-500'
+        ? 'dash-dot-busy'
+        : 'dash-dot-ok'
   const label =
     loadState.status === 'error'
       ? `Error: ${loadState.error}`
@@ -40,7 +40,7 @@ export function ModelStatusBar({
   if (loadState.status === 'error' && loadState.error) {
     // P2: expand to show error detail
     return (
-      <div className="rounded border border-red-800/50 bg-zinc-950/80 px-3 py-2 text-sm text-red-300">
+      <div className="dash-error-panel rounded border px-3 py-2 text-sm">
         <div className="flex items-center gap-2">
           <span
             className={`h-2 w-2 shrink-0 rounded-full ${stateDot}`}
@@ -49,13 +49,13 @@ export function ModelStatusBar({
           {label}
         </div>
         {showPath ? (
-          <p className="mt-2 break-all font-mono text-xs text-zinc-500">
+          <p className="dash-muted mt-2 break-all font-mono text-xs">
             {modelJsonUrl}
           </p>
         ) : null}
         <button
           type="button"
-          className="mt-1 text-xs text-amber-400/90 underline"
+          className="dash-link mt-1 text-xs underline"
           onClick={() => setExpanded((e) => !e)}
         >
           {expanded ? 'Hide detail' : 'Show detail'}
@@ -65,9 +65,9 @@ export function ModelStatusBar({
   }
 
   return (
-    <div className="rounded border border-zinc-800/80 bg-zinc-900/50 px-3 py-1.5">
+    <div className="dash-card rounded border px-3 py-1.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-sm text-zinc-300">
+        <div className="dash-text flex items-center gap-2 text-sm">
           <span
             className={`h-2 w-2 shrink-0 rounded-full ${stateDot}`}
             title={loadState.status}
@@ -78,7 +78,7 @@ export function ModelStatusBar({
         {variant === 'compact' && loadState.status === 'ready' ? (
           <button
             type="button"
-            className="text-xs text-zinc-500 hover:text-zinc-300"
+            className="dash-tab text-xs"
             onClick={() => setExpanded((e) => !e)}
             aria-expanded={expanded}
           >
@@ -88,11 +88,11 @@ export function ModelStatusBar({
       </div>
       {showPath && loadState.status === 'ready' && (
         <>
-          <p className="mt-1 break-all font-mono text-[10px] text-zinc-500">
+          <p className="dash-muted mt-1 break-all font-mono text-[10px]">
             {modelJsonUrl}
           </p>
           {tfModel.selection && (
-            <p className="mt-0.5 text-xs text-zinc-500">Selection JSON in Model Info tab</p>
+            <p className="dash-muted mt-0.5 text-xs">Selection JSON in Model Info tab</p>
           )}
         </>
       )}

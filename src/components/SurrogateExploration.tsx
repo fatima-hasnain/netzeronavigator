@@ -107,7 +107,7 @@ export function SurrogateExploration({
               />
             ) : null}
             {configError ? (
-              <p className="mb-2 text-sm text-amber-400" role="status">
+              <p className="dash-warning mb-2 text-sm" role="status">
                 {configError}
               </p>
             ) : null}
@@ -127,6 +127,8 @@ export function SurrogateExploration({
             tfModel={tfModel}
             valueMap={values}
             inferenceWasSlow={inferenceWasSlow}
+            model={loadState.model}
+            inputFeatures={orderedIn}
           />
         </div>
       )}

@@ -25,7 +25,7 @@ function SurrogateBody({ surrogateId }: { surrogateId: string }) {
 
   if (state.status === 'loading') {
     return (
-      <div className="p-8 text-zinc-400">
+      <div className="dash-text p-8">
         Loading manifest for <span className="font-mono">{surrogateId}</span>…
       </div>
     )
@@ -34,8 +34,8 @@ function SurrogateBody({ surrogateId }: { surrogateId: string }) {
   if (state.status === 'error') {
     return (
       <div className="p-8">
-        <p className="text-red-400">Failed to load manifest: {state.error}</p>
-        <Link className="mt-4 inline-block text-cyan-400 hover:underline" to="/">
+        <p className="dash-error">Failed to load manifest: {state.error}</p>
+        <Link className="dash-link mt-4 inline-block" to="/">
           Home
         </Link>
       </div>
@@ -93,29 +93,29 @@ function SurrogateContent({
   const title = manifest.name ?? manifest.id
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <nav className="mb-6 text-sm text-zinc-500" aria-label="Breadcrumb">
-        <Link className="text-cyan-500 hover:underline" to="/">
+      <nav className="dash-muted mb-6 text-sm" aria-label="Breadcrumb">
+        <Link className="dash-link" to="/">
           Home
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-zinc-300">{title}</span>
+        <span className="dash-text">{title}</span>
       </nav>
 
       <header className="mb-6">
         <div className="flex flex-wrap items-baseline gap-2">
-          <h1 className="text-2xl font-semibold text-zinc-50">{title}</h1>
+          <h1 className="dash-heading text-2xl font-semibold">{title}</h1>
           <span
-            className="rounded border border-zinc-700 bg-zinc-900 px-1.5 py-0.5 font-mono text-xs text-zinc-500"
+            className="dash-chip rounded border px-1.5 py-0.5 font-mono text-xs"
             title="Surrogate id"
           >
             {surrogateId}
           </span>
         </div>
-        <p className="mt-1 text-sm text-zinc-500">Surrogate model explorer</p>
+        <p className="dash-muted mt-1 text-sm">Surrogate model explorer</p>
       </header>
 
       <div
-        className="mb-4 flex border-b border-zinc-800"
+        className="dash-divider mb-4 flex border-b"
         role="tablist"
         aria-label="View"
       >
@@ -126,8 +126,8 @@ function SurrogateContent({
           aria-selected={tab === 'explorer'}
           className={
             tab === 'explorer'
-              ? '-mb-px border-b-2 border-amber-500 px-3 py-2 text-sm font-medium text-zinc-100'
-              : 'px-3 py-2 text-sm text-zinc-500 hover:text-zinc-200'
+              ? 'dash-tab-active -mb-px border-b-2 px-3 py-2 text-sm font-medium'
+              : 'dash-tab px-3 py-2 text-sm'
           }
           onClick={() => setTab('explorer')}
         >
@@ -140,8 +140,8 @@ function SurrogateContent({
           aria-selected={tab === 'info'}
           className={
             tab === 'info'
-              ? '-mb-px border-b-2 border-amber-500 px-3 py-2 text-sm font-medium text-zinc-100'
-              : 'px-3 py-2 text-sm text-zinc-500 hover:text-zinc-200'
+              ? 'dash-tab-active -mb-px border-b-2 px-3 py-2 text-sm font-medium'
+              : 'dash-tab px-3 py-2 text-sm'
           }
           onClick={() => setTab('info')}
         >
@@ -165,7 +165,7 @@ function SurrogateContent({
               configError={configError}
             />
           ) : (
-            <p className="text-zinc-500">No TensorFlow model in manifest.</p>
+            <p className="dash-muted">No TensorFlow model in manifest.</p>
           )}
         </div>
       )}
@@ -179,28 +179,28 @@ function SurrogateContent({
         >
           {manifest.description && (
             <section>
-              <h2 className="mb-2 text-lg font-medium text-zinc-200">Description</h2>
-              <p className="max-w-3xl text-sm leading-relaxed text-zinc-400">
+              <h2 className="dash-heading mb-2 text-lg font-medium">Description</h2>
+              <p className="dash-text max-w-3xl text-sm leading-relaxed">
                 {manifest.description}
               </p>
             </section>
           )}
 
           <section>
-            <h2 className="mb-3 text-lg font-medium text-zinc-200">File metadata</h2>
-            <dl className="grid gap-2 text-sm text-zinc-500 sm:grid-cols-2">
+            <h2 className="dash-heading mb-3 text-lg font-medium">File metadata</h2>
+            <dl className="dash-muted grid gap-2 text-sm sm:grid-cols-2">
               {manifest['base-idf'] && (
                 <div>
-                  <dt className="text-zinc-600">Base IDF</dt>
-                  <dd className="font-mono text-zinc-400">
+                  <dt className="dash-muted">Base IDF</dt>
+                  <dd className="dash-text font-mono">
                     {manifest['base-idf']}
                   </dd>
                 </div>
               )}
               {manifest['climate-file'] && (
                 <div>
-                  <dt className="text-zinc-600">Climate file</dt>
-                  <dd className="font-mono text-zinc-400">
+                  <dt className="dash-muted">Climate file</dt>
+                  <dd className="dash-text font-mono">
                     {manifest['climate-file']}
                   </dd>
                 </div>
@@ -220,7 +220,7 @@ function SurrogateContent({
             if (!features?.length) return null
             return (
               <section key={kind}>
-                <h2 className="mb-3 text-lg font-medium text-zinc-200">
+                <h2 className="dash-heading mb-3 text-lg font-medium">
                   {sectionTitle}
                 </h2>
                 <FeatureTable features={features} />
@@ -246,18 +246,18 @@ function ModelStatusDevtools({
 }) {
   const modelUrl = tfModelJsonUrl(surrogateId, tf.path)
   return (
-    <section className="rounded-lg border border-zinc-800/80 bg-zinc-950/40 p-3">
-      <h3 className="text-sm font-medium text-zinc-300">Model & selection</h3>
+    <section className="dash-panel rounded-lg border p-3">
+      <h3 className="dash-text text-sm font-medium">Model & selection</h3>
       <details className="mt-2 text-sm">
-        <summary className="cursor-pointer text-zinc-500 hover:text-zinc-300">
+        <summary className="dash-tab cursor-pointer">
           TensorFlow model.json path
         </summary>
-        <p className="mt-2 break-all font-mono text-xs text-zinc-500">{modelUrl}</p>
+        <p className="dash-muted mt-2 break-all font-mono text-xs">{modelUrl}</p>
       </details>
       {tf.selection && (
-        <p className="mt-2 text-xs text-zinc-500">
-          <span className="text-zinc-600">Selection: </span>
-          <code className="text-zinc-400">{JSON.stringify(tf.selection)}</code>
+        <p className="dash-muted mt-2 text-xs">
+          <span className="dash-muted">Selection: </span>
+          <code className="dash-text">{JSON.stringify(tf.selection)}</code>
         </p>
       )}
     </section>
@@ -269,8 +269,8 @@ export default function SurrogatePage() {
 
   if (!surrogateId) {
     return (
-      <div className="p-8 text-zinc-400">
-        Missing surrogate id. <Link to="/">Home</Link>
+      <div className="dash-text p-8">
+        Missing surrogate id. <Link className="dash-link" to="/">Home</Link>
       </div>
     )
   }

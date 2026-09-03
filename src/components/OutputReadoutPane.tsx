@@ -14,12 +14,14 @@ import {
   ghgOrCostLevel,
 } from '../lib/outputCardMeta'
 import { formatEnergy, type EnergyDisplayUnit } from '../lib/volumeConversion'
+import { OutputSensitivityChart } from './OutputSensitivityChart'
+import type { LayersModel } from '@tensorflow/tfjs'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
 function Skeleton() {
   return (
     <span
-      className="inline-block h-4 w-20 animate-pulse rounded bg-zinc-600/80"
+      className="dash-skeleton inline-block h-4 w-20 animate-pulse rounded"
       aria-hidden
     />
   )
@@ -34,6 +36,8 @@ export interface OutputReadoutPaneProps {
   tfModel: TfModel
   valueMap: Record<string, number>
   inferenceWasSlow: boolean
+  model: LayersModel
+  inputFeatures: ManifestFeature[]
 }
 
 const DERIVED_ORDER: {
@@ -64,26 +68,26 @@ function EnergyOutputRow({
   const { label, className } =
     j !== undefined && Number.isFinite(j)
       ? energyOutputLevelJ(j)
-      : { label: '—', className: 'bg-zinc-600 text-zinc-100' }
+      : { label: '—', className: 'dash-badge-neutral' }
 
   return (
-    <li className="flex flex-col gap-1 rounded-md border border-zinc-800/80 bg-zinc-900/30 px-3 py-2.5">
+    <li className="dash-card flex flex-col gap-1 rounded-md border px-3 py-2.5">
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 text-sm text-zinc-200">{t(f.feature.id)}</div>
+        <div className="dash-text min-w-0 text-sm">{t(f.feature.id)}</div>
         <span
           className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${className}`}
         >
           {label}
         </span>
       </div>
-      <div className="text-right font-mono text-sm text-cyan-300">
+      <div className="dash-accent-text text-right font-mono text-sm">
         {busy ? (
           <Skeleton />
         ) : (
           <>
             {text}
             {unit ? (
-              <span className="ml-1 text-xs text-zinc-500">{unit}</span>
+              <span className="dash-muted ml-1 text-xs">{unit}</span>
             ) : null}
           </>
         )}
@@ -115,9 +119,9 @@ function DerivedRow({
     kind === 'kwh' ? derivedMetricBarFraction(value, DEFAULT_REFERENCE_EUI_KWH_M2) : 0
 
   return (
-    <li className="flex flex-col gap-1 rounded-md border border-zinc-800/80 bg-zinc-900/30 px-3 py-2.5">
+    <li className="dash-card flex flex-col gap-1 rounded-md border px-3 py-2.5">
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 text-sm text-zinc-200">{rowTitle}</div>
+        <div className="dash-text min-w-0 text-sm">{rowTitle}</div>
         <span
           className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${className}`}
         >
@@ -126,22 +130,22 @@ function DerivedRow({
       </div>
       {kind === 'kwh' && !busy && Number.isFinite(value) ? (
         <div
-          className="h-1 w-full overflow-hidden rounded bg-zinc-800"
+          className="dash-track h-1 w-full overflow-hidden rounded"
           title="Relative to a simple reference intensity for this view"
         >
           <div
-            className="h-full rounded bg-cyan-600/80"
+            className="dash-bar h-full rounded"
             style={{ width: `${frac * 100}%` }}
           />
         </div>
       ) : null}
-      <div className="text-right font-mono text-sm text-cyan-300">
+      <div className="dash-accent-text text-right font-mono text-sm">
         {busy ? (
           <Skeleton />
         ) : (
           <>
             {Number.isFinite(value) ? value.toFixed(2) : '—'}
-            <span className="ml-1 text-xs text-zinc-500">{unit}</span>
+            <span className="dash-muted ml-1 text-xs">{unit}</span>
           </>
         )}
       </div>
@@ -160,6 +164,8 @@ export function OutputReadoutPane({
   tfModel,
   valueMap,
   inferenceWasSlow,
+  model,
+  inputFeatures,
 }: OutputReadoutPaneProps) {
   const [energyMode, setEnergyMode] = useState<EnergyDisplayUnit>('kWh')
   const busy = isOutputUpdating || isPredicting
@@ -188,16 +194,16 @@ export function OutputReadoutPane({
       aria-live="polite"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-zinc-100">Predicted Outputs</h3>
+        <h3 className="dash-heading text-sm font-semibold">Predicted Outputs</h3>
         <div className="flex flex-wrap items-center gap-2">
           {inferenceWasSlow ? (
-            <span className="text-[10px] text-amber-400/90">Slow run (&gt;1s)</span>
+            <span className="dash-warning text-[10px]">Slow run (&gt;1s)</span>
           ) : null}
           {busy ? (
-            <span className="text-xs text-amber-400/90">Updating…</span>
+            <span className="dash-warning text-xs">Updating…</span>
           ) : null}
           <div
-            className="flex rounded border border-zinc-700 bg-zinc-950 p-0.5 text-xs"
+            className="dash-control flex rounded border p-0.5 text-xs"
             role="group"
             aria-label="Energy display unit"
           >
@@ -208,8 +214,8 @@ export function OutputReadoutPane({
                 onClick={() => setEnergyMode(m)}
                 className={
                   m === energyMode
-                    ? 'rounded bg-amber-600/40 px-2 py-0.5 text-amber-100'
-                    : 'px-2 py-0.5 text-zinc-400 hover:text-zinc-200'
+                    ? 'dash-accent-bg rounded px-2 py-0.5'
+                    : 'dash-tab px-2 py-0.5'
                 }
               >
                 {m}
@@ -219,10 +225,18 @@ export function OutputReadoutPane({
         </div>
       </div>
       {predictError && (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="dash-error text-sm" role="alert">
           {predictError}
         </p>
       )}
+      <OutputSensitivityChart
+        model={model}
+        tfModel={tfModel}
+        inputFeatures={inputFeatures}
+        outputFeatures={features}
+        valueMap={valueMap}
+        energyMode={energyMode}
+      />
       <ul className="max-h-[min(70vh,40rem)] space-y-2 overflow-y-auto pr-1">
         {features.map((f) => {
           const id = f.feature.id
@@ -240,7 +254,7 @@ export function OutputReadoutPane({
       </ul>
 
       <div>
-        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        <h4 className="dash-muted mb-2 text-xs font-semibold uppercase tracking-wide">
           Derived Metrics
         </h4>
         <ul className="space-y-2">

@@ -10,21 +10,21 @@ export function outputLevelBand(
   high: number,
 ): { label: string; className: string } {
   if (!Number.isFinite(value)) {
-    return { label: '—', className: 'bg-zinc-600 text-zinc-100' }
+    return { label: '—', className: 'dash-badge-neutral' }
   }
   if (value <= low) {
-    return { label: 'Lower', className: 'bg-emerald-700/90 text-emerald-50' }
+    return { label: 'Lower', className: 'dash-badge-low' }
   }
   if (value >= high) {
-    return { label: 'Higher', className: 'bg-amber-700/90 text-amber-50' }
+    return { label: 'Higher', className: 'dash-badge-high' }
   }
-  return { label: 'Typical', className: 'bg-zinc-600 text-zinc-100' }
+  return { label: 'Typical', className: 'dash-badge-neutral' }
 }
 
 /** Heuristic kWh bands (from J) for six end-use outputs. */
 export function energyOutputLevelJ(j: number): { label: string; className: string } {
   if (!Number.isFinite(j)) {
-    return { label: '—', className: 'bg-zinc-600 text-zinc-100' }
+    return { label: '—', className: 'dash-badge-neutral' }
   }
   const kwh = jToKwh(j)
   return outputLevelBand(kwh, 5_000, 500_000)
@@ -43,14 +43,14 @@ export function derivedMetricBarFraction(
 /** Simple bands for TEDI / EUI in kWh/m² (P2 display). */
 export function derivedIntensityLevel(v: number): { label: string; className: string } {
   if (!Number.isFinite(v)) {
-    return { label: '—', className: 'bg-zinc-600 text-zinc-100' }
+    return { label: '—', className: 'dash-badge-neutral' }
   }
   return outputLevelBand(v, 30, 120)
 }
 
 export function ghgOrCostLevel(v: number, high: number): { label: string; className: string } {
   if (!Number.isFinite(v)) {
-    return { label: '—', className: 'bg-zinc-600 text-zinc-100' }
+    return { label: '—', className: 'dash-badge-neutral' }
   }
   return outputLevelBand(v, high * 0.25, high * 0.8)
 }

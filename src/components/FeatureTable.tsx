@@ -7,7 +7,7 @@ export function FeatureTable({ features }: { features: ManifestFeature[] }) {
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-zinc-700 text-xs uppercase tracking-wide text-zinc-500">
+          <tr className="dash-divider dash-muted border-b text-xs uppercase tracking-wide">
             <th className="pb-2 pr-4">Label</th>
             <th className="pb-2 pr-4">Id</th>
             <th className="pb-2 pr-4">Units</th>
