@@ -37,17 +37,9 @@ export function formatEnergy(
     }
     return { text: mwh.toFixed(1), unit: 'MWh' }
   }
-  // kWh — spec §4 auto-range when mode is kWh, but we also have manual toggle
   const kwh = jToKwh(j)
   if (!Number.isFinite(kwh)) {
     return { text: '—', unit: 'kWh' }
-  }
-  const a = Math.abs(kwh)
-  if (a >= 1_000_000) {
-    return { text: (kwh / 1_000_000).toLocaleString(locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 }), unit: 'GWh' }
-  }
-  if (a >= 1_000) {
-    return { text: (kwh / 1_000).toLocaleString(locale, { maximumFractionDigits: 1, minimumFractionDigits: 1 }), unit: 'MWh' }
   }
   return { text: kwh.toLocaleString(locale, { maximumFractionDigits: 1, minimumFractionDigits: 1 }), unit: 'kWh' }
 }
