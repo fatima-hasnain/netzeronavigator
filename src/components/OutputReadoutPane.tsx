@@ -15,6 +15,9 @@ import {
 } from '../lib/outputCardMeta'
 import { formatEnergy, type EnergyDisplayUnit } from '../lib/volumeConversion'
 import { OutputSensitivityChart } from './OutputSensitivityChart'
+import { OutputComparisonView } from './OutputComparisonView'
+import { OutputHeatmapView } from './OutputHeatmapView'
+import { OutputTornadoView } from './OutputTornadoView'
 import type { LayersModel } from '@tensorflow/tfjs'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
@@ -28,6 +31,7 @@ function Skeleton() {
 }
 
 export interface OutputReadoutPaneProps {
+  surrogateId: string
   features: ManifestFeature[]
   outputs: Record<string, number> | null
   isOutputUpdating: boolean
@@ -71,9 +75,9 @@ function EnergyOutputRow({
       : { label: '—', className: 'dash-badge-neutral' }
 
   return (
-    <li className="dash-card flex flex-col gap-1 rounded-md border px-3 py-2.5">
+    <li className="dash-card flex flex-col gap-1 rounded-md border px-2.5 py-1.5">
       <div className="flex items-start justify-between gap-2">
-        <div className="dash-text min-w-0 text-sm">{t(f.feature.id)}</div>
+        <div className="dash-card-label dash-text min-w-0 text-sm">{t(f.feature.id)}</div>
         <span
           className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${className}`}
         >
@@ -119,9 +123,9 @@ function DerivedRow({
     kind === 'kwh' ? derivedMetricBarFraction(value, DEFAULT_REFERENCE_EUI_KWH_M2) : 0
 
   return (
-    <li className="dash-card flex flex-col gap-1 rounded-md border px-3 py-2.5">
+    <li className="dash-card flex flex-col gap-1 rounded-md border px-2.5 py-1.5">
       <div className="flex items-start justify-between gap-2">
-        <div className="dash-text min-w-0 text-sm">{rowTitle}</div>
+        <div className="dash-card-label dash-text min-w-0 text-sm">{rowTitle}</div>
         <span
           className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${className}`}
         >
@@ -155,7 +159,17 @@ function DerivedRow({
 
 const ENERGY_MODES: EnergyDisplayUnit[] = ['J', 'kWh', 'MWh']
 
+const VISUALIZATION_VIEWS = [
+  { id: 'sensitivity', label: 'Sensitivity' },
+  { id: 'comparison', label: 'Comparison' },
+  { id: 'heatmap', label: 'Heatmap' },
+  { id: 'tornado', label: 'Tornado' },
+] as const
+
+type VisualizationView = (typeof VISUALIZATION_VIEWS)[number]['id']
+
 export function OutputReadoutPane({
+  surrogateId,
   features,
   outputs,
   isOutputUpdating,
@@ -168,6 +182,8 @@ export function OutputReadoutPane({
   inputFeatures,
 }: OutputReadoutPaneProps) {
   const [energyMode, setEnergyMode] = useState<EnergyDisplayUnit>('kWh')
+  const [visualizationView, setVisualizationView] =
+    useState<VisualizationView>('sensitivity')
   const busy = isOutputUpdating || isPredicting
 
   const derived = useMemo(() => {
@@ -188,13 +204,13 @@ export function OutputReadoutPane({
 
   return (
     <div
-      className="min-w-0 space-y-4 pl-1 lg:sticky lg:top-4 lg:self-start"
+      className="min-w-0 space-y-2 "
       role="region"
       aria-label="Predicted outputs"
       aria-live="polite"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="dash-heading text-sm font-semibold">Predicted Outputs</h3>
+        <h3 className="dash-section-heading">Predicted Outputs</h3>
         <div className="flex flex-wrap items-center gap-2">
           {inferenceWasSlow ? (
             <span className="dash-warning text-[10px]">Slow run (&gt;1s)</span>
@@ -229,54 +245,133 @@ export function OutputReadoutPane({
           {predictError}
         </p>
       )}
-      <OutputSensitivityChart
-        model={model}
-        tfModel={tfModel}
-        inputFeatures={inputFeatures}
-        outputFeatures={features}
-        valueMap={valueMap}
-        energyMode={energyMode}
-      />
-      <ul className="max-h-[min(70vh,40rem)] space-y-2 overflow-y-auto pr-1">
-        {features.map((f) => {
-          const id = f.feature.id
-          const v = outputs ? outputs[id] : undefined
-          return (
-            <EnergyOutputRow
-              key={id}
-              f={f}
-              j={v}
-              mode={energyMode}
-              busy={busy}
-            />
-          )
-        })}
-      </ul>
-
-      <div>
-        <h4 className="dash-muted mb-2 text-xs font-semibold uppercase tracking-wide">
-          Derived Metrics
-        </h4>
-        <ul className="space-y-2">
-          {DERIVED_ORDER.map(({ key }) => {
-            const val = derived ? derived[key] : Number.NaN
-            const unit =
-              key === 'GHGI' ? 'kgCO₂/m²' : key === 'OPERATING_COST' ? '$/m²' : 'kWh/m²'
-            const k: 'kwh' | 'ghg' | 'cost' =
-              key === 'GHGI' ? 'ghg' : key === 'OPERATING_COST' ? 'cost' : 'kwh'
-            return (
-              <DerivedRow
-                key={key}
-                title={derivedLabels[key] ?? key}
-                value={val}
-                unit={unit}
-                busy={busy}
-                kind={k}
+      <div className="grid gap-6 2xl:grid-cols-[42rem_minmax(16rem,1fr)] 2xl:items-stretch">
+        <div className="max-w-2xl 2xl:flex 2xl:flex-col">
+          <div
+            className="dash-control mb-2 inline-flex rounded border p-0.5 text-xs"
+            role="tablist"
+            aria-label="Visualization"
+          >
+            {VISUALIZATION_VIEWS.map((view) => (
+              <button
+                key={view.id}
+                id={`visualization-tab-${view.id}`}
+                type="button"
+                role="tab"
+                aria-selected={visualizationView === view.id}
+                aria-controls={`visualization-panel-${view.id}`}
+                onClick={() => setVisualizationView(view.id)}
+                className={
+                  visualizationView === view.id
+                    ? 'dash-accent-bg rounded px-3 py-1'
+                    : 'dash-tab rounded px-3 py-1'
+                }
+              >
+                {view.label}
+              </button>
+            ))}
+          </div>
+          <div
+            id={`visualization-panel-${visualizationView}`}
+            role="tabpanel"
+            aria-labelledby={`visualization-tab-${visualizationView}`}
+            className="2xl:flex 2xl:flex-1 2xl:flex-col"
+          >
+            {visualizationView === 'sensitivity' ? (
+              <OutputSensitivityChart
+                surrogateId={surrogateId}
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                valueMap={valueMap}
+                energyMode={energyMode}
               />
-            )
-          })}
-        </ul>
+            ) : visualizationView === 'comparison' ? (
+              <OutputComparisonView
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                initialValues={valueMap}
+                energyMode={energyMode}
+              />
+            ) : visualizationView === 'heatmap' ? (
+              <OutputHeatmapView
+                surrogateId={surrogateId}
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                valueMap={valueMap}
+                energyMode={energyMode}
+              />
+            ) : (
+              <OutputTornadoView
+                surrogateId={surrogateId}
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                valueMap={valueMap}
+                energyMode={energyMode}
+              />
+            )}
+          </div>
+        </div>
+        <div className="space-y-2">
+          <ul className="grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-2">
+            {features.map((f) => {
+              const id = f.feature.id
+              const v = outputs ? outputs[id] : undefined
+              return (
+                <EnergyOutputRow
+                  key={id}
+                  f={f}
+                  j={v}
+                  mode={energyMode}
+                  busy={busy}
+                />
+              )
+            })}
+          </ul>
+
+          <div>
+            <h4 className="dash-subsection-heading mb-2">
+              Derived Metrics
+            </h4>
+            <ul className="space-y-2">
+              {DERIVED_ORDER.map(({ key }) => {
+                const val = derived ? derived[key] : Number.NaN
+                const unit =
+                  key === 'GHGI' ? 'kgCO₂/m²' : key === 'OPERATING_COST' ? '$/m²' : 'kWh/m²'
+                const k: 'kwh' | 'ghg' | 'cost' =
+                  key === 'GHGI' ? 'ghg' : key === 'OPERATING_COST' ? 'cost' : 'kwh'
+                return (
+                  <DerivedRow
+                    key={key}
+                    title={derivedLabels[key] ?? key}
+                    value={val}
+                    unit={unit}
+                    busy={busy}
+                    kind={k}
+                  />
+                )
+              })}
+            </ul>
+          </div>
+        </div>
       </div>
+      <details className="dash-muted text-xs">
+        <summary className="cursor-pointer">How Lower / Typical / Higher are assigned</summary>
+        <p className="mt-2">These are fixed display thresholds, not measured building benchmarks or model confidence. Lower includes the lower boundary; Higher includes the upper boundary; Typical is strictly between them. Higher describes magnitude, not necessarily worse performance.</p>
+        <ul className="mt-2 list-disc pl-4 space-y-1">
+          <li>Energy outputs: Lower ≤ 5,000 kWh; Typical 5,000–500,000 kWh; Higher ≥ 500,000 kWh (also when displaying GJ).</li>
+          <li>Energy intensities: Lower ≤ 30; Typical 30–120; Higher ≥ 120 kWh/m².</li>
+          <li>GHG intensity: Lower ≤ 12.5; Typical 12.5–40; Higher ≥ 40 kgCO₂/m².</li>
+          <li>Operating cost: Lower ≤ 6.25; Typical 6.25–20; Higher ≥ 20 $/m².</li>
+        </ul>
+      </details>
     </div>
   )
 }

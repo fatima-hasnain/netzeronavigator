@@ -14,18 +14,18 @@ body {
  * glacier (default), viridis, or daylight.
  */
 [data-theme='glacier'] {
-  --dash-canvas: #07111f;
-  --dash-surface: #0e1b2b;
-  --dash-surface-raised: #14243a;
-  --dash-border: #334a63;
+  --dash-canvas: #141518;
+  --dash-surface: #1d1f23;
+  --dash-surface-raised: #272a30;
+  --dash-border: #494e58;
   --dash-text: #f1f5f9;
   --dash-text-soft: #cbd5e1;
   --dash-text-muted: #94a3b8;
-  --dash-accent: #38bdf8;
-  --dash-accent-strong: #0284c7;
-  --dash-accent-soft: #bae6fd;
+  --dash-accent: #5eead4;
+  --dash-accent-strong: #0f766e;
+  --dash-accent-soft: #ccfbf1;
   --dash-warning: #fbbf24;
-  --dash-ok: #34d399;
+  --dash-ok: #5eead4;
   --dash-error: #f87171;
 }
 
@@ -112,3 +112,123 @@ body {
 .dash-badge-high { background: color-mix(in srgb, var(--dash-warning) 26%, transparent); color: var(--dash-warning); }
 .dash-chart-grid { stroke: var(--dash-border); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .dash-chart-line { fill: none; stroke: var(--dash-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.dash-heatmap-legend { background: linear-gradient(90deg, #8060b0, #21918c, #fde725); }
+.dash-section-heading { color: var(--dash-text); font-size: 0.9375rem; line-height: 1.25rem; font-weight: 700; letter-spacing: 0.01em; }
+.dash-subsection-heading { color: var(--dash-text-soft); font-size: 0.75rem; line-height: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.dash-card-label { min-height: 1.25rem; line-height: 1.25rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+
+/* Live palette comparison: shared chart colours, independent interface colours. */
+[data-theme='terracotta'] {
+  --dash-canvas: #f5eee5; --dash-surface: #fffaf3; --dash-surface-raised: #ede0d2;
+  --dash-border: #b6a08c; --dash-text: #38281f; --dash-text-soft: #564033; --dash-text-muted: #715c4d;
+  --dash-accent: #a0442f; --dash-accent-strong: #883721; --dash-accent-soft: #883721;
+  --dash-warning: #8a5300; --dash-ok: #086c60; --dash-error: #b02c30;
+}
+[data-theme='aubergine'] {
+  --dash-canvas: #241922; --dash-surface: #342530; --dash-surface-raised: #44313e;
+  --dash-border: #806474; --dash-text: #fff3ea; --dash-text-soft: #eedcd9; --dash-text-muted: #c8b0ba;
+  --dash-accent: #f3b58a; --dash-accent-strong: #9b5c3a; --dash-accent-soft: #ffe0c6;
+  --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
+}
+[data-theme='olive'] {
+  --dash-canvas: #f2f0e5; --dash-surface: #fcfbf4; --dash-surface-raised: #e6e9da;
+  --dash-border: #a0ab91; --dash-text: #293329; --dash-text-soft: #43503d; --dash-text-muted: #5f6955;
+  --dash-accent: #456044; --dash-accent-strong: #354d34; --dash-accent-soft: #354d34;
+  --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
+}
+.theme-comparison { background: var(--dash-surface); border-bottom: 1px solid var(--dash-border); }
+.theme-choice[aria-pressed='true'] { outline: 2px solid var(--dash-accent); outline-offset: 1px; }
+.theme-choice:focus-visible { outline: 3px solid var(--dash-accent); outline-offset: 3px; }
+[data-theme='terracotta'] .dash-btn, [data-theme='olive'] .dash-btn { color: #fffaf3; }
+[data-theme='terracotta'] .dash-badge-neutral, [data-theme='olive'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
+[data-theme='aubergine'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
+/* A constant neutral plotting surface preserves the same colour appearance across palettes. */
+svg[aria-label^='Sensitivity chart'], svg[aria-label*='heatmap by'] { background: #181c22; border: 1px solid #626974; border-radius: 6px; }
+svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #626974; }
+.dash-heatmap-legend { border: 1px solid #626974; }
+
+/* Additional selectable interface palettes. */
+[data-theme='sand'] {
+ --dash-canvas: #f3ebdd; --dash-surface: #fffcf5; --dash-surface-raised: #e8ddcc;
+ --dash-border: #ab9c86; --dash-text: #302e27; --dash-text-soft: #514b40; --dash-text-muted: #6c6356;
+ --dash-accent: #176b70; --dash-accent-strong: #12575c; --dash-accent-soft: #12575c;
+ --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
+}
+[data-theme='sand'] .dash-btn { color: #fffaf3; }
+[data-theme='sand'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
+[data-theme='espresso'] {
+ --dash-canvas: #241c18; --dash-surface: #362a24; --dash-surface-raised: #45352c;
+ --dash-border: #876e5c; --dash-text: #fff3e8; --dash-text-soft: #eedbca; --dash-text-muted: #cbb29e;
+ --dash-accent: #e4a078; --dash-accent-strong: #8c4f2d; --dash-accent-soft: #fff3e8;
+ --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
+}
+[data-theme='espresso'] .dash-btn { color: #fffaf3; }
+[data-theme='espresso'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
+[data-theme='parchment'] {
+ --dash-canvas: #f7f1e8; --dash-surface: #fffcf7; --dash-surface-raised: #eee3da;
+ --dash-border: #b7a093; --dash-text: #392c2c; --dash-text-soft: #594546; --dash-text-muted: #756060;
+ --dash-accent: #873d50; --dash-accent-strong: #702c40; --dash-accent-soft: #702c40;
+ --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
+}
+[data-theme='parchment'] .dash-btn { color: #fffaf3; }
+[data-theme='parchment'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
+[data-theme='midnight'] {
+ --dash-canvas: #17232b; --dash-surface: #263640; --dash-surface-raised: #30434e;
+ --dash-border: #69818e; --dash-text: #f5f0e5; --dash-text-soft: #dce2e3; --dash-text-muted: #afbec5;
+ --dash-accent: #d8b46a; --dash-accent-strong: #806127; --dash-accent-soft: #f5f0e5;
+ --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
+}
+[data-theme='midnight'] .dash-btn { color: #fffaf3; }
+[data-theme='midnight'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
+[data-theme='mist'] {
+ --dash-canvas: #edf3ef; --dash-surface: #fafcfa; --dash-surface-raised: #dfeae3;
+ --dash-border: #97aca0; --dash-text: #24382d; --dash-text-soft: #41574a; --dash-text-muted: #5a7062;
+ --dash-accent: #36705a; --dash-accent-strong: #285941; --dash-accent-soft: #285941;
+ --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
+}
+[data-theme='mist'] .dash-btn { color: #fffaf3; }
+[data-theme='mist'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
+[data-theme='porcelain'] {
+ --dash-canvas: #f5f3ef; --dash-surface: #ffffff; --dash-surface-raised: #e9e8e5;
+ --dash-border: #a5a6ad; --dash-text: #292d3a; --dash-text-soft: #464c60; --dash-text-muted: #636879;
+ --dash-accent: #3456b8; --dash-accent-strong: #294598; --dash-accent-soft: #294598;
+ --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
+}
+[data-theme='porcelain'] .dash-btn { color: #fffaf3; }
+[data-theme='porcelain'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
+
+/* Final Midnight & Brass presentation. */
+[data-theme='midnight'] {
+ --dash-accent-soft: #edd39a; --dash-ok: #85c6bc; --dash-warning: #e9bc61;
+ --dash-chart-surface: #f1eee5;
+ color-scheme: dark;
+}
+[data-theme='midnight'] .dash-btn { background: #d8b46a; color: #17232b; }
+[data-theme='midnight'] .dash-btn:hover { background: #edd39a; }
+[data-theme='midnight'] .dash-badge-low { background: #254840; color: #a3d9ce; }
+[data-theme='midnight'] .dash-badge-neutral { background: #3e505e; color: #e1e8ed; }
+[data-theme='midnight'] .dash-badge-high { background: #514326; color: #f3cf81; }
+[data-theme='midnight'] .dash-bar { background: linear-gradient(90deg, #887346, #d8b46a); }
+[data-theme='midnight'] svg[aria-label^='Sensitivity chart'],
+[data-theme='midnight'] svg[aria-label*='heatmap by'] { background: var(--dash-chart-surface); border-color: #a5997d; }
+[data-theme='midnight'] svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #9f9b90; }
+/* Keep both dark blue and light gold portions distinct on the parchment plot. */
+[data-theme='midnight'] .dash-chart-magnitude { filter: drop-shadow(0 0 0.65px #17232b); stroke-width: 3; }
+[data-theme='midnight'] .dash-heatmap-legend { border-color: #a5997d; }
+
+/* Compact plots and an expanded view of the same data. */
+[data-theme='midnight'] { --dash-chart-surface: var(--dash-surface-raised); }
+[data-theme='midnight'] svg[aria-label^='Sensitivity chart'],
+[data-theme='midnight'] svg[aria-label*='heatmap by'] { background: var(--dash-surface-raised); border-color: var(--dash-border); }
+[data-theme='midnight'] .dash-chart-line { stroke: var(--dash-accent); stroke-width: 2.5; filter: none; }
+.chart-modal { margin: auto; width: min(94vw, 1400px); max-height: 92dvh; padding: 1.5rem; border: 1px solid var(--dash-border); border-radius: 12px; color: var(--dash-text); overflow: auto; }
+.chart-modal::backdrop { background: rgb(5 12 18 / 78%); }
+.chart-modal .sensitivity-plot { height: min(60dvh, 650px); }
+.chart-modal .heatmap-plot { max-height: min(62dvh, 720px); }
+.chart-modal [class*='text-[10px]'] { font-size: 12px; }
+
+/* Standalone /s/:surrogateId/chart page: same charts, sized to fill the page. */
+.chart-fullpage .sensitivity-plot { height: min(65dvh, 720px); }
+.chart-fullpage .heatmap-plot { max-height: min(65dvh, 720px); }
+.chart-fullpage .tornado-plot { max-height: min(70dvh, 900px); }
+.chart-fullpage [class*='text-[10px]'] { font-size: 12px; }

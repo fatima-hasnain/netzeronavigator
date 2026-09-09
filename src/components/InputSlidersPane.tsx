@@ -16,7 +16,6 @@ import {
 import { normalizeUnitLabel } from '../lib/unitNormalize'
 import { sliderBoundsForFeature } from '../lib/sliderBounds'
 import { t } from '../i18n/t'
-import { EXPLORATION_DEBOUNCE_MS } from '../hooks/useSurrogateExploration'
 import type { ManifestFeature } from '../types/manifest'
 
 function numberStepModel(id: string): number {
@@ -91,7 +90,7 @@ ${f.description && typeof f.description === 'string' ? f.description : f.notes &
       {/* Row 1: full label + help, with value and unit right-aligned. */}
       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
         <div className="flex min-w-0 flex-1 items-baseline gap-1">
-          <div className="dash-text text-sm font-medium">{t(id)}</div>
+          <div className="dash-card-label dash-text text-sm font-medium">{t(id)}</div>
           <button
             type="button"
             className="dash-accent-text shrink-0 rounded p-0.5 text-sm hover:opacity-80"
@@ -178,31 +177,41 @@ export function InputSlidersPane({
 }: InputSlidersPaneProps) {
   const baseId = useId()
   const groups = useMemo(() => groupTensorInputs(features), [features])
-  const [open, setOpen] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(groups.map((g) => [g.title, true])),
-  )
+  const [open, setOpen] = useState<Record<string, boolean>>({})
+  const allExpanded = groups.length > 0 && groups.every((g) => open[g.title] === true)
 
   return (
     <div className="min-w-0 pr-1">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="dash-heading text-sm font-semibold">Inputs (tensor)</h3>
-        <button
-          type="button"
-          onClick={onResetToDefaults}
-          className="dash-control rounded border px-2.5 py-1 text-xs"
-        >
-          Reset all to defaults
-        </button>
+        <h3 className="dash-section-heading">Building Design Inputs</h3>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              setOpen(
+                Object.fromEntries(groups.map((g) => [g.title, !allExpanded])),
+              )
+            }
+            className="dash-control rounded border px-2.5 py-1 text-xs"
+          >
+            {allExpanded ? 'Collapse all' : 'Expand all'}
+          </button>
+          <button
+            type="button"
+            onClick={onResetToDefaults}
+            className="dash-control rounded border px-2.5 py-1 text-xs"
+          >
+            Reset all to defaults
+          </button>
+        </div>
       </div>
       <p className="dash-muted mb-4 text-xs">
-        Adjust inputs; outputs update after {EXPLORATION_DEBOUNCE_MS} ms
-        debounce. Training bounds
-        are shown on each slider; values can still be set outside the range
-        (highlighted with the warning colour).
+        Adjust the building design inputs to see how predicted performance changes.
+        Each slider shows the model’s training range. Values outside that range are highlighted in amber.
       </p>
       <div className="space-y-2">
         {groups.map((g) => {
-          const expanded = open[g.title] !== false
+          const expanded = open[g.title] === true
           return (
             <div
               key={g.title}
@@ -216,12 +225,17 @@ export function InputSlidersPane({
                 className="dash-text flex w-full items-center justify-between gap-2 px-2.5 py-2 text-left text-sm font-medium"
                 aria-expanded={expanded}
               >
-                <span>{g.title}</span>
+                <span>
+                  {g.title}{' '}
+                  <span className="dash-muted text-xs font-normal">
+                    · {g.items.length} {g.items.length === 1 ? 'input' : 'inputs'}
+                  </span>
+                </span>
                 <span className="dash-muted">{expanded ? '−' : '+'}</span>
               </button>
               {expanded ? (
                 <ul
-                  className="dash-divider grid list-none grid-cols-1 gap-2 border-t px-2.5 py-2 min-[640px]:grid-cols-2"
+                  className="dash-divider grid list-none grid-cols-1 gap-2 border-t px-2.5 py-2"
                   style={{ maxWidth: '100%' }}
                 >
                   {g.items.map((f) => {

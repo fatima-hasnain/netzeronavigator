@@ -95,7 +95,7 @@ export function SurrogateExploration({
         variant="compact"
       />
       {loadState.status === 'ready' && (
-        <div className="min-[900px]:grid min-[900px]:grid-cols-2 min-[900px]:items-start min-[900px]:gap-6">
+        <div className="grid grid-cols-1 gap-6 min-[1100px]:grid-cols-[340px_minmax(0,1fr)] items-start">
           <div className="min-w-0 max-w-full">
             {selectionFeatures.length > 0 ? (
               <ConfigurationBar
@@ -119,6 +119,7 @@ export function SurrogateExploration({
             />
           </div>
           <OutputReadoutPane
+            surrogateId={surrogateId}
             features={orderedOut}
             outputs={outputs}
             isOutputUpdating={isOutputUpdating}
