@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { t } from '../i18n/t'
 import {
   computeDerivedMetrics,
@@ -14,10 +14,12 @@ import {
   ghgOrCostLevel,
 } from '../lib/outputCardMeta'
 import { formatEnergy, type EnergyDisplayUnit } from '../lib/volumeConversion'
+import type { OutputSelection } from '../lib/outputSelection'
 import { OutputSensitivityChart } from './OutputSensitivityChart'
 import { OutputComparisonView } from './OutputComparisonView'
 import { OutputHeatmapView } from './OutputHeatmapView'
 import { OutputTornadoView } from './OutputTornadoView'
+import { OutputSmallMultiplesView } from './OutputSmallMultiplesView'
 import type { LayersModel } from '@tensorflow/tfjs'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
@@ -164,6 +166,7 @@ const VISUALIZATION_VIEWS = [
   { id: 'comparison', label: 'Comparison' },
   { id: 'heatmap', label: 'Heatmap' },
   { id: 'tornado', label: 'Tornado' },
+  { id: 'small-multiples', label: 'Small Multiples' },
 ] as const
 
 type VisualizationView = (typeof VISUALIZATION_VIEWS)[number]['id']
@@ -184,7 +187,22 @@ export function OutputReadoutPane({
   const [energyMode, setEnergyMode] = useState<EnergyDisplayUnit>('kWh')
   const [visualizationView, setVisualizationView] =
     useState<VisualizationView>('sensitivity')
+  /** Set only by a Small Multiples tile click; cleared when the Sensitivity tab is clicked directly. */
+  const [sensitivityFocus, setSensitivityFocus] = useState<{
+    inputId: string
+    outputSelection: OutputSelection
+  } | null>(null)
   const busy = isOutputUpdating || isPredicting
+
+  const handleTabClick = useCallback((id: VisualizationView) => {
+    setVisualizationView(id)
+    if (id === 'sensitivity') setSensitivityFocus(null)
+  }, [])
+
+  const openInSensitivity = useCallback((inputId: string, outputSelection: OutputSelection) => {
+    setSensitivityFocus({ inputId, outputSelection })
+    setVisualizationView('sensitivity')
+  }, [])
 
   const derived = useMemo(() => {
     if (!outputs) return null
@@ -260,7 +278,7 @@ export function OutputReadoutPane({
                 role="tab"
                 aria-selected={visualizationView === view.id}
                 aria-controls={`visualization-panel-${view.id}`}
-                onClick={() => setVisualizationView(view.id)}
+                onClick={() => handleTabClick(view.id)}
                 className={
                   visualizationView === view.id
                     ? 'dash-accent-bg rounded px-3 py-1'
@@ -286,6 +304,8 @@ export function OutputReadoutPane({
                 outputFeatures={features}
                 valueMap={valueMap}
                 energyMode={energyMode}
+                initialInputId={sensitivityFocus?.inputId}
+                initialOutputSelection={sensitivityFocus?.outputSelection}
               />
             ) : visualizationView === 'comparison' ? (
               <OutputComparisonView
@@ -306,7 +326,7 @@ export function OutputReadoutPane({
                 valueMap={valueMap}
                 energyMode={energyMode}
               />
-            ) : (
+            ) : visualizationView === 'tornado' ? (
               <OutputTornadoView
                 surrogateId={surrogateId}
                 model={model}
@@ -315,6 +335,17 @@ export function OutputReadoutPane({
                 outputFeatures={features}
                 valueMap={valueMap}
                 energyMode={energyMode}
+              />
+            ) : (
+              <OutputSmallMultiplesView
+                surrogateId={surrogateId}
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                valueMap={valueMap}
+                energyMode={energyMode}
+                onOpenInSensitivity={openInSensitivity}
               />
             )}
           </div>

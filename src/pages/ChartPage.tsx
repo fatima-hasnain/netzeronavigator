@@ -1,15 +1,16 @@
-import { useMemo } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { useCallback, useMemo } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useManifest } from '../hooks/useManifest'
 import { useTfModel } from '../hooks/useTfModel'
 import { tfModelJsonUrl } from '../lib/assetUrls'
 import { tensorInputFeatures, tensorOutputFeatures } from '../lib/tfFeatureSelection'
 import { initialTensorValueMap } from '../tf/initialTensorValues'
-import { readChartHandoff } from '../lib/chartHandoff'
+import { readChartHandoff, writeChartHandoff } from '../lib/chartHandoff'
 import type { OutputSelection } from '../lib/outputSelection'
 import { OutputSensitivityChart } from '../components/OutputSensitivityChart'
 import { OutputHeatmapView } from '../components/OutputHeatmapView'
 import { OutputTornadoView } from '../components/OutputTornadoView'
+import { OutputSmallMultiplesView } from '../components/OutputSmallMultiplesView'
 import type { EnergyDisplayUnit } from '../lib/volumeConversion'
 import type { Manifest, TfModel } from '../types/manifest'
 
@@ -18,6 +19,7 @@ const VIEW_LABELS: Record<string, string> = {
   sensitivity: 'Sensitivity',
   heatmap: 'Heatmap',
   tornado: 'Tornado',
+  'small-multiples': 'Small Multiples',
 }
 
 function parseEnergyMode(raw: string | null): EnergyDisplayUnit {
@@ -59,6 +61,7 @@ function ChartContent({
   manifest: Manifest
 }) {
   const [params] = useSearchParams()
+  const navigate = useNavigate()
 
   const models = useMemo(
     () => (manifest['tf-models'] as TfModel[] | undefined) ?? [],
@@ -87,6 +90,22 @@ function ChartContent({
   const initialOutputSelection = (params.get('output') as OutputSelection | null) ?? undefined
   const title = manifest.name ?? manifest.id
   const viewLabel = VIEW_LABELS[view] ?? view
+
+  const openInSensitivity = useCallback(
+    (inputId: string, outputSelection: OutputSelection) => {
+      if (!tf) return
+      writeChartHandoff({ valueMap })
+      const nextParams = new URLSearchParams({
+        tf: tf.path,
+        view: 'sensitivity',
+        energy: energyMode,
+        input: inputId,
+        output: outputSelection,
+      })
+      navigate(`/s/${surrogateId}/chart?${nextParams.toString()}`)
+    },
+    [energyMode, navigate, surrogateId, tf, valueMap],
+  )
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -141,6 +160,18 @@ function ChartContent({
               valueMap={valueMap}
               energyMode={energyMode}
               initialOutputSelection={initialOutputSelection}
+            />
+          ) : view === 'small-multiples' ? (
+            <OutputSmallMultiplesView
+              surrogateId={surrogateId}
+              model={loadState.model}
+              tfModel={tf}
+              inputFeatures={orderedIn}
+              outputFeatures={orderedOut}
+              valueMap={valueMap}
+              energyMode={energyMode}
+              initialOutputSelection={initialOutputSelection}
+              onOpenInSensitivity={openInSensitivity}
             />
           ) : (
             <OutputSensitivityChart

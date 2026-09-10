@@ -17,7 +17,8 @@ import {
 } from '../lib/outputSelection'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
-const SWEEP_STEPS = 20
+/** Also reused by OutputSmallMultiplesView, so every mini curve has the same resolution. */
+export const SWEEP_STEPS = 20
 
 interface OutputSensitivityChartProps {
   surrogateId: string

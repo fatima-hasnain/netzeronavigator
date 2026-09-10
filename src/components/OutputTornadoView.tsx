@@ -20,7 +20,8 @@ interface TornadoRow {
   id: string
   loValue: number
   hiValue: number
-  swing: number
+  /** hiValue − loValue: positive means the output rises from min-input to max-input. */
+  signedSwing: number
 }
 
 interface OutputTornadoViewProps {
@@ -56,27 +57,41 @@ export function OutputTornadoView({
   )
 
   const tornado = useMemo(() => {
-    if (inputFeatures.length === 0) return { rows: [] as TornadoRow[], error: null as string | null }
+    if (inputFeatures.length === 0) {
+      return { rows: [] as TornadoRow[], baselineValue: Number.NaN, error: null as string | null }
+    }
     try {
       const bounds = inputFeatures.map((f) => sliderBoundsForFeature(f, valueMap[f.feature.id] ?? 0))
       const samples = inputFeatures.flatMap((f, i) => [
         { ...valueMap, [f.feature.id]: bounds[i].min },
         { ...valueMap, [f.feature.id]: bounds[i].max },
       ])
+      samples.push({ ...valueMap })
       const predictions = runSurrogatePredictBatch(model, inputFeatures, outputFeatures, samples)
+      const baselineValue = resolveOutputValue(
+        outputSelection,
+        predictions[predictions.length - 1],
+        tfModel,
+        valueMap,
+        energyMode,
+      )
       const rows = inputFeatures
         .map((f, i) => {
           const loValues = samples[i * 2]
           const hiValues = samples[i * 2 + 1]
           const loValue = resolveOutputValue(outputSelection, predictions[i * 2], tfModel, loValues, energyMode)
           const hiValue = resolveOutputValue(outputSelection, predictions[i * 2 + 1], tfModel, hiValues, energyMode)
-          return { id: f.feature.id, loValue, hiValue, swing: Math.abs(hiValue - loValue) }
+          return { id: f.feature.id, loValue, hiValue, signedSwing: hiValue - loValue }
         })
-        .filter((row) => Number.isFinite(row.swing))
-        .sort((a, b) => b.swing - a.swing)
-      return { rows, error: null as string | null }
+        .filter((row) => Number.isFinite(row.signedSwing))
+        .sort((a, b) => Math.abs(b.signedSwing) - Math.abs(a.signedSwing))
+      return { rows, baselineValue, error: null as string | null }
     } catch (error) {
-      return { rows: [] as TornadoRow[], error: error instanceof Error ? error.message : String(error) }
+      return {
+        rows: [] as TornadoRow[],
+        baselineValue: Number.NaN,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   }, [energyMode, inputFeatures, model, outputFeatures, outputSelection, tfModel, valueMap])
 
@@ -94,7 +109,7 @@ export function OutputTornadoView({
   if (outputFeatures.length === 0) return null
 
   const unit = outputSelectionUnit(outputSelection, energyMode)
-  const maxSwing = Math.max(...tornado.rows.map((row) => row.swing), 1e-9)
+  const maxAbsSwing = Math.max(...tornado.rows.map((row) => Math.abs(row.signedSwing)), 1e-9)
 
   return (
     <section className="dash-panel rounded border p-1.5 2xl:flex 2xl:flex-1 2xl:flex-col" aria-labelledby="tornado-title">
@@ -130,24 +145,47 @@ export function OutputTornadoView({
         <p className="dash-error mt-2 text-xs" role="alert">{tornado.error}</p>
       ) : (
         <ExpandableChart title="Tornado chart" onOpenNewTab={openInNewTab}>
-          <div className="tornado-plot mt-1 max-h-96 space-y-1.5 overflow-y-auto pr-1 text-[10px] 2xl:max-h-[32rem]">
-            {tornado.rows.map((row) => (
-              <div key={row.id}>
-                <div className="mb-0.5 flex items-baseline justify-between gap-2">
-                  <span className="dash-text min-w-0 truncate">{t(row.id)}</span>
-                  <span className="dash-muted shrink-0 tabular-nums">
-                    {formatChartNumber(row.loValue)} → {formatChartNumber(row.hiValue)}
-                  </span>
+          <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
+            <span className="dash-muted">← decreases output</span>
+            <span className="dash-text">
+              Baseline {formatChartNumber(tornado.baselineValue)} {unit}
+            </span>
+            <span className="dash-muted">increases output →</span>
+          </div>
+          <div className="tornado-plot max-h-96 space-y-1.5 overflow-y-auto pr-1 text-[10px] 2xl:max-h-[32rem]">
+            {tornado.rows.map((row) => {
+              const halfPct = (Math.abs(row.signedSwing) / maxAbsSwing) * 50
+              return (
+                <div key={row.id}>
+                  <div className="mb-0.5 flex items-baseline justify-between gap-2">
+                    <span className="dash-text min-w-0 truncate">{t(row.id)}</span>
+                    <span className="dash-muted shrink-0 tabular-nums">
+                      {formatChartNumber(row.loValue)} → {formatChartNumber(row.hiValue)}
+                    </span>
+                  </div>
+                  <div className="dash-track relative h-2.5 w-full overflow-hidden rounded">
+                    <div
+                      className="absolute inset-y-0 left-1/2 w-px"
+                      style={{ background: 'var(--dash-border)' }}
+                      aria-hidden="true"
+                    />
+                    <div
+                      className="dash-bar absolute inset-y-0 rounded"
+                      style={
+                        row.signedSwing >= 0
+                          ? { left: '50%', width: `${halfPct}%` }
+                          : { right: '50%', width: `${halfPct}%` }
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="dash-track h-2.5 w-full overflow-hidden rounded">
-                  <div className="dash-bar h-full rounded" style={{ width: `${(row.swing / maxSwing) * 100}%` }} />
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <p className="dash-muted mt-2 text-[10px]">
-            Swing = predicted {t(outputSelectionLabel(outputSelection))} ({unit}) at each input&rsquo;s training max
-            minus at its training min, holding other inputs at current values. Ranked longest first.
+            Bars show the change in predicted {t(outputSelectionLabel(outputSelection))} ({unit}) from baseline as
+            each input moves from its training min to its training max, holding other inputs at current values.
+            Right = output increases, left = output decreases. Ranked by size of change, longest first.
           </p>
         </ExpandableChart>
       )}
