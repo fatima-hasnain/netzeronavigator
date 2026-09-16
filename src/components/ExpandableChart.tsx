@@ -7,7 +7,16 @@ export interface ExpandableChartProps {
   onOpenNewTab?: () => void
 }
 
-/** Reuses the plotted data and labels in a keyboard-accessible native modal. */
+/**
+ * Shared "Expand chart" affordance wrapped around every visualization view
+ * (Sensitivity, Tornado, Heatmap, All Inputs) — the compact in-panel chart is
+ * cramped next to the input sliders, so this renders the same `children` a
+ * second time, larger, inside a modal. Built on the native `<dialog>` element
+ * rather than a hand-rolled overlay: `showModal()` gets focus trapping,
+ * Escape-to-close, and `::backdrop` styling for free, which a custom div-based
+ * modal would otherwise have to reimplement to be keyboard/screen-reader
+ * accessible.
+ */
 export function ExpandableChart({ title, children, onOpenNewTab }: ExpandableChartProps) {
   const [expanded, setExpanded] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)

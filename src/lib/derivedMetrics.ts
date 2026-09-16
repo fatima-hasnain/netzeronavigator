@@ -13,6 +13,20 @@ export interface SurrogateOutputJ {
 /**
  * Client-side approximations aligned with manifest `derived-output` notes (20200224).
  * All energies in J; `floorM2` from exterior context; intensities in kgCO2/kWh; $/kWh.
+ *
+ * The "in J" assumption is trusted, not verified here: `outputsRecordToJ` below just
+ * reads whichever prediction values already carry the HEATING_DEMAND/COOLING_DEMAND/etc
+ * ids — it doesn't check what unit those predictions are actually expressed in. The
+ * real check lives upstream, in `supportsDerived`/`isJoules` (modelDisplay.ts), which
+ * only lets this run when the manifest *declares* each output's `units` as `"J"`. That
+ * declaration is reliable for 20200224 and the other hand-exported models, but for the
+ * 280-model reconstructed archetype sweep it is exactly one of the open items flagged
+ * in their recovery profile ("Output column order and units need confirmation") — a
+ * unit label recovered alongside an unverified scaler, not something physically
+ * confirmed. None of those 280 are `status: available` yet, so this path can't run for
+ * them today; if one is ever promoted to available without independently confirming its
+ * output units, `isJoules` would trust the manifest's "J" label and this function would
+ * silently compute TEDI/CEDI/EUI/GHGI/cost from values that may not be joules at all.
  */
 export function computeDerivedMetrics(
   out: SurrogateOutputJ,

@@ -175,6 +175,13 @@ function signed(value: number, maximumFractionDigits = 2): string {
   return value > 0 ? `+${text}` : value < 0 ? `−${text}` : text
 }
 
+/**
+ * Side-by-side A/B design comparison: two independent input tables, each predicted
+ * separately and shown with their outputs, derived metrics, and a radar chart. Use
+ * this view (rather than Sensitivity/Tornado/Heatmap, which all vary inputs around
+ * one current design) when the question is "how do two specific, independently-set
+ * designs compare?" — e.g. current vs. a proposed retrofit.
+ */
 export function OutputComparisonView({
   model,
   tfModel,

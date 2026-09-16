@@ -8,10 +8,10 @@ import { tensorInputFeatures, tensorOutputFeatures } from '../lib/tfFeatureSelec
 import { initialTensorValueMap } from '../tf/initialTensorValues'
 import { readChartHandoff, writeChartHandoff } from '../lib/chartHandoff'
 import type { OutputSelection } from '../lib/outputSelection'
-import { OutputSensitivityChart } from '../components/OutputSensitivityChart'
+import { OutputSensitivityView } from '../components/OutputSensitivityView'
 import { OutputHeatmapView } from '../components/OutputHeatmapView'
 import { OutputTornadoView } from '../components/OutputTornadoView'
-import { OutputSmallMultiplesView } from '../components/OutputSmallMultiplesView'
+import { OutputAllInputsView } from '../components/OutputAllInputsView'
 import type { EnergyDisplayUnit } from '../lib/volumeConversion'
 import type { Manifest, TfModel } from '../types/manifest'
 
@@ -164,7 +164,7 @@ function ChartContent({
               initialOutputSelection={initialOutputSelection}
             />
           ) : view === 'all-inputs' ? (
-            <OutputSmallMultiplesView
+            <OutputAllInputsView
               surrogateId={surrogateId}
               model={loadState.model}
               tfModel={tf}
@@ -176,7 +176,7 @@ function ChartContent({
               onOpenInSensitivity={openInSensitivity}
             />
           ) : (
-            <OutputSensitivityChart
+            <OutputSensitivityView
               surrogateId={surrogateId}
               model={loadState.model}
               tfModel={tf}

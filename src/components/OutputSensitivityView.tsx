@@ -18,10 +18,19 @@ import {
 } from '../lib/outputSelection'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
-/** Also reused by OutputSmallMultiplesView, so every mini curve has the same resolution. */
+/** Also reused by OutputAllInputsView, so every mini curve has the same resolution. */
 export const SWEEP_STEPS = 20
 
-interface OutputSensitivityChartProps {
+/**
+ * One-input-at-a-time sweep: holds every other input at its current slider value
+ * and plots the model's predicted output across the chosen input's full training
+ * range. Use this view to answer "what happens to output X as input Y moves,
+ * with everything else fixed at what I've already set?" — the per-input detail
+ * view that All Inputs' mini curves link out to, and what Tornado's two-point
+ * range check is a cheaper summary of.
+ */
+
+interface OutputSensitivityViewProps {
   surrogateId: string
   model: LayersModel
   tfModel: TfModel
@@ -33,7 +42,7 @@ interface OutputSensitivityChartProps {
   initialOutputSelection?: OutputSelection
 }
 
-export function OutputSensitivityChart({
+export function OutputSensitivityView({
   surrogateId,
   model,
   tfModel,
@@ -43,7 +52,7 @@ export function OutputSensitivityChart({
   energyMode,
   initialInputId,
   initialOutputSelection,
-}: OutputSensitivityChartProps) {
+}: OutputSensitivityViewProps) {
   const [inputId, setInputId] = useState(
     () => initialInputId ?? inputFeatures[0]?.feature.id ?? '',
   )
@@ -64,6 +73,8 @@ export function OutputSensitivityChart({
         const x = min + ((max - min) * index) / (SWEEP_STEPS - 1)
         return { x, values: { ...valueMap, [activeInput.feature.id]: x } }
       })
+      // Batched: one predict call for all SWEEP_STEPS samples rather than looping
+      // runSurrogatePredict per step (see runSurrogatePredictBatch for why).
       const predictions = runSurrogatePredictBatch(
         model,
         inputFeatures,
@@ -171,6 +182,10 @@ export function OutputSensitivityChart({
                   const dx = point.x - prev.x
                   return { prev, point, absSlope: dx !== 0 ? Math.abs((point.y - prev.y) / dx) : 0 }
                 })
+                // Normalized against this curve's own min→max |slope| (not a fixed
+                // scale) — see chartSlope.ts for why: an absolute scale would render
+                // most curves as a single flat colour, since slope magnitude varies
+                // hugely between inputs.
                 const slopeValues = segments.map((s) => s.absSlope)
                 const minAbsSlope = slopeValues.length ? Math.min(...slopeValues) : 0
                 const maxAbsSlope = slopeValues.length ? Math.max(...slopeValues) : 0

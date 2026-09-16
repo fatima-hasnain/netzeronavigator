@@ -40,8 +40,16 @@ interface OutputTornadoViewProps {
  * Sweeps each input across its training range one at a time (others held at
  * `valueMap`), ranking by the resulting output swing. Reuses
  * `runSurrogatePredictBatch` for one batched call over all inputs' two extremes,
- * rather than `OutputSensitivityChart`'s per-input 20-step interpolation — a
+ * rather than `OutputSensitivityView`'s per-input 20-step interpolation — a
  * tornado only needs the two range endpoints, not the curve between them.
+ *
+ * Other inputs are held at `valueMap` (the user's current slider position), not
+ * the model's defaults, because the question this view answers is "given the
+ * design I'm currently looking at, which input matters most from here?" — local
+ * sensitivity around the point being explored. Anchoring to defaults instead
+ * would answer a different, less useful question (which input matters most for
+ * some fixed reference design) and the ranking would stop matching what's on
+ * screen the moment the user moved any slider away from its default.
  */
 export function OutputTornadoView({
   surrogateId,

@@ -15,11 +15,11 @@ import {
 } from '../lib/outputCardMeta'
 import { type EnergyDisplayUnit } from '../lib/volumeConversion'
 import type { OutputSelection } from '../lib/outputSelection'
-import { OutputSensitivityChart } from './OutputSensitivityChart'
+import { OutputSensitivityView } from './OutputSensitivityView'
 import { OutputComparisonView } from './OutputComparisonView'
 import { OutputHeatmapView } from './OutputHeatmapView'
 import { OutputTornadoView } from './OutputTornadoView'
-import { OutputSmallMultiplesView } from './OutputSmallMultiplesView'
+import { OutputAllInputsView } from './OutputAllInputsView'
 import type { LayersModel } from '@tensorflow/tfjs'
 import type { ManifestFeature, TfModel } from '../types/manifest'
 
@@ -173,6 +173,13 @@ const VISUALIZATION_VIEWS = [
 
 type VisualizationView = (typeof VISUALIZATION_VIEWS)[number]['id']
 
+/**
+ * The right-hand "Predicted Outputs" panel of the explorer: current-prediction
+ * cards and derived metrics, plus the tab strip that switches between the five
+ * visualization views (All Inputs, Sensitivity, Tornado, Heatmap, Comparison).
+ * Owns which view is active and the energy display unit, since both need to
+ * survive switching views and are shared by whichever view is on screen.
+ */
 export function OutputReadoutPane({
   surrogateId,
   features,
@@ -298,7 +305,7 @@ export function OutputReadoutPane({
             className="2xl:flex 2xl:flex-1 2xl:flex-col"
           >
             {visualizationView === 'all-inputs' ? (
-              <OutputSmallMultiplesView
+              <OutputAllInputsView
                 surrogateId={surrogateId}
                 model={model}
                 tfModel={tfModel}
@@ -309,7 +316,7 @@ export function OutputReadoutPane({
                 onOpenInSensitivity={openInSensitivity}
               />
             ) : visualizationView === 'sensitivity' ? (
-              <OutputSensitivityChart
+              <OutputSensitivityView
                 surrogateId={surrogateId}
                 model={model}
                 tfModel={tfModel}

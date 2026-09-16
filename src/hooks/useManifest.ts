@@ -43,6 +43,14 @@ export function useManifest(surrogateId: string): ManifestState {
         for (const model of data['tf-models']) {
           const inputs = tensorInputFeatures(model), outputs = tensorOutputFeatures(model)
           if (!inputs.length || !outputs.length) throw Error('Missing parameter metadata')
+          // `f.tf?.position !== i` (after tensorInputFeatures/tensorOutputFeatures already
+          // sorted by position) fails fast on a gap or duplicate in the manifest's position
+          // numbering. runSurrogatePredict/tensorPipeline consume these arrays purely by
+          // index — they never re-check `tf.position` — so a hole here would silently
+          // shift every input after it into the wrong tensor column with no runtime error,
+          // just a wrong prediction. Rejecting non-positive `training-scale` here (not just
+          // non-zero, as `standardize` does) also catches a corrupt/negative scaler before
+          // it flips the sign of every standardized value for that feature.
           for (const features of [inputs, outputs]) features.forEach((f, i) => {
             if (f.tf?.position !== i || !Number.isFinite(f.tf['training-mean']) || !Number.isFinite(f.tf['training-scale']) || f.tf['training-scale']! <= 0) throw Error('Missing or invalid scaler: ' + f.feature.id)
           })

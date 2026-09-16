@@ -8,7 +8,7 @@ import { formatChartNumber } from '../lib/chartNumberFormat'
 import type { EnergyDisplayUnit } from '../lib/volumeConversion'
 import { runSurrogatePredictBatch } from '../tf/runSurrogatePredict'
 import { writeChartHandoff } from '../lib/chartHandoff'
-import { SWEEP_STEPS } from './OutputSensitivityChart'
+import { SWEEP_STEPS } from './OutputSensitivityView'
 import {
   derivedOptionsFor,
   outputSelectionLabel,
@@ -23,7 +23,7 @@ interface MiniSeries {
   points: { x: number; y: number }[]
 }
 
-interface OutputSmallMultiplesViewProps {
+interface OutputAllInputsViewProps {
   surrogateId: string
   model: LayersModel
   tfModel: TfModel
@@ -39,11 +39,11 @@ interface OutputSmallMultiplesViewProps {
 /**
  * One miniature sensitivity curve per input, all sharing a single y-axis scale so
  * a flat tile genuinely means "barely matters" rather than an artifact of per-tile
- * autoscaling. Reuses the same batched-sweep approach as OutputSensitivityChart —
+ * autoscaling. Reuses the same batched-sweep approach as OutputSensitivityView —
  * one runSurrogatePredictBatch call over every input's SWEEP_STEPS samples
  * concatenated together, rather than one call per tile.
  */
-export function OutputSmallMultiplesView({
+export function OutputAllInputsView({
   surrogateId,
   model,
   tfModel,
@@ -53,7 +53,7 @@ export function OutputSmallMultiplesView({
   energyMode,
   initialOutputSelection,
   onOpenInSensitivity,
-}: OutputSmallMultiplesViewProps) {
+}: OutputAllInputsViewProps) {
   const [outputSelection, setOutputSelection] = useState<OutputSelection>(
     () => initialOutputSelection ?? `tensor:${outputFeatures[0]?.feature.id ?? ''}`,
   )

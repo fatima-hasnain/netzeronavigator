@@ -5,6 +5,9 @@ import { formatEnergy, type EnergyDisplayUnit } from './volumeConversion'
 export function featureLabel(f: ManifestFeature): string {
   return f['short-name'] || f['long-name'] || t(f.feature.id)
 }
+/** Trusts the manifest's declared `units`, does not verify the underlying values are
+ * actually joules — see the caveat in derivedMetrics.ts about the reconstructed
+ * archetype sweep, whose recovered unit labels are unconfirmed. */
 export function isJoules(f: ManifestFeature | undefined): boolean {
   return f?.units?.toLowerCase() === 'j'
 }

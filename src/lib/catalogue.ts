@@ -1,3 +1,11 @@
+/**
+ * Shape of one entry in the generated `public/models/catalog.json` (built by
+ * `scripts/generate-catalog.mjs` from several source pipelines — hand-exported
+ * TF.js bundles, a legacy interface, and a reconstructed archetype sweep) plus the
+ * filtering/display helpers the catalogue picker (HomePage) builds on. `status`
+ * is the load-bearing field: only `'available'` entries have a working TF.js
+ * export and can actually predict; everything else is metadata-only.
+ */
 export interface CatalogueModel {
   id: string
   displayName: string

@@ -3,6 +3,15 @@ import { modelsBase } from '../lib/assetUrls'
 import type { CatalogueModel } from '../lib/catalogue'
 
 type State = { status: 'loading' } | { status: 'error'; error: string } | { status: 'success'; models: CatalogueModel[] }
+
+/**
+ * Fetches the generated catalogue once per mount. `catalog.json` is machine-written
+ * by `scripts/generate-catalog.mjs`, not hand-edited, but it's still fetched over
+ * the network as plain JSON with no compile-time guarantee it matches
+ * `CatalogueModel` — the shape/schemaVersion check below exists so a stale or
+ * regenerated-with-a-different-shape catalogue fails loudly as a catalogue error
+ * instead of the picker silently rendering `undefined` fields.
+ */
 export function useCatalogue() {
   const [state, setState] = useState<State>({ status: 'loading' })
   useEffect(() => {

@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { useCatalogue } from '../hooks/useCatalogue'
 import { cleanDisplayName, filterModels, normalizeArchetype, sourceBucket, type CatalogueModel } from '../lib/catalogue'
 
+/** One catalogue entry, used both in the always-visible "Ready to explore" grid
+ * and inside the collapsed archive below it — same card either way, since the
+ * only real difference between a prediction-ready and details-only model is
+ * which state its own `status` field is in. */
 function ModelCard({ m }: { m: CatalogueModel }) {
   return (
     <article className="dash-card flex h-full flex-col rounded-lg border p-4">
@@ -22,6 +26,17 @@ function ModelCard({ m }: { m: CatalogueModel }) {
   )
 }
 
+/**
+ * The filterable, collapsed-by-default list of every non-interactive catalogue
+ * entry (raw exports still awaiting TF.js conversion, plus the reconstructed
+ * archetype sweep). Collapsed rather than shown inline because these outnumber
+ * the interactive models roughly 100 to 1 — rendering them all in the main grid
+ * would bury the handful of models a visitor can actually predict with under an
+ * essentially unbounded wall of "details only" cards. The per-source-bucket
+ * counts in the summary line exist so that scale is still visible without
+ * expanding: e.g. that most of these come from one large reconstructed sweep,
+ * not 400+ independent training runs.
+ */
 function ArchivePicker({ models }: { models: CatalogueModel[] }) {
   const [search, setSearch] = useState('')
   const [archetype, setArchetype] = useState('')

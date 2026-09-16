@@ -20,6 +20,13 @@ import type { ManifestFeature, TfModel } from '../types/manifest'
 
 const GRID_STEPS = 20
 
+/**
+ * Two-input joint sweep, rendered as a GRID_STEPS × GRID_STEPS colour grid. Use
+ * this view when a single-input Sensitivity curve isn't enough to see whether two
+ * inputs interact (e.g. insulation only matters when infiltration is also high) —
+ * Sensitivity varies one input at a time, this varies two simultaneously.
+ */
+
 interface OutputHeatmapViewProps {
   surrogateId: string
   model: LayersModel
@@ -71,6 +78,10 @@ export function OutputHeatmapView({
     })
 
     try {
+      // Batched: one predict call for all GRID_STEPS × GRID_STEPS = 400 cells
+      // rather than looping runSurrogatePredict per cell (see
+      // runSurrogatePredictBatch for why — 400 individual calls would be the
+      // most expensive view in the app if it weren't batched).
       const predictions = runSurrogatePredictBatch(
         model,
         inputFeatures,

@@ -40,7 +40,16 @@ export function runSurrogatePredict(
   return rawPredictionToOutputs(raw, orderedOut)
 }
 
-/** Run multiple input value maps in one model call. */
+/**
+ * Run multiple input value maps as one `model.predict` call instead of looping
+ * `runSurrogatePredict` per sample. Every sweep view (Sensitivity's 20 steps,
+ * Tornado's 2 per input, All Inputs' 20 × input-count, Heatmap's 20 × 20 grid)
+ * needs many predictions per slider move, and each `model.predict` call carries
+ * fixed tensor-allocation and kernel-dispatch overhead regardless of batch size —
+ * one call over a stacked `tensor2d` amortizes that overhead across every row
+ * instead of paying it once per row, which is what keeps these views responsive
+ * while a slider is being dragged.
+ */
 export function runSurrogatePredictBatch(
   model: tf.LayersModel,
   orderedIn: ManifestFeature[],

@@ -5,7 +5,11 @@ import { deStandardize } from './standardize'
  * Inverse Box-Cox: y(lambda) = (t^lambda - 1) / lambda  =>  t = (y*lambda + 1)^(1/lambda),
  * or t = exp(y) when lambda = 0. Domain guard: box-cox is only defined for t > 0, so a
  * pre-image that would go non-positive (y*lambda + 1 <= 0) clamps to a tiny positive
- * number rather than producing NaN.
+ * number rather than producing NaN. Clamping (not throwing) matters here specifically
+ * because `runSurrogatePredictBatch` decodes every row of a sweep/heatmap through this
+ * function in one pass — one out-of-range sample at the edge of a slider's training
+ * bounds would otherwise throw `Non-finite prediction` and abort the whole batch (all
+ * 20 sweep points, or all 400 heatmap cells) instead of just that one sample.
  */
 function inverseBoxCox(y: number, lambda: number): number {
   if (lambda === 0) return Math.exp(y)
