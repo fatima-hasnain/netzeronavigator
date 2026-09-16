@@ -1,3 +1,4 @@
+import { featureLabel } from '../lib/modelDisplay'
 import { ExpandableChart } from './ExpandableChart'
 import { magnitudeColor, MAGNITUDE_GRADIENT } from '../lib/chartMagnitude'
 import { useCallback, useMemo, useState } from 'react'
@@ -9,7 +10,7 @@ import type { EnergyDisplayUnit } from '../lib/volumeConversion'
 import { runSurrogatePredictBatch } from '../tf/runSurrogatePredict'
 import { writeChartHandoff } from '../lib/chartHandoff'
 import {
-  DERIVED_OPTIONS,
+  derivedOptionsFor,
   outputSelectionLabel,
   outputSelectionUnit,
   resolveOutputValue,
@@ -109,7 +110,7 @@ export function OutputHeatmapView({
   const maxValue = values.length ? Math.max(...values) : 1
   const span = maxValue - minValue || 1
   const cellSize = 200 / GRID_STEPS
-  const unit = outputSelectionUnit(outputSelection, energyMode)
+  const unit = outputSelectionUnit(outputSelection, energyMode, tfModel)
 
   return (
     <section className="dash-panel rounded border p-1.5 2xl:flex 2xl:flex-1 2xl:flex-col" aria-labelledby="heatmap-title">
@@ -117,20 +118,20 @@ export function OutputHeatmapView({
         <label className="dash-muted text-[10px] font-semibold uppercase tracking-wide">
           X input
           <select className="dash-select mt-0.5 block w-full rounded border px-2 py-1 text-xs normal-case" value={xInput.feature.id} onChange={(event) => setXInputId(event.target.value)}>
-            {inputFeatures.filter((feature) => feature.feature.id !== yInput.feature.id).map((feature) => <option key={feature.feature.id} value={feature.feature.id}>{t(feature.feature.id)}</option>)}
+            {inputFeatures.filter((feature) => feature.feature.id !== yInput.feature.id).map((feature) => <option key={feature.feature.id} value={feature.feature.id}>{featureLabel(feature)}</option>)}
           </select>
         </label>
         <label className="dash-muted text-[10px] font-semibold uppercase tracking-wide">
           Y input
           <select className="dash-select mt-0.5 block w-full rounded border px-2 py-1 text-xs normal-case" value={yInput.feature.id} onChange={(event) => setYInputId(event.target.value)}>
-            {inputFeatures.filter((feature) => feature.feature.id !== xInput.feature.id).map((feature) => <option key={feature.feature.id} value={feature.feature.id}>{t(feature.feature.id)}</option>)}
+            {inputFeatures.filter((feature) => feature.feature.id !== xInput.feature.id).map((feature) => <option key={feature.feature.id} value={feature.feature.id}>{featureLabel(feature)}</option>)}
           </select>
         </label>
         <label className="dash-muted text-[10px] font-semibold uppercase tracking-wide">
           Output
           <select className="dash-select mt-0.5 block w-full rounded border px-2 py-1 text-xs normal-case" value={outputSelection} onChange={(event) => setOutputSelection(event.target.value as OutputSelection)}>
-            <optgroup label="Energy outputs">{outputFeatures.map((feature) => <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{t(feature.feature.id)}</option>)}</optgroup>
-            <optgroup label="Derived metrics">{DERIVED_OPTIONS.map(([key, label]) => <option key={key} value={`derived:${key}`}>{label}</option>)}</optgroup>
+            <optgroup label="Model outputs">{outputFeatures.map((feature) => <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{featureLabel(feature)}</option>)}</optgroup>
+            <optgroup label="Derived metrics">{derivedOptionsFor(tfModel).map(([key, label]) => <option key={key} value={`derived:${key}`}>{label}</option>)}</optgroup>
           </select>
         </label>
       </div>
@@ -141,15 +142,15 @@ export function OutputHeatmapView({
       {heatmap.error ? <p className="dash-error mt-2 text-xs" role="alert">{heatmap.error}</p> : (
         <ExpandableChart title="Two-input heatmap" onOpenNewTab={openInNewTab}><p className="dash-muted mt-2 text-xs">Colour shows output magnitude: blue = lower, grey = middle, gold = higher within this sweep.</p>
         <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-2 text-[10px]">
-          <div className="dash-muted flex flex-col justify-between text-right"><span>{formatChartNumber(heatmap.yMax)}</span><span>{t(yInput.feature.id)}</span><span>{formatChartNumber(heatmap.yMin)}</span></div>
+          <div className="dash-muted flex flex-col justify-between text-right"><span>{formatChartNumber(heatmap.yMax)}</span><span>{featureLabel(yInput)}</span><span>{formatChartNumber(heatmap.yMin)}</span></div>
           <div>
-            <svg className="mx-auto block heatmap-plot aspect-square max-h-40 w-full 2xl:max-h-56" viewBox="0 0 200 200" role="img" aria-label={`${t(outputSelectionLabel(outputSelection))} heatmap by ${t(xInput.feature.id)} and ${t(yInput.feature.id)}`}>
+            <svg className="mx-auto block heatmap-plot aspect-square max-h-40 w-full 2xl:max-h-56" viewBox="0 0 200 200" role="img" aria-label={`${t(outputSelectionLabel(outputSelection, tfModel))} heatmap by ${featureLabel(xInput)} and ${featureLabel(yInput)}`}>
               {heatmap.cells.map((cell) => {
                 const intensity = Number.isFinite(cell.value) ? (cell.value - minValue) / span : 0
                 return <rect key={`${cell.xIndex}-${cell.yIndex}`} x={cell.xIndex * cellSize} y={(GRID_STEPS - 1 - cell.yIndex) * cellSize} width={cellSize + 0.15} height={cellSize + 0.15} fill={magnitudeColor(intensity)}><title>{cell.value.toLocaleString('en-CA', { maximumSignificantDigits: 8 })} {unit}</title></rect>
               })}
             </svg>
-            <div className="dash-muted mt-1 flex justify-between"><span>{formatChartNumber(heatmap.xMin)}</span><span>{t(xInput.feature.id)} →</span><span>{formatChartNumber(heatmap.xMax)}</span></div>
+            <div className="dash-muted mt-1 flex justify-between"><span>{formatChartNumber(heatmap.xMin)}</span><span>{featureLabel(xInput)} →</span><span>{formatChartNumber(heatmap.xMax)}</span></div>
             <div className="mt-2 flex items-center gap-2"><span className="dash-muted">{formatChartNumber(minValue)}</span><span className="dash-heatmap-legend h-2 flex-1 rounded" style={{ background: MAGNITUDE_GRADIENT }} /><span className="dash-muted">{formatChartNumber(maxValue)} {unit}</span></div>
           </div>
         </div>

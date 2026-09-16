@@ -1,0 +1,883 @@
+{
+  "id": "280set-medoff-calgary-pilot",
+  "name": "Medium Office - Calgary (280-set pilot, approximate)",
+  "description": "PILOT / APPROXIMATE. One of the 280 archetype x location surrogates (Medium Office, CAN_AB_CALGARY_CWEC2016) recovered from the NZN dev-main branch (NZN_Archetype_Surrogate_Models/NZN_transfer/). Input bounds and scaler are the analytic uniform-distribution approximation from Table 1 of Rulff, Evins & Cant (2023, IBPSA BS2023 #1394) -- the true per-bin sampling scaler has not been recovered, so predictions may be inaccurate until validated against a known input/output pair. Output transform (Box-Cox, lambda=0.17, mean_shift=-7, stddev_norm=1.7) is the real, confirmed transform shared across all 280 models per D. Rulff.",
+  "base-idf": "Medium_Office",
+  "climate-file": "CAN_AB_CALGARY_CWEC2016.epw",
+  "tf-models": [
+    {
+      "path": "model_new/model.json",
+      "features": [
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WWR_NORTH"
+          },
+          "units": "ratio",
+          "default": 0.4955,
+          "ui": {
+            "position": 0,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 0,
+            "training-min": 0.001,
+            "training-max": 0.99,
+            "training-mean": 0.4955,
+            "training-scale": 0.28549970811426995,
+            "training-variance": 0.08151008333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WWR_EAST"
+          },
+          "units": "ratio",
+          "default": 0.4955,
+          "ui": {
+            "position": 1,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 1,
+            "training-min": 0.001,
+            "training-max": 0.99,
+            "training-mean": 0.4955,
+            "training-scale": 0.28549970811426995,
+            "training-variance": 0.08151008333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WWR_SOUTH"
+          },
+          "units": "ratio",
+          "default": 0.4955,
+          "ui": {
+            "position": 2,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 2,
+            "training-min": 0.001,
+            "training-max": 0.99,
+            "training-mean": 0.4955,
+            "training-scale": 0.28549970811426995,
+            "training-variance": 0.08151008333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WWR_WEST"
+          },
+          "units": "ratio",
+          "default": 0.4955,
+          "ui": {
+            "position": 3,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 3,
+            "training-min": 0.001,
+            "training-max": 0.99,
+            "training-mean": 0.4955,
+            "training-scale": 0.28549970811426995,
+            "training-variance": 0.08151008333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "SHADING_NORTH"
+          },
+          "units": "m",
+          "default": 1.0005,
+          "ui": {
+            "position": 4,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 4,
+            "training-min": 0.001,
+            "training-max": 2,
+            "training-mean": 1.0005,
+            "training-scale": 0.577061594055031,
+            "training-variance": 0.33300008333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "SHADING_EAST"
+          },
+          "units": "m",
+          "default": 1.0005,
+          "ui": {
+            "position": 5,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 5,
+            "training-min": 0.001,
+            "training-max": 2,
+            "training-mean": 1.0005,
+            "training-scale": 0.577061594055031,
+            "training-variance": 0.33300008333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "SHADING_SOUTH"
+          },
+          "units": "m",
+          "default": 1.0005,
+          "ui": {
+            "position": 6,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 6,
+            "training-min": 0.001,
+            "training-max": 2,
+            "training-mean": 1.0005,
+            "training-scale": 0.577061594055031,
+            "training-variance": 0.33300008333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "SHADING_WEST"
+          },
+          "units": "m",
+          "default": 1.0005,
+          "ui": {
+            "position": 7,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 7,
+            "training-min": 0.001,
+            "training-max": 2,
+            "training-mean": 1.0005,
+            "training-scale": 0.577061594055031,
+            "training-variance": 0.33300008333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ORIENTATION"
+          },
+          "units": "degree",
+          "default": 0,
+          "ui": {
+            "position": 8,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 8,
+            "training-min": -90,
+            "training-max": 90,
+            "training-mean": 0,
+            "training-scale": 51.96152422706632,
+            "training-variance": 2700
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "OCCUPANCY"
+          },
+          "units": "m2/occ",
+          "default": 125.5,
+          "ui": {
+            "position": 9,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 9,
+            "training-min": 1,
+            "training-max": 250,
+            "training-mean": 125.5,
+            "training-scale": 71.88010851410841,
+            "training-variance": 5166.750000000001
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "HEATING_SETPOINT"
+          },
+          "units": "C",
+          "default": 16.5,
+          "ui": {
+            "position": 10,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 10,
+            "training-min": 5,
+            "training-max": 28,
+            "training-mean": 16.5,
+            "training-scale": 6.639528095680697,
+            "training-variance": 44.083333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "COOLING_SETPOINT"
+          },
+          "units": "C",
+          "default": 31.5,
+          "ui": {
+            "position": 11,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 11,
+            "training-min": 13,
+            "training-max": 50,
+            "training-mean": 31.5,
+            "training-scale": 10.680979980008077,
+            "training-variance": 114.08333333333334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "RH_LOW"
+          },
+          "units": "%RH",
+          "default": 40,
+          "ui": {
+            "position": 12,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 12,
+            "training-min": 0,
+            "training-max": 80,
+            "training-mean": 40,
+            "training-scale": 23.094010767585033,
+            "training-variance": 533.3333333333335
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "RH_HIGH"
+          },
+          "units": "%RH",
+          "default": 65,
+          "ui": {
+            "position": 13,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 13,
+            "training-min": 30,
+            "training-max": 100,
+            "training-mean": 65,
+            "training-scale": 20.207259421636902,
+            "training-variance": 408.3333333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "VENTILATION_PER_OCCUPANCY"
+          },
+          "units": "L/s-occ",
+          "default": 12.5,
+          "ui": {
+            "position": 14,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 14,
+            "training-min": 0,
+            "training-max": 25,
+            "training-mean": 12.5,
+            "training-scale": 7.216878364870323,
+            "training-variance": 52.08333333333334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "VENTILATION_PER_FLOOR_AREA"
+          },
+          "units": "L/s-m2",
+          "default": 1.5,
+          "ui": {
+            "position": 15,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 15,
+            "training-min": 0,
+            "training-max": 3,
+            "training-mean": 1.5,
+            "training-scale": 0.8660254037844387,
+            "training-variance": 0.7500000000000001
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "VENTILATION_DISTRIBUTION_EFFECTIVENESS"
+          },
+          "units": "ratio",
+          "default": 1,
+          "ui": {
+            "position": 16,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 16,
+            "training-min": 0.6,
+            "training-max": 1.4,
+            "training-mean": 1,
+            "training-scale": 0.2309401076758503,
+            "training-variance": 0.05333333333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ERV_SENSIBLE"
+          },
+          "units": "ratio",
+          "default": 0.5,
+          "ui": {
+            "position": 17,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 17,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0.5,
+            "training-scale": 0.2886751345948129,
+            "training-variance": 0.08333333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ERV_LATENT"
+          },
+          "units": "ratio",
+          "default": 0.5,
+          "ui": {
+            "position": 18,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 18,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0.5,
+            "training-scale": 0.2886751345948129,
+            "training-variance": 0.08333333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "DCV_ON"
+          },
+          "units": "",
+          "default": 0,
+          "ui": {
+            "position": 19,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 19,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0,
+            "training-scale": 1,
+            "training-variance": 1
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "DCV_OFF"
+          },
+          "units": "",
+          "default": 0,
+          "ui": {
+            "position": 20,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 20,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0,
+            "training-scale": 1,
+            "training-variance": 1
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ECONOMIZER_ON"
+          },
+          "units": "",
+          "default": 0,
+          "ui": {
+            "position": 21,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 21,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0,
+            "training-scale": 1,
+            "training-variance": 1
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ECONOMIZER_OFF"
+          },
+          "units": "",
+          "default": 0,
+          "ui": {
+            "position": 22,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 22,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0,
+            "training-scale": 1,
+            "training-variance": 1
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WALL_INSULATION"
+          },
+          "units": "R",
+          "default": 31.75,
+          "ui": {
+            "position": 23,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 23,
+            "training-min": 3.5,
+            "training-max": 60,
+            "training-mean": 31.75,
+            "training-scale": 16.310145104606928,
+            "training-variance": 266.0208333333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "ROOF_INSULATION"
+          },
+          "units": "R",
+          "default": 47.5,
+          "ui": {
+            "position": 24,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 24,
+            "training-min": 5,
+            "training-max": 90,
+            "training-mean": 47.5,
+            "training-scale": 24.537386440559096,
+            "training-variance": 602.0833333333334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "GLAZING_U_VALUE"
+          },
+          "units": "W/m2K",
+          "default": 3,
+          "ui": {
+            "position": 25,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 25,
+            "training-min": 0.5,
+            "training-max": 5.5,
+            "training-mean": 3,
+            "training-scale": 1.4433756729740645,
+            "training-variance": 2.083333333333334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "GLAZING_SHGC"
+          },
+          "units": "ratio",
+          "default": 0.45,
+          "ui": {
+            "position": 26,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 26,
+            "training-min": 0.1,
+            "training-max": 0.8,
+            "training-mean": 0.45,
+            "training-scale": 0.20207259421636906,
+            "training-variance": 0.040833333333333346
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "GLAZING_VT"
+          },
+          "units": "ratio",
+          "default": 0.6,
+          "ui": {
+            "position": 27,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 27,
+            "training-min": 0.3,
+            "training-max": 0.9,
+            "training-mean": 0.6,
+            "training-scale": 0.17320508075688776,
+            "training-variance": 0.03000000000000001
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "WALL_THERMAL_MASS"
+          },
+          "units": "m",
+          "default": 0.055,
+          "ui": {
+            "position": 28,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 28,
+            "training-min": 0.01,
+            "training-max": 0.1,
+            "training-mean": 0.055,
+            "training-scale": 0.025980762113533163,
+            "training-variance": 0.0006750000000000001
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "FLOOR_THERMAL_MASS"
+          },
+          "units": "m",
+          "default": 0.045,
+          "ui": {
+            "position": 29,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 29,
+            "training-min": 0.01,
+            "training-max": 0.08,
+            "training-mean": 0.045,
+            "training-scale": 0.020207259421636904,
+            "training-variance": 0.0004083333333333334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "SLAB_INSULATION"
+          },
+          "units": "W/mK",
+          "default": 1.00005,
+          "ui": {
+            "position": 30,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 30,
+            "training-min": 0.0001,
+            "training-max": 2,
+            "training-mean": 1.00005,
+            "training-scale": 0.5773214016761663,
+            "training-variance": 0.33330000083333333
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "INFILTRATION_RATE"
+          },
+          "units": "L/s/s-m2 @ 5Pa",
+          "default": 0.7575,
+          "ui": {
+            "position": 31,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 31,
+            "training-min": 0.015,
+            "training-max": 1.5,
+            "training-mean": 0.7575,
+            "training-scale": 0.4286825748732972,
+            "training-variance": 0.18376875000000006
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "INFILTRATION_DYNAMICS_FACTOR"
+          },
+          "units": "ratio",
+          "default": 0.5,
+          "ui": {
+            "position": 32,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 32,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0.5,
+            "training-scale": 0.2886751345948129,
+            "training-variance": 0.08333333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "LIGHTING_POWER_DENSITY"
+          },
+          "units": "W/m2",
+          "default": 25,
+          "ui": {
+            "position": 33,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 33,
+            "training-min": 0,
+            "training-max": 50,
+            "training-mean": 25,
+            "training-scale": 14.433756729740645,
+            "training-variance": 208.33333333333337
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "DAYLIGHTING_FRACTION"
+          },
+          "units": "ratio",
+          "default": 0.5,
+          "ui": {
+            "position": 34,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 34,
+            "training-min": 0,
+            "training-max": 1,
+            "training-mean": 0.5,
+            "training-scale": 0.2886751345948129,
+            "training-variance": 0.08333333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "DAYLIGHTING_THRESHOLD"
+          },
+          "units": "Lux",
+          "default": 650,
+          "ui": {
+            "position": 35,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 35,
+            "training-min": 300,
+            "training-max": 1000,
+            "training-mean": 650,
+            "training-scale": 202.07259421636903,
+            "training-variance": 40833.333333333336
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "PLUG_LOADS"
+          },
+          "units": "W/m2",
+          "default": 50,
+          "ui": {
+            "position": 36,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 36,
+            "training-min": 0,
+            "training-max": 100,
+            "training-mean": 50,
+            "training-scale": 28.86751345948129,
+            "training-variance": 833.3333333333335
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "DHW_CONSUMPTION"
+          },
+          "units": "m3/s/p",
+          "default": 0.000002,
+          "ui": {
+            "position": 37,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 37,
+            "training-min": 0,
+            "training-max": 0.000003,
+            "training-mean": 0.0000015,
+            "training-scale": 8.660254037844387e-7,
+            "training-variance": 7.5e-13
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "PV_CAPACITY"
+          },
+          "units": "Wp/m2",
+          "default": 250.0005,
+          "ui": {
+            "position": 38,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 38,
+            "training-min": 0.001,
+            "training-max": 500,
+            "training-mean": 250.0005,
+            "training-scale": 144.33727862227187,
+            "training-variance": 20833.25000008334
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "PV_TILT"
+          },
+          "units": "degree",
+          "default": 45,
+          "ui": {
+            "position": 39,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 39,
+            "training-min": 0,
+            "training-max": 90,
+            "training-mean": 45,
+            "training-scale": 25.98076211353316,
+            "training-variance": 675
+          }
+        },
+        {
+          "kind": "surrogate-input",
+          "feature": {
+            "id": "PV_AZIMUTH"
+          },
+          "units": "degree",
+          "default": 180,
+          "ui": {
+            "position": 40,
+            "control": "continuous"
+          },
+          "tf": {
+            "position": 40,
+            "training-min": 90,
+            "training-max": 270,
+            "training-mean": 180,
+            "training-scale": 51.96152422706632,
+            "training-variance": 2700
+          }
+        },
+        {
+          "kind": "surrogate-output",
+          "feature": {
+            "id": "HEATING_DEMAND"
+          },
+          "units": "kWh (unverified — see description)",
+          "ui": {
+            "position": 0
+          },
+          "tf": {
+            "position": 0,
+            "training-mean": 7,
+            "training-scale": 1.7,
+            "boxcox-lambda": 0.17
+          }
+        },
+        {
+          "kind": "surrogate-output",
+          "feature": {
+            "id": "COOLING_DEMAND"
+          },
+          "units": "kWh (unverified — see description)",
+          "ui": {
+            "position": 1
+          },
+          "tf": {
+            "position": 1,
+            "training-mean": 7,
+            "training-scale": 1.7,
+            "boxcox-lambda": 0.17
+          }
+        },
+        {
+          "kind": "surrogate-output",
+          "feature": {
+            "id": "ELECTRICITY_DEMAND"
+          },
+          "units": "kWh (unverified — see description)",
+          "ui": {
+            "position": 2
+          },
+          "tf": {
+            "position": 2,
+            "training-mean": 7,
+            "training-scale": 1.7,
+            "boxcox-lambda": 0.17
+          }
+        }
+      ]
+    }
+  ],
+  "output-transform-provenance": "Dave Rulff email plus NZN custom_inv_transform: multiply standardized prediction by 1.7, then subtract the forward shift -7 (add 7), then inverse Box-Cox. Input preprocessing and output units remain unverified."
+}

@@ -1,0 +1,2101 @@
+{
+  "id": "nzn-transfer-2024-dave-reconstruction-v1",
+  "scope": "2024 NZN transfer collection: 14 archetypes and 20 locations; not local training runs or older browser bundles",
+  "provenance": {
+    "inputOrder": "Dave Rulff's 41-column NN input table, supplied by the user in this conversation",
+    "samplingBins": "User-supplied screenshot: NZ 2400, MAIN 3700, CODE 560, ALL 1100; interpreted as sample counts following Dave's explanation",
+    "outputTransform": "Dave's email to OPEN quoted in the supplied conversation; cross-checked against origin/dev-main surrogate_training.ipynb",
+    "confidence": "Author-provided historical evidence; applicability to every saved model is not independently verified by matching dimensions"
+  },
+  "bins": [
+    {
+      "name": "NZ",
+      "count": 2400,
+      "directory": "NZ/"
+    },
+    {
+      "name": "MAIN",
+      "count": 3700,
+      "directory": "MAIN/"
+    },
+    {
+      "name": "CODE",
+      "count": 560,
+      "directory": "CODE/"
+    },
+    {
+      "name": "ALL",
+      "count": 1100,
+      "directory": ""
+    }
+  ],
+  "tensorInputNames": [
+    "North Window to Wall Ratio (%)",
+    "East Window to Wall Ratio (%)",
+    "South Window to Wall Ratio (%)",
+    "West Window to Wall Ratio (%)",
+    "North Shading (m)",
+    "East Shading (m)",
+    "South Shading (m)",
+    "West Shading (m)",
+    "Orientation (degrees from north)",
+    "Occupancy (m2/occ)",
+    "Heating Setpoint (C)",
+    "Cooling Setpoint (C)",
+    "RH-Low Setpoint (%RH)",
+    "RH-High Setpoint (%RH)",
+    "Ventilation Per Occupancy (L/s-occ)",
+    "Ventilation Per Floor Area (L/s-m2)",
+    "Ventilation Distribution Effectiveness",
+    "ERV Sensible Effectiveness",
+    "ERV Latent Effectiveness",
+    "Wall Insulation (R-Value)",
+    "Roof Insulation (R-Value)",
+    "Glazing U-value (W/m2K)",
+    "Glazing SHGC",
+    "Glazing Visible Transmittance",
+    "Wall Thermal Mass (m)",
+    "Floor Thermal Mass (m)",
+    "Slab Insulation (W/mK)",
+    "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+    "Infiltration Dynamics Factor",
+    "Overhead Lighting Power Density (W/m2)",
+    "Daylighting Fraction",
+    "Daylighting Threshold (Lux)",
+    "Plug Loads (W/m2)",
+    "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+    "PV Capacity (Wp/m2(roof))",
+    "PV Tilt (degrees from horizontal)",
+    "PV Azimuth (degrees from north)",
+    "Demand Controlled Ventilation_None",
+    "Demand Controlled Ventilation_OccupancySchedule",
+    "Outdoor Air Economizer_DifferentialEnthalpy",
+    "Outdoor Air Economizer_NoEconomizer"
+  ],
+  "categoricalGroups": [
+    {
+      "name": "Demand Controlled Ventilation",
+      "positions": [
+        37,
+        38
+      ],
+      "categories": [
+        "None",
+        "OccupancySchedule"
+      ],
+      "userPosition": 19
+    },
+    {
+      "name": "Outdoor Air Economizer",
+      "positions": [
+        39,
+        40
+      ],
+      "categories": [
+        "DifferentialEnthalpy",
+        "NoEconomizer"
+      ],
+      "userPosition": 20
+    }
+  ],
+  "outputNames": [
+    "Aggregate space heating demand",
+    "Aggregate space cooling demand",
+    "Aggregate space electricity demand (excluding heating and cooling)"
+  ],
+  "outputOrderStatus": "Names are author-supplied; array order is a candidate, not independently confirmed against saved model outputs",
+  "outputUnitsStatus": "Unresolved: historical CSV labels say ekWh/m2 but their units field says J; confirm the actual training targets",
+  "outputTransform": {
+    "lambda": 0.17,
+    "forwardAdditiveShift": -7,
+    "standardDeviation": 1.7,
+    "preShift": 0,
+    "dashboardTrainingMean": 7,
+    "forward": "z = (((y ** 0.17 - 1) / 0.17) - 7) / 1.7",
+    "inverse": "y = (1 + 0.17 * (1.7 * z + 7)) ** (1 / 0.17)"
+  },
+  "sourceCommit": "095f5c200a40fc86dd4a3224d4308b42326b4a3c",
+  "sourceFiles": [
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/architectural_parameters.py",
+      "sha256": "5257830638b58a4a1e1ee32e0bf837469dae65ac7a813038b3d094befe9f4180"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/comfort_parameters.py",
+      "sha256": "96fa957424a2d16bf86986f2b0ad68d239a191c806a46a79aabe4a4b7b2363eb"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/envelope_parameters.py",
+      "sha256": "459aa8fffa3195a36e74e2a9eedcd16af0f4d96e69ef26950a3476dd1c129afd"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/lighting_parameters.py",
+      "sha256": "46ded4ed1b70511d70c313ed73c977895ed4c179279c40fc51d9c9cd835d904e"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/loads_parameters.py",
+      "sha256": "494ead0891be33421d18b07ae27bf20c0421dfa61777eacc1b10b1ddf0b23033"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/NZ/renewable_parameters.py",
+      "sha256": "7848b8f46eb4368b43893dbdd5c001483af186a3efdb5b90d6db97e269850ae0"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/architectural_parameters.py",
+      "sha256": "dc81e6f2ef3238ba5afae2a79da763a57cee6c3c40bce34a95776b94502518e8"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/comfort_parameters.py",
+      "sha256": "1ad6c868e32c303da16276884d7ffc35c0bd8cadcb366104697265b19b243eb6"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/envelope_parameters.py",
+      "sha256": "711ed532e74a8ac3991eafbb34feb52d3aa477dfee14b81bdf76e4e95b6dbbda"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/lighting_parameters.py",
+      "sha256": "46ded4ed1b70511d70c313ed73c977895ed4c179279c40fc51d9c9cd835d904e"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/loads_parameters.py",
+      "sha256": "494ead0891be33421d18b07ae27bf20c0421dfa61777eacc1b10b1ddf0b23033"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/MAIN/renewable_parameters.py",
+      "sha256": "7848b8f46eb4368b43893dbdd5c001483af186a3efdb5b90d6db97e269850ae0"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/architectural_parameters.py",
+      "sha256": "eded124124efd7f1d908adee149aa6d9d4665e4d8b5b5698daeedef260b87c98"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/comfort_parameters.py",
+      "sha256": "8137a6564342108d7ffdf1175c098da999923321bd684de7dc0c877ba74577c1"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/envelope_parameters.py",
+      "sha256": "e12c38b3dd132d677cc188ff5596b19b672ddada41a8ecb45fdb49759255bde1"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/lighting_parameters.py",
+      "sha256": "811bdb82d507ddf06ac78abe8f635df52ae4a4853d92cc751b17662850d753c1"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/loads_parameters.py",
+      "sha256": "cbddbb0009290d31c11c8077e62f8fb7d347ae11667814d347aacc8d5885f110"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/CODE/renewable_parameters.py",
+      "sha256": "8035c8611be97fdeeefd2049b201849562eed35ef96cde1cf90c19b33c5a9ad2"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/architectural_parameters.py",
+      "sha256": "43f86cec6203928961d133cdf1e1247a33b97834af5da919d82d4bf1a5c5bc71"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/comfort_parameters.py",
+      "sha256": "9c7d450f5ff0ecb5f0538ea6af2cf65015e9d268dc95eb2fca3d58b4d8b95746"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/envelope_parameters.py",
+      "sha256": "942eaeb09c78b0c3a823b8674a6170d650111cd30c086609ca9f6cd8a9ff1073"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/lighting_parameters.py",
+      "sha256": "ea117defbf88d8ccf5c81912b1d93a275da3608dc0ffddba4cdd43f9a55c0311"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/loads_parameters.py",
+      "sha256": "8e05c4bc90a087bac5cf06101cbed464f634ebca99f9b60b69e3eb421dc27b88"
+    },
+    {
+      "path": "Surrogate Development/Universal/parameter_set/renewable_parameters.py",
+      "sha256": "7848b8f46eb4368b43893dbdd5c001483af186a3efdb5b90d6db97e269850ae0"
+    }
+  ],
+  "totalSamples": 7760,
+  "rawInputCount": 39,
+  "tensorInputCount": 41,
+  "outputCount": 3,
+  "status": "reconstructed-unverified",
+  "tensorInputs": [
+    {
+      "position": 0,
+      "name": "North Window to Wall Ratio (%)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 0.99
+      },
+      "candidateBins": [
+        {
+          "name": "North Window to Wall Ratio (%)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.5
+        },
+        {
+          "name": "North Window to Wall Ratio (%)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.8
+        },
+        {
+          "name": "North Window to Wall Ratio (%)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.2,
+          "max": 0.6
+        },
+        {
+          "name": "North Window to Wall Ratio (%)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 0.99
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.40644974226804126,
+        "variance": 0.041645690343576194,
+        "scale": 0.20407275747530879
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 1,
+      "name": "East Window to Wall Ratio (%)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 0.99
+      },
+      "candidateBins": [
+        {
+          "name": "East Window to Wall Ratio (%)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.5
+        },
+        {
+          "name": "East Window to Wall Ratio (%)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.8
+        },
+        {
+          "name": "East Window to Wall Ratio (%)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.2,
+          "max": 0.6
+        },
+        {
+          "name": "East Window to Wall Ratio (%)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 0.99
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.40644974226804126,
+        "variance": 0.041645690343576194,
+        "scale": 0.20407275747530879
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 2,
+      "name": "South Window to Wall Ratio (%)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 0.99
+      },
+      "candidateBins": [
+        {
+          "name": "South Window to Wall Ratio (%)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.5
+        },
+        {
+          "name": "South Window to Wall Ratio (%)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.8
+        },
+        {
+          "name": "South Window to Wall Ratio (%)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.2,
+          "max": 0.6
+        },
+        {
+          "name": "South Window to Wall Ratio (%)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 0.99
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.40644974226804126,
+        "variance": 0.041645690343576194,
+        "scale": 0.20407275747530879
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 3,
+      "name": "West Window to Wall Ratio (%)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 0.99
+      },
+      "candidateBins": [
+        {
+          "name": "West Window to Wall Ratio (%)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.5
+        },
+        {
+          "name": "West Window to Wall Ratio (%)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.8
+        },
+        {
+          "name": "West Window to Wall Ratio (%)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.2,
+          "max": 0.6
+        },
+        {
+          "name": "West Window to Wall Ratio (%)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 0.99
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.40644974226804126,
+        "variance": 0.041645690343576194,
+        "scale": 0.20407275747530879
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 4,
+      "name": "North Shading (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 2
+      },
+      "candidateBins": [
+        {
+          "name": "North Shading (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "North Shading (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "North Shading (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "North Shading (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 2
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.0005,
+        "variance": 0.33300008333333336,
+        "scale": 0.577061594055031
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 5,
+      "name": "East Shading (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 2
+      },
+      "candidateBins": [
+        {
+          "name": "East Shading (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "East Shading (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "East Shading (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "East Shading (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 2
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.0005,
+        "variance": 0.33300008333333336,
+        "scale": 0.577061594055031
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 6,
+      "name": "South Shading (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 2
+      },
+      "candidateBins": [
+        {
+          "name": "South Shading (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "South Shading (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "South Shading (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "South Shading (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 2
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.0005,
+        "variance": 0.33300008333333336,
+        "scale": 0.577061594055031
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 7,
+      "name": "West Shading (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.001,
+        "max": 2
+      },
+      "candidateBins": [
+        {
+          "name": "West Shading (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "West Shading (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "West Shading (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.001,
+          "max": 2
+        },
+        {
+          "name": "West Shading (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 2
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.0005,
+        "variance": 0.33300008333333336,
+        "scale": 0.577061594055031
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 8,
+      "name": "Orientation (degrees from north)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": -90,
+        "max": 90
+      },
+      "candidateBins": [
+        {
+          "name": "Orientation (degrees from north)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": -90,
+          "max": 90
+        },
+        {
+          "name": "Orientation (degrees from north)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": -90,
+          "max": 90
+        },
+        {
+          "name": "Orientation (degrees from north)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": -90,
+          "max": 90
+        },
+        {
+          "name": "Orientation (degrees from north)",
+          "count": 1100,
+          "directory": "",
+          "min": -90,
+          "max": 90
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0,
+        "variance": 2700.0000000000005,
+        "scale": 51.96152422706632
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 9,
+      "name": "Occupancy (m2/occ)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 1,
+        "max": 250
+      },
+      "candidateBins": [
+        {
+          "name": "Occupancy (m2/occ)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 5,
+          "max": 30
+        },
+        {
+          "name": "Occupancy (m2/occ)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 5,
+          "max": 30
+        },
+        {
+          "name": "Occupancy (m2/occ)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 5,
+          "max": 30
+        },
+        {
+          "name": "Occupancy (m2/occ)",
+          "count": 1100,
+          "directory": "",
+          "min": 1,
+          "max": 250
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 32.80927835051546,
+        "variance": 2196.128573706026,
+        "scale": 46.86286988337383
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 10,
+      "name": "Heating Setpoint (C)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 5,
+        "max": 28
+      },
+      "candidateBins": [
+        {
+          "name": "Heating Setpoint (C)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 18,
+          "max": 24
+        },
+        {
+          "name": "Heating Setpoint (C)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 18,
+          "max": 24
+        },
+        {
+          "name": "Heating Setpoint (C)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 21,
+          "max": 23
+        },
+        {
+          "name": "Heating Setpoint (C)",
+          "count": 1100,
+          "directory": "",
+          "min": 5,
+          "max": 28
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 20.43427835051547,
+        "variance": 11.253842176816523,
+        "scale": 3.354674675257874
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 11,
+      "name": "Cooling Setpoint (C)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 13,
+        "max": 50
+      },
+      "candidateBins": [
+        {
+          "name": "Cooling Setpoint (C)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 22,
+          "max": 28
+        },
+        {
+          "name": "Cooling Setpoint (C)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 22,
+          "max": 28
+        },
+        {
+          "name": "Cooling Setpoint (C)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 24,
+          "max": 26
+        },
+        {
+          "name": "Cooling Setpoint (C)",
+          "count": 1100,
+          "directory": "",
+          "min": 13,
+          "max": 50
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 25.92139175257732,
+        "variance": 23.693992564742974,
+        "scale": 4.867647539083225
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 12,
+      "name": "RH-Low Setpoint (%RH)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 80
+      },
+      "candidateBins": [
+        {
+          "name": "RH-Low Setpoint (%RH)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0,
+          "max": 40
+        },
+        {
+          "name": "RH-Low Setpoint (%RH)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 40
+        },
+        {
+          "name": "RH-Low Setpoint (%RH)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "RH-Low Setpoint (%RH)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 80
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 22.47422680412371,
+        "variance": 238.20809862897227,
+        "scale": 15.433991662203665
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 13,
+      "name": "RH-High Setpoint (%RH)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 30,
+        "max": 100
+      },
+      "candidateBins": [
+        {
+          "name": "RH-High Setpoint (%RH)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 60,
+          "max": 100
+        },
+        {
+          "name": "RH-High Setpoint (%RH)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 60,
+          "max": 100
+        },
+        {
+          "name": "RH-High Setpoint (%RH)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 60,
+          "max": 100
+        },
+        {
+          "name": "RH-High Setpoint (%RH)",
+          "count": 1100,
+          "directory": "",
+          "min": 30,
+          "max": 100
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 77.87371134020619,
+        "variance": 199.6885185283594,
+        "scale": 14.13111879959826
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 14,
+      "name": "Ventilation Per Occupancy (L/s-occ)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 25
+      },
+      "candidateBins": [
+        {
+          "name": "Ventilation Per Occupancy (L/s-occ)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 2,
+          "max": 7.5
+        },
+        {
+          "name": "Ventilation Per Occupancy (L/s-occ)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 2,
+          "max": 7.5
+        },
+        {
+          "name": "Ventilation Per Occupancy (L/s-occ)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 2,
+          "max": 2.8
+        },
+        {
+          "name": "Ventilation Per Occupancy (L/s-occ)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 25
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 5.678994845360824,
+        "variance": 17.417892116811917,
+        "scale": 4.173474825228004
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 15,
+      "name": "Ventilation Per Floor Area (L/s-m2)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 3
+      },
+      "candidateBins": [
+        {
+          "name": "Ventilation Per Floor Area (L/s-m2)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.24,
+          "max": 2.25
+        },
+        {
+          "name": "Ventilation Per Floor Area (L/s-m2)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.24,
+          "max": 2.25
+        },
+        {
+          "name": "Ventilation Per Floor Area (L/s-m2)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.24,
+          "max": 0.32
+        },
+        {
+          "name": "Ventilation Per Floor Area (L/s-m2)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 3
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.211507731958763,
+        "variance": 0.44630477141788,
+        "scale": 0.6680604549124877
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 16,
+      "name": "Ventilation Distribution Effectiveness",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.3,
+        "max": 1.4
+      },
+      "candidateBins": [
+        {
+          "name": "Ventilation Distribution Effectiveness",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 1,
+          "max": 1.2
+        },
+        {
+          "name": "Ventilation Distribution Effectiveness",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.5,
+          "max": 1.2
+        },
+        {
+          "name": "Ventilation Distribution Effectiveness",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.5,
+          "max": 1
+        },
+        {
+          "name": "Ventilation Distribution Effectiveness",
+          "count": 1100,
+          "directory": "",
+          "min": 0.3,
+          "max": 1.4
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.9201030927835052,
+        "variance": 0.05143435363304638,
+        "scale": 0.2267914320097794
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 17,
+      "name": "ERV Sensible Effectiveness",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 1
+      },
+      "candidateBins": [
+        {
+          "name": "ERV Sensible Effectiveness",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.75,
+          "max": 1
+        },
+        {
+          "name": "ERV Sensible Effectiveness",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "name": "ERV Sensible Effectiveness",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.4,
+          "max": 0.6
+        },
+        {
+          "name": "ERV Sensible Effectiveness",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.615979381443299,
+        "variance": 0.08343881744429094,
+        "scale": 0.2888577806538902
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 18,
+      "name": "ERV Latent Effectiveness",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 1
+      },
+      "candidateBins": [
+        {
+          "name": "ERV Latent Effectiveness",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.5,
+          "max": 1
+        },
+        {
+          "name": "ERV Latent Effectiveness",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 0.8
+        },
+        {
+          "name": "ERV Latent Effectiveness",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.4,
+          "max": 0.6
+        },
+        {
+          "name": "ERV Latent Effectiveness",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.529639175257732,
+        "variance": 0.06714557427285932,
+        "scale": 0.25912463077225856
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 19,
+      "name": "Wall Insulation (R-Value)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 3.5,
+        "max": 60
+      },
+      "candidateBins": [
+        {
+          "name": "Wall Insulation (R-Value)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 20,
+          "max": 60
+        },
+        {
+          "name": "Wall Insulation (R-Value)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 3.5,
+          "max": 60
+        },
+        {
+          "name": "Wall Insulation (R-Value)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 18,
+          "max": 22
+        },
+        {
+          "name": "Wall Insulation (R-Value)",
+          "count": 1100,
+          "directory": "",
+          "min": 3.5,
+          "max": 60
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 33.45360824742268,
+        "variance": 233.99355227264672,
+        "scale": 15.296847788765067
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 20,
+      "name": "Roof Insulation (R-Value)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 5,
+        "max": 90
+      },
+      "candidateBins": [
+        {
+          "name": "Roof Insulation (R-Value)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 30,
+          "max": 90
+        },
+        {
+          "name": "Roof Insulation (R-Value)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 5,
+          "max": 90
+        },
+        {
+          "name": "Roof Insulation (R-Value)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 25,
+          "max": 40
+        },
+        {
+          "name": "Roof Insulation (R-Value)",
+          "count": 1100,
+          "directory": "",
+          "min": 5,
+          "max": 90
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 50.28350515463917,
+        "variance": 523.3732330747158,
+        "scale": 22.877351968152166
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 21,
+      "name": "Glazing U-value (W/m2K)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.5,
+        "max": 5.5
+      },
+      "candidateBins": [
+        {
+          "name": "Glazing U-value (W/m2K)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.5,
+          "max": 2.2
+        },
+        {
+          "name": "Glazing U-value (W/m2K)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.5,
+          "max": 5.5
+        },
+        {
+          "name": "Glazing U-value (W/m2K)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 1.6,
+          "max": 2.6
+        },
+        {
+          "name": "Glazing U-value (W/m2K)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.5,
+          "max": 5.5
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 2.424742268041237,
+        "variance": 1.938700534948808,
+        "scale": 1.3923722688091744
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 22,
+      "name": "Glazing SHGC",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.1,
+        "max": 0.8
+      },
+      "candidateBins": [
+        {
+          "name": "Glazing SHGC",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.6
+        },
+        {
+          "name": "Glazing SHGC",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.8
+        },
+        {
+          "name": "Glazing SHGC",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.3,
+          "max": 0.6
+        },
+        {
+          "name": "Glazing SHGC",
+          "count": 1100,
+          "directory": "",
+          "min": 0.1,
+          "max": 0.8
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.4190721649484536,
+        "variance": 0.0343785205654161,
+        "scale": 0.18541445619318925
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 23,
+      "name": "Glazing Visible Transmittance",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.1,
+        "max": 0.9
+      },
+      "candidateBins": [
+        {
+          "name": "Glazing Visible Transmittance",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.1,
+          "max": 0.9
+        },
+        {
+          "name": "Glazing Visible Transmittance",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.1,
+          "max": 0.9
+        },
+        {
+          "name": "Glazing Visible Transmittance",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.3,
+          "max": 0.9
+        },
+        {
+          "name": "Glazing Visible Transmittance",
+          "count": 1100,
+          "directory": "",
+          "min": 0.1,
+          "max": 0.9
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.5072164948453609,
+        "variance": 0.052319056222765455,
+        "scale": 0.2287335922481992
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 24,
+      "name": "Wall Thermal Mass (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.01,
+        "max": 0.1
+      },
+      "candidateBins": [
+        {
+          "name": "Wall Thermal Mass (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Wall Thermal Mass (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Wall Thermal Mass (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Wall Thermal Mass (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.01,
+          "max": 0.1
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.020670103092783505,
+        "variance": 0.0002974891061749389,
+        "scale": 0.017247872511557443
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 25,
+      "name": "Floor Thermal Mass (m)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.01,
+        "max": 0.08
+      },
+      "candidateBins": [
+        {
+          "name": "Floor Thermal Mass (m)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Floor Thermal Mass (m)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Floor Thermal Mass (m)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.01,
+          "max": 0.02
+        },
+        {
+          "name": "Floor Thermal Mass (m)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.01,
+          "max": 0.08
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.019252577319587627,
+        "variance": 0.00017452726998972614,
+        "scale": 0.013210876957633287
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 26,
+      "name": "Slab Insulation (W/mK)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.0001,
+        "max": 2
+      },
+      "candidateBins": [
+        {
+          "name": "Slab Insulation (W/mK)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.01,
+          "max": 2
+        },
+        {
+          "name": "Slab Insulation (W/mK)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.01,
+          "max": 2
+        },
+        {
+          "name": "Slab Insulation (W/mK)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.8,
+          "max": 1.2
+        },
+        {
+          "name": "Slab Insulation (W/mK)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.0001,
+          "max": 2
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 1.0039375,
+        "variance": 0.30762624914357817,
+        "scale": 0.5546406486578298
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 27,
+      "name": "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0.015,
+        "max": 1.5
+      },
+      "candidateBins": [
+        {
+          "name": "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.015,
+          "max": 0.25
+        },
+        {
+          "name": "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.015,
+          "max": 0.52
+        },
+        {
+          "name": "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.2,
+          "max": 0.3
+        },
+        {
+          "name": "Design Infiltration Rate (L/s/s-m2 @ 5Pa)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.015,
+          "max": 1.5
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.2939432989690722,
+        "variance": 0.07666048132107556,
+        "scale": 0.276876292450393
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 28,
+      "name": "Infiltration Dynamics Factor",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 1
+      },
+      "candidateBins": [
+        {
+          "name": "Infiltration Dynamics Factor",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0,
+          "max": 0.01
+        },
+        {
+          "name": "Infiltration Dynamics Factor",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 0.01
+        },
+        {
+          "name": "Infiltration Dynamics Factor",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0,
+          "max": 0.01
+        },
+        {
+          "name": "Infiltration Dynamics Factor",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.07516752577319588,
+        "variance": 0.041629310423087824,
+        "scale": 0.20403262097784222
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 29,
+      "name": "Overhead Lighting Power Density (W/m2)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 50
+      },
+      "candidateBins": [
+        {
+          "name": "Overhead Lighting Power Density (W/m2)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 5.6,
+          "max": 18.4
+        },
+        {
+          "name": "Overhead Lighting Power Density (W/m2)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 5.6,
+          "max": 18.4
+        },
+        {
+          "name": "Overhead Lighting Power Density (W/m2)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 5.6,
+          "max": 10.6
+        },
+        {
+          "name": "Overhead Lighting Power Density (W/m2)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 50
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 13.561340206185566,
+        "variance": 63.03080782584051,
+        "scale": 7.939194406603262
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 30,
+      "name": "Daylighting Fraction",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 1
+      },
+      "candidateBins": [
+        {
+          "name": "Daylighting Fraction",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "name": "Daylighting Fraction",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "name": "Daylighting Fraction",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.5,
+          "max": 1
+        },
+        {
+          "name": "Daylighting Fraction",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 0.5180412371134021,
+        "variance": 0.08300784709675135,
+        "scale": 0.28811082433110935
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 31,
+      "name": "Daylighting Threshold (Lux)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 300,
+        "max": 1000
+      },
+      "candidateBins": [
+        {
+          "name": "Daylighting Threshold (Lux)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 300,
+          "max": 1000
+        },
+        {
+          "name": "Daylighting Threshold (Lux)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 300,
+          "max": 1000
+        },
+        {
+          "name": "Daylighting Threshold (Lux)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 300,
+          "max": 1000
+        },
+        {
+          "name": "Daylighting Threshold (Lux)",
+          "count": 1100,
+          "directory": "",
+          "min": 300,
+          "max": 1000
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 650,
+        "variance": 40833.333333333336,
+        "scale": 202.07259421636903
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 32,
+      "name": "Plug Loads (W/m2)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 100
+      },
+      "candidateBins": [
+        {
+          "name": "Plug Loads (W/m2)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 1,
+          "max": 10
+        },
+        {
+          "name": "Plug Loads (W/m2)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 1,
+          "max": 10
+        },
+        {
+          "name": "Plug Loads (W/m2)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 5,
+          "max": 10
+        },
+        {
+          "name": "Plug Loads (W/m2)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 100
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 11.952319587628866,
+        "variance": 362.9453210799943,
+        "scale": 19.051123879708364
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 33,
+      "name": "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 0.000003
+      },
+      "candidateBins": [
+        {
+          "name": "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0,
+          "max": 0.0000013
+        },
+        {
+          "name": "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 0.0000013
+        },
+        {
+          "name": "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 2e-7,
+          "max": 6e-7
+        },
+        {
+          "name": "Domestic Hot Water Consumption (m3/s / occupant of 140F HW)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 0.000003
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 7.524484536082475e-7,
+        "variance": 3.144141081677118e-13,
+        "scale": 5.607264111558432e-7
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 34,
+      "name": "PV Capacity (Wp/m2(roof))",
+      "kind": "continuous",
+      "candidateBins": [
+        {
+          "name": "PV Capacity (Wp)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0.001,
+          "max": 10000000
+        },
+        {
+          "name": "PV Capacity (Wp)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0.001,
+          "max": 10000000
+        },
+        {
+          "name": "PV Capacity (Wp)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0.001,
+          "max": 0.02
+        },
+        {
+          "name": "PV Capacity (Wp)",
+          "count": 1100,
+          "directory": "",
+          "min": 0.001,
+          "max": 10000000
+        }
+      ],
+      "scalerEstimate": null,
+      "estimateStatus": "Blocked: author table uses Wp/m2(roof), repository uses total Wp; no unit substitution applied"
+    },
+    {
+      "position": 35,
+      "name": "PV Tilt (degrees from horizontal)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 0,
+        "max": 90
+      },
+      "candidateBins": [
+        {
+          "name": "PV Tilt (degrees from horizontal)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 0,
+          "max": 90
+        },
+        {
+          "name": "PV Tilt (degrees from horizontal)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 0,
+          "max": 90
+        },
+        {
+          "name": "PV Tilt (degrees from horizontal)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 0,
+          "max": 90
+        },
+        {
+          "name": "PV Tilt (degrees from horizontal)",
+          "count": 1100,
+          "directory": "",
+          "min": 0,
+          "max": 90
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 45,
+        "variance": 675.0000000000001,
+        "scale": 25.98076211353316
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 36,
+      "name": "PV Azimuth (degrees from north)",
+      "kind": "continuous",
+      "candidateBounds": {
+        "min": 90,
+        "max": 270
+      },
+      "candidateBins": [
+        {
+          "name": "PV Azimuth (degrees from north)",
+          "count": 2400,
+          "directory": "NZ/",
+          "min": 90,
+          "max": 270
+        },
+        {
+          "name": "PV Azimuth (degrees from north)",
+          "count": 3700,
+          "directory": "MAIN/",
+          "min": 90,
+          "max": 270
+        },
+        {
+          "name": "PV Azimuth (degrees from north)",
+          "count": 560,
+          "directory": "CODE/",
+          "min": 90,
+          "max": 270
+        },
+        {
+          "name": "PV Azimuth (degrees from north)",
+          "count": 1100,
+          "directory": "",
+          "min": 90,
+          "max": 270
+        }
+      ],
+      "scalerEstimate": {
+        "mean": 180,
+        "variance": 2700.0000000000005,
+        "scale": 51.96152422706632
+      },
+      "estimateStatus": "Approximate population moments, conditional on historical bin definitions and uniform within-bin sampling"
+    },
+    {
+      "position": 37,
+      "name": "Demand Controlled Ventilation_None",
+      "kind": "onehot",
+      "group": "Demand Controlled Ventilation",
+      "category": "None",
+      "scalerEstimate": {
+        "mean": 0.5,
+        "scale": 0.5,
+        "variance": 0.25
+      },
+      "estimateStatus": "Conditional on equally likely categories in every bin; actual frequencies not recovered",
+      "candidateBins": [
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 2400,
+          "directory": "NZ/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 3700,
+          "directory": "MAIN/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 560,
+          "directory": "CODE/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 1100,
+          "directory": "",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 38,
+      "name": "Demand Controlled Ventilation_OccupancySchedule",
+      "kind": "onehot",
+      "group": "Demand Controlled Ventilation",
+      "category": "OccupancySchedule",
+      "scalerEstimate": {
+        "mean": 0.5,
+        "scale": 0.5,
+        "variance": 0.25
+      },
+      "estimateStatus": "Conditional on equally likely categories in every bin; actual frequencies not recovered",
+      "candidateBins": [
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 2400,
+          "directory": "NZ/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 3700,
+          "directory": "MAIN/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 560,
+          "directory": "CODE/",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        },
+        {
+          "name": "Demand Controlled Ventilation",
+          "count": 1100,
+          "directory": "",
+          "categories": [
+            "None",
+            "OccupancySchedule"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 39,
+      "name": "Outdoor Air Economizer_DifferentialEnthalpy",
+      "kind": "onehot",
+      "group": "Outdoor Air Economizer",
+      "category": "DifferentialEnthalpy",
+      "scalerEstimate": {
+        "mean": 0.5,
+        "scale": 0.5,
+        "variance": 0.25
+      },
+      "estimateStatus": "Conditional on equally likely categories in every bin; actual frequencies not recovered",
+      "candidateBins": [
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 2400,
+          "directory": "NZ/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 3700,
+          "directory": "MAIN/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 560,
+          "directory": "CODE/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 1100,
+          "directory": "",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 40,
+      "name": "Outdoor Air Economizer_NoEconomizer",
+      "kind": "onehot",
+      "group": "Outdoor Air Economizer",
+      "category": "NoEconomizer",
+      "scalerEstimate": {
+        "mean": 0.5,
+        "scale": 0.5,
+        "variance": 0.25
+      },
+      "estimateStatus": "Conditional on equally likely categories in every bin; actual frequencies not recovered",
+      "candidateBins": [
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 2400,
+          "directory": "NZ/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 3700,
+          "directory": "MAIN/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 560,
+          "directory": "CODE/",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        },
+        {
+          "name": "Outdoor Air Economizer",
+          "count": 1100,
+          "directory": "",
+          "categories": [
+            "NoEconomizer",
+            "DifferentialEnthalpy"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "ALL is mapped to the root parameter_set directory because its wider bounds match the conversation; the screenshot does not identify a commit.",
+    "Bin counts are applied to the shared author-described sampling design, not claimed as the actual retained training rows for every model.",
+    "Train/test split, failed simulations and finite-sample variation can change fitted scalers.",
+    "Categorical estimates assume 50/50 sampling in each bin."
+  ],
+  "unresolved": [
+    "PV input position 34: Wp/m2(roof) versus total Wp; historical revision must be established.",
+    "Exact fitted input scalers or numerical parity references are not recovered.",
+    "Output names are recovered; exact output column order and physical units require corroboration.",
+    "Keras models require browser conversion and numerical parity tests."
+  ],
+  "recoveryCounts": {
+    "continuousEstimates": 36,
+    "categoricalConditionalEstimates": 4,
+    "blockedInputs": 1
+  }
+}

@@ -1,3 +1,4 @@
+import { featureLabel } from '../lib/modelDisplay'
 import { ExpandableChart } from './ExpandableChart'
 import { useCallback, useMemo, useState } from 'react'
 import type { LayersModel } from '@tensorflow/tfjs'
@@ -8,7 +9,7 @@ import type { EnergyDisplayUnit } from '../lib/volumeConversion'
 import { runSurrogatePredictBatch } from '../tf/runSurrogatePredict'
 import { writeChartHandoff } from '../lib/chartHandoff'
 import {
-  DERIVED_OPTIONS,
+  derivedOptionsFor,
   outputSelectionLabel,
   outputSelectionUnit,
   resolveOutputValue,
@@ -108,7 +109,7 @@ export function OutputTornadoView({
 
   if (outputFeatures.length === 0) return null
 
-  const unit = outputSelectionUnit(outputSelection, energyMode)
+  const unit = outputSelectionUnit(outputSelection, energyMode, tfModel)
   const maxAbsSwing = Math.max(...tornado.rows.map((row) => Math.abs(row.signedSwing)), 1e-9)
 
   return (
@@ -124,13 +125,13 @@ export function OutputTornadoView({
             value={outputSelection}
             onChange={(event) => setOutputSelection(event.target.value as OutputSelection)}
           >
-            <optgroup label="Energy outputs">
+            <optgroup label="Model outputs">
               {outputFeatures.map((feature) => (
-                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{t(feature.feature.id)}</option>
+                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{featureLabel(feature)}</option>
               ))}
             </optgroup>
             <optgroup label="Derived metrics">
-              {DERIVED_OPTIONS.map(([key, label]) => (
+              {derivedOptionsFor(tfModel).map(([key, label]) => (
                 <option key={key} value={`derived:${key}`}>{label}</option>
               ))}
             </optgroup>
@@ -158,7 +159,7 @@ export function OutputTornadoView({
               return (
                 <div key={row.id}>
                   <div className="mb-0.5 flex items-baseline justify-between gap-2">
-                    <span className="dash-text min-w-0 truncate">{t(row.id)}</span>
+                    <span className="dash-text min-w-0 truncate">{featureLabel(inputFeatures.find(f => f.feature.id === row.id)!)}</span>
                     <span className="dash-muted shrink-0 tabular-nums">
                       {formatChartNumber(row.loValue)} → {formatChartNumber(row.hiValue)}
                     </span>
@@ -183,7 +184,7 @@ export function OutputTornadoView({
             })}
           </div>
           <p className="dash-muted mt-2 text-[10px]">
-            Bars show the change in predicted {t(outputSelectionLabel(outputSelection))} ({unit}) from baseline as
+            Bars show the change in predicted {t(outputSelectionLabel(outputSelection, tfModel))} ({unit}) from baseline as
             each input moves from its training min to its training max, holding other inputs at current values.
             Right = output increases, left = output decreases. Ranked by size of change, longest first.
           </p>

@@ -1,5 +1,5 @@
+import { featureLabel, formatModelOutput, isJoules, supportsDerived } from '../lib/modelDisplay'
 import { useCallback, useMemo, useState } from 'react'
-import { t } from '../i18n/t'
 import {
   computeDerivedMetrics,
   contextRecordForDerived,
@@ -13,7 +13,7 @@ import {
   energyOutputLevelJ,
   ghgOrCostLevel,
 } from '../lib/outputCardMeta'
-import { formatEnergy, type EnergyDisplayUnit } from '../lib/volumeConversion'
+import { type EnergyDisplayUnit } from '../lib/volumeConversion'
 import type { OutputSelection } from '../lib/outputSelection'
 import { OutputSensitivityChart } from './OutputSensitivityChart'
 import { OutputComparisonView } from './OutputComparisonView'
@@ -70,16 +70,16 @@ function EnergyOutputRow({
   const { text, unit } =
     j === undefined || !Number.isFinite(j)
       ? { text: '—', unit: '' }
-      : formatEnergy(j, mode, 'en-CA')
+      : formatModelOutput(j, f, mode)
   const { label, className } =
-    j !== undefined && Number.isFinite(j)
+    isJoules(f) && j !== undefined && Number.isFinite(j)
       ? energyOutputLevelJ(j)
       : { label: '—', className: 'dash-badge-neutral' }
 
   return (
     <li className="dash-card flex flex-col gap-1 rounded-md border px-2.5 py-1.5">
       <div className="flex items-start justify-between gap-2">
-        <div className="dash-card-label dash-text min-w-0 text-sm">{t(f.feature.id)}</div>
+        <div className="dash-card-label dash-text min-w-0 text-sm">{featureLabel(f)}</div>
         <span
           className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${className}`}
         >
@@ -161,12 +161,14 @@ function DerivedRow({
 
 const ENERGY_MODES: EnergyDisplayUnit[] = ['J', 'kWh', 'MWh']
 
+/** Comparison gets `ml-auto` at render time — it compares two designs rather than
+ * exploring inputs, so it's visually set apart from the rest on the far right. */
 const VISUALIZATION_VIEWS = [
+  { id: 'all-inputs', label: 'All Inputs' },
   { id: 'sensitivity', label: 'Sensitivity' },
-  { id: 'comparison', label: 'Comparison' },
-  { id: 'heatmap', label: 'Heatmap' },
   { id: 'tornado', label: 'Tornado' },
-  { id: 'small-multiples', label: 'Small Multiples' },
+  { id: 'heatmap', label: 'Heatmap' },
+  { id: 'comparison', label: 'Comparison' },
 ] as const
 
 type VisualizationView = (typeof VISUALIZATION_VIEWS)[number]['id']
@@ -186,8 +188,8 @@ export function OutputReadoutPane({
 }: OutputReadoutPaneProps) {
   const [energyMode, setEnergyMode] = useState<EnergyDisplayUnit>('kWh')
   const [visualizationView, setVisualizationView] =
-    useState<VisualizationView>('sensitivity')
-  /** Set only by a Small Multiples tile click; cleared when the Sensitivity tab is clicked directly. */
+    useState<VisualizationView>('all-inputs')
+  /** Set only by an All Inputs tile click; cleared when the Sensitivity tab is clicked directly. */
   const [sensitivityFocus, setSensitivityFocus] = useState<{
     inputId: string
     outputSelection: OutputSelection
@@ -205,7 +207,7 @@ export function OutputReadoutPane({
   }, [])
 
   const derived = useMemo(() => {
-    if (!outputs) return null
+    if (!outputs || !supportsDerived(tfModel)) return null
     const jout = outputsRecordToJ(outputs)
     if (!jout) return null
     const ctx = contextRecordForDerived(mergeDerivedContext(tfModel, valueMap))
@@ -241,7 +243,7 @@ export function OutputReadoutPane({
             role="group"
             aria-label="Energy display unit"
           >
-            {ENERGY_MODES.map((m) => (
+            {(features.some(isJoules) ? ENERGY_MODES : []).map((m) => (
               <button
                 key={m}
                 type="button"
@@ -266,7 +268,7 @@ export function OutputReadoutPane({
       <div className="grid gap-6 2xl:grid-cols-[42rem_minmax(16rem,1fr)] 2xl:items-stretch">
         <div className="max-w-2xl 2xl:flex 2xl:flex-col">
           <div
-            className="dash-control mb-2 inline-flex rounded border p-0.5 text-xs"
+            className="dash-control mb-2 flex w-full flex-wrap items-center gap-1 rounded border p-0.5 text-xs"
             role="tablist"
             aria-label="Visualization"
           >
@@ -280,9 +282,9 @@ export function OutputReadoutPane({
                 aria-controls={`visualization-panel-${view.id}`}
                 onClick={() => handleTabClick(view.id)}
                 className={
-                  visualizationView === view.id
+                  (visualizationView === view.id
                     ? 'dash-accent-bg rounded px-3 py-1'
-                    : 'dash-tab rounded px-3 py-1'
+                    : 'dash-tab rounded px-3 py-1') + (view.id === 'comparison' ? ' sm:ml-auto' : '')
                 }
               >
                 {view.label}
@@ -295,7 +297,18 @@ export function OutputReadoutPane({
             aria-labelledby={`visualization-tab-${visualizationView}`}
             className="2xl:flex 2xl:flex-1 2xl:flex-col"
           >
-            {visualizationView === 'sensitivity' ? (
+            {visualizationView === 'all-inputs' ? (
+              <OutputSmallMultiplesView
+                surrogateId={surrogateId}
+                model={model}
+                tfModel={tfModel}
+                inputFeatures={inputFeatures}
+                outputFeatures={features}
+                valueMap={valueMap}
+                energyMode={energyMode}
+                onOpenInSensitivity={openInSensitivity}
+              />
+            ) : visualizationView === 'sensitivity' ? (
               <OutputSensitivityChart
                 surrogateId={surrogateId}
                 model={model}
@@ -307,13 +320,14 @@ export function OutputReadoutPane({
                 initialInputId={sensitivityFocus?.inputId}
                 initialOutputSelection={sensitivityFocus?.outputSelection}
               />
-            ) : visualizationView === 'comparison' ? (
-              <OutputComparisonView
+            ) : visualizationView === 'tornado' ? (
+              <OutputTornadoView
+                surrogateId={surrogateId}
                 model={model}
                 tfModel={tfModel}
                 inputFeatures={inputFeatures}
                 outputFeatures={features}
-                initialValues={valueMap}
+                valueMap={valueMap}
                 energyMode={energyMode}
               />
             ) : visualizationView === 'heatmap' ? (
@@ -326,26 +340,14 @@ export function OutputReadoutPane({
                 valueMap={valueMap}
                 energyMode={energyMode}
               />
-            ) : visualizationView === 'tornado' ? (
-              <OutputTornadoView
-                surrogateId={surrogateId}
-                model={model}
-                tfModel={tfModel}
-                inputFeatures={inputFeatures}
-                outputFeatures={features}
-                valueMap={valueMap}
-                energyMode={energyMode}
-              />
             ) : (
-              <OutputSmallMultiplesView
-                surrogateId={surrogateId}
+              <OutputComparisonView
                 model={model}
                 tfModel={tfModel}
                 inputFeatures={inputFeatures}
                 outputFeatures={features}
-                valueMap={valueMap}
+                initialValues={valueMap}
                 energyMode={energyMode}
-                onOpenInSensitivity={openInSensitivity}
               />
             )}
           </div>
@@ -367,7 +369,7 @@ export function OutputReadoutPane({
             })}
           </ul>
 
-          <div>
+          {supportsDerived(tfModel) && <div>
             <h4 className="dash-subsection-heading mb-2">
               Derived Metrics
             </h4>
@@ -390,7 +392,7 @@ export function OutputReadoutPane({
                 )
               })}
             </ul>
-          </div>
+          </div>}
         </div>
       </div>
       <details className="dash-muted text-xs">

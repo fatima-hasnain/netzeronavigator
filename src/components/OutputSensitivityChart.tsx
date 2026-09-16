@@ -1,3 +1,4 @@
+import { featureLabel } from '../lib/modelDisplay'
 import { ExpandableChart } from './ExpandableChart'
 import { useCallback, useMemo, useState } from 'react'
 import type { LayersModel } from '@tensorflow/tfjs'
@@ -9,7 +10,7 @@ import { runSurrogatePredictBatch } from '../tf/runSurrogatePredict'
 import { slopeColor, SLOPE_GRADIENT } from '../lib/chartSlope'
 import { writeChartHandoff } from '../lib/chartHandoff'
 import {
-  DERIVED_OPTIONS,
+  derivedOptionsFor,
   outputSelectionLabel,
   outputSelectionUnit,
   resolveOutputValue,
@@ -104,7 +105,7 @@ export function OutputSensitivityChart({
   const ySpan = maxY - minY || Math.max(Math.abs(maxY) * 0.1, 1)
   const xSpan = maxX - minX || 1
 
-  const unit = outputSelectionUnit(outputSelection, energyMode)
+  const unit = outputSelectionUnit(outputSelection, energyMode, tfModel)
 
   return (
     <section className="dash-panel rounded border p-1.5 2xl:flex 2xl:flex-1 2xl:flex-col" aria-labelledby="sensitivity-title">
@@ -120,7 +121,7 @@ export function OutputSensitivityChart({
             onChange={(event) => setInputId(event.target.value)}
           >
             {inputFeatures.map((feature) => (
-              <option key={feature.feature.id} value={feature.feature.id}>{t(feature.feature.id)}</option>
+              <option key={feature.feature.id} value={feature.feature.id}>{featureLabel(feature)}</option>
             ))}
           </select>
         </div>
@@ -134,13 +135,13 @@ export function OutputSensitivityChart({
             value={outputSelection}
             onChange={(event) => setOutputSelection(event.target.value as OutputSelection)}
           >
-            <optgroup label="Energy outputs">
+            <optgroup label="Model outputs">
               {outputFeatures.map((feature) => (
-                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{t(feature.feature.id)}</option>
+                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{featureLabel(feature)}</option>
               ))}
             </optgroup>
             <optgroup label="Derived metrics">
-              {DERIVED_OPTIONS.map(([key, label]) => (
+              {derivedOptionsFor(tfModel).map(([key, label]) => (
                 <option key={key} value={`derived:${key}`}>{label}</option>
               ))}
             </optgroup>
@@ -168,33 +169,39 @@ export function OutputSensitivityChart({
                 const segments = finitePoints.slice(1).map((point, i) => {
                   const prev = finitePoints[i]
                   const dx = point.x - prev.x
-                  return { prev, point, slope: dx !== 0 ? (point.y - prev.y) / dx : 0 }
+                  return { prev, point, absSlope: dx !== 0 ? Math.abs((point.y - prev.y) / dx) : 0 }
                 })
-                const maxAbsSlope = Math.max(0, ...segments.map((s) => Math.abs(s.slope))) || 1
-                return segments.map(({ prev, point, slope }, i) => (
-                  <line
-                    key={i}
-                    className="dash-chart-line"
-                    style={{ stroke: slopeColor(slope / maxAbsSlope) }}
-                    x1={8 + ((prev.x - minX) / xSpan) * 284}
-                    y1={8 + (1 - (prev.y - minY) / ySpan) * 104}
-                    x2={8 + ((point.x - minX) / xSpan) * 284}
-                    y2={8 + (1 - (point.y - minY) / ySpan) * 104}
-                  />
-                ))
+                const slopeValues = segments.map((s) => s.absSlope)
+                const minAbsSlope = slopeValues.length ? Math.min(...slopeValues) : 0
+                const maxAbsSlope = slopeValues.length ? Math.max(...slopeValues) : 0
+                const slopeRange = maxAbsSlope - minAbsSlope
+                return segments.map(({ prev, point, absSlope }, i) => {
+                  const frac = slopeRange > 1e-9 ? (absSlope - minAbsSlope) / slopeRange : 0.5
+                  return (
+                    <line
+                      key={i}
+                      className="dash-chart-line"
+                      style={{ stroke: slopeColor(frac) }}
+                      x1={8 + ((prev.x - minX) / xSpan) * 284}
+                      y1={8 + (1 - (prev.y - minY) / ySpan) * 104}
+                      x2={8 + ((point.x - minX) / xSpan) * 284}
+                      y2={8 + (1 - (point.y - minY) / ySpan) * 104}
+                    />
+                  )
+                })
               })()}
             </svg>
             <div className="dash-muted flex justify-between tabular-nums">
               <span>{formatChartNumber(minX)}</span>
-              <span>{t(activeInput.feature.id)} {activeInput.units ? `(${activeInput.units})` : ''} →</span>
+              <span>{featureLabel(activeInput)} {activeInput.units ? `(${activeInput.units})` : ''} →</span>
               <span>{formatChartNumber(maxX)}</span>
             </div>
           </div>
           <span />
           <div className="dash-muted mt-1 flex flex-wrap items-center justify-end gap-x-2 gap-y-0.5 text-right">
-            <span>Predicted {t(outputSelectionLabel(outputSelection))} ({unit})</span>
-            <span className="flex items-center gap-1" aria-hidden="true">
-              <span className="inline-block h-0.5 w-8 rounded" style={{ background: SLOPE_GRADIENT }} />
+            <span>Predicted {t(outputSelectionLabel(outputSelection, tfModel))} ({unit})</span>
+            <span className="flex items-center gap-1.5" aria-hidden="true">
+              <span className="inline-block h-2 w-10 rounded-sm" style={{ background: SLOPE_GRADIENT }} />
               <span>flat · changing fast</span>
             </span>
           </div>

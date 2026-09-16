@@ -225,7 +225,7 @@ svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #626974; }
 .chart-modal::backdrop { background: rgb(5 12 18 / 78%); }
 .chart-modal .sensitivity-plot { height: min(60dvh, 650px); }
 .chart-modal .heatmap-plot { max-height: min(62dvh, 720px); }
-.chart-modal .small-multiples-plot { max-height: min(70dvh, 800px); }
+.chart-modal .all-inputs-plot { max-height: min(70dvh, 800px); }
 .chart-modal .mini-sensitivity-plot { height: 5rem; }
 .chart-modal [class*='text-[10px]'] { font-size: 12px; }
 
@@ -233,6 +233,6 @@ svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #626974; }
 .chart-fullpage .sensitivity-plot { height: min(65dvh, 720px); }
 .chart-fullpage .heatmap-plot { max-height: min(65dvh, 720px); }
 .chart-fullpage .tornado-plot { max-height: min(70dvh, 900px); }
-.chart-fullpage .small-multiples-plot { max-height: min(72dvh, 900px); }
+.chart-fullpage .all-inputs-plot { max-height: min(72dvh, 900px); }
 .chart-fullpage .mini-sensitivity-plot { height: 6rem; }
 .chart-fullpage [class*='text-[10px]'] { font-size: 12px; }

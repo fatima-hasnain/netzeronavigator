@@ -2,9 +2,24 @@ import type { ManifestFeature } from '../types/manifest'
 import { deStandardize } from './standardize'
 
 /**
+ * Inverse Box-Cox: y(lambda) = (t^lambda - 1) / lambda  =>  t = (y*lambda + 1)^(1/lambda),
+ * or t = exp(y) when lambda = 0. Domain guard: box-cox is only defined for t > 0, so a
+ * pre-image that would go non-positive (y*lambda + 1 <= 0) clamps to a tiny positive
+ * number rather than producing NaN.
+ */
+function inverseBoxCox(y: number, lambda: number): number {
+  if (lambda === 0) return Math.exp(y)
+  const base = y * lambda + 1
+  if (base <= 0) return Number.EPSILON
+  return Math.pow(base, 1 / lambda)
+}
+
+/**
  * Map raw model output row (one standardized output per column, order matches
- * `orderedOutputFeatures`) through de-standardization and `Math.exp`, matching legacy
- * `de-standardize-sample` + `exponentiate` in `nzn.browser.tfjs`.
+ * `orderedOutputFeatures`) back to real units. Legacy path: de-standardize then
+ * `Math.exp` (`de-standardize-sample` + `exponentiate` in `nzn.browser.tfjs`). When a
+ * feature carries `tf['boxcox-lambda']`, de-standardize into box-cox space instead (per
+ * the NZN pipeline's "standardize inside box-cox" convention) then apply inverse Box-Cox.
  */
 export function rawPredictionToOutputs(
   rawRow: Float32Array | number[],
@@ -26,8 +41,11 @@ export function rawPredictionToOutputs(
       throw new Error(`Missing training-mean/training-scale for output ${id}`)
     }
     const z = rawRow[i]
-    const y = deStandardize(u, s, z)
-    out[id] = Math.exp(y)
+    const t = deStandardize(u, s, z)
+    const lambda = f.tf?.['boxcox-lambda']
+    const transform = f.tf?.['output-transform']
+    out[id] = (transform === 'linear' ? t : lambda === undefined ? Math.exp(t) : inverseBoxCox(t, lambda)) - (f.tf?.['output-offset'] ?? 0)
+    if (!Number.isFinite(out[id])) throw new Error(`Non-finite prediction for ${id}`)
   }
   return out
 }

@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useManifest } from '../hooks/useManifest'
+import { ModelPreview } from '../components/ModelPreview'
 import { useTfModel } from '../hooks/useTfModel'
 import { tfModelJsonUrl } from '../lib/assetUrls'
 import { tensorInputFeatures, tensorOutputFeatures } from '../lib/tfFeatureSelection'
@@ -19,7 +20,7 @@ const VIEW_LABELS: Record<string, string> = {
   sensitivity: 'Sensitivity',
   heatmap: 'Heatmap',
   tornado: 'Tornado',
-  'small-multiples': 'Small Multiples',
+  'all-inputs': 'All Inputs',
 }
 
 function parseEnergyMode(raw: string | null): EnergyDisplayUnit {
@@ -50,6 +51,7 @@ function ChartBody({ surrogateId }: { surrogateId: string }) {
     )
   }
 
+  if (state.status === 'preview') return <ModelPreview entry={state.entry} />
   return <ChartContent key={surrogateId} surrogateId={surrogateId} manifest={state.data} />
 }
 
@@ -69,7 +71,7 @@ function ChartContent({
   )
   const tfParam = params.get('tf')
   const tf: TfModel | undefined =
-    models.find((m) => m.path === tfParam) ?? models[0]
+    tfParam ? models.find((m) => m.path === tfParam) : models[0]
 
   const orderedIn = useMemo(() => (tf ? tensorInputFeatures(tf) : []), [tf])
   const orderedOut = useMemo(() => (tf ? tensorOutputFeatures(tf) : []), [tf])
@@ -161,7 +163,7 @@ function ChartContent({
               energyMode={energyMode}
               initialOutputSelection={initialOutputSelection}
             />
-          ) : view === 'small-multiples' ? (
+          ) : view === 'all-inputs' ? (
             <OutputSmallMultiplesView
               surrogateId={surrogateId}
               model={loadState.model}

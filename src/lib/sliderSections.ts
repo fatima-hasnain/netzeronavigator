@@ -78,7 +78,12 @@ export function groupTensorInputs(
     .filter((f) => !used.has(f.feature.id))
     .sort((a, b) => (a.tf?.position ?? 0) - (b.tf?.position ?? 0))
   if (rest.length) {
-    groups.push({ title: 'Other', items: rest })
+    for (const f of rest) {
+      const title = f.category?.name || 'Other'
+      const group = groups.find(g => g.title === title)
+      if (group) group.items.push(f)
+      else groups.push({ title, items: [f] })
+    }
   }
 
   return groups

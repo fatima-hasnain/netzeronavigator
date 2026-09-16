@@ -1,3 +1,4 @@
+import { featureLabel } from '../lib/modelDisplay'
 import { ExpandableChart } from './ExpandableChart'
 import { useCallback, useMemo, useState } from 'react'
 import type { LayersModel } from '@tensorflow/tfjs'
@@ -9,7 +10,7 @@ import { runSurrogatePredictBatch } from '../tf/runSurrogatePredict'
 import { writeChartHandoff } from '../lib/chartHandoff'
 import { SWEEP_STEPS } from './OutputSensitivityChart'
 import {
-  DERIVED_OPTIONS,
+  derivedOptionsFor,
   outputSelectionLabel,
   outputSelectionUnit,
   resolveOutputValue,
@@ -105,7 +106,7 @@ export function OutputSmallMultiplesView({
     writeChartHandoff({ valueMap })
     const params = new URLSearchParams({
       tf: tfModel.path,
-      view: 'small-multiples',
+      view: 'all-inputs',
       energy: energyMode,
       output: outputSelection,
     })
@@ -114,29 +115,29 @@ export function OutputSmallMultiplesView({
 
   if (outputFeatures.length === 0) return null
 
-  const unit = outputSelectionUnit(outputSelection, energyMode)
+  const unit = outputSelectionUnit(outputSelection, energyMode, tfModel)
   const ySpan = multiples.globalMax - multiples.globalMin || 1
 
   return (
-    <section className="dash-panel rounded border p-1.5 2xl:flex 2xl:flex-1 2xl:flex-col" aria-labelledby="small-multiples-title">
+    <section className="dash-panel rounded border p-1.5 2xl:flex 2xl:flex-1 2xl:flex-col" aria-labelledby="all-inputs-title">
       <div className="mb-1.5 flex flex-wrap items-end gap-2">
         <div className="min-w-40 flex-1">
-          <label className="dash-muted mb-0.5 block text-[10px] font-semibold uppercase tracking-wide" htmlFor="small-multiples-output">
+          <label className="dash-muted mb-0.5 block text-[10px] font-semibold uppercase tracking-wide" htmlFor="all-inputs-output">
             Output
           </label>
           <select
-            id="small-multiples-output"
+            id="all-inputs-output"
             className="dash-select w-full rounded border px-2 py-1 text-xs"
             value={outputSelection}
             onChange={(event) => setOutputSelection(event.target.value as OutputSelection)}
           >
-            <optgroup label="Energy outputs">
+            <optgroup label="Model outputs">
               {outputFeatures.map((feature) => (
-                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{t(feature.feature.id)}</option>
+                <option key={feature.feature.id} value={`tensor:${feature.feature.id}`}>{featureLabel(feature)}</option>
               ))}
             </optgroup>
             <optgroup label="Derived metrics">
-              {DERIVED_OPTIONS.map(([key, label]) => (
+              {derivedOptionsFor(tfModel).map(([key, label]) => (
                 <option key={key} value={`derived:${key}`}>{label}</option>
               ))}
             </optgroup>
@@ -144,18 +145,18 @@ export function OutputSmallMultiplesView({
         </div>
       </div>
       <div className="flex items-baseline justify-between gap-2">
-        <h4 id="small-multiples-title" className="dash-subsection-heading">Small Multiples</h4>
+        <h4 id="all-inputs-title" className="dash-subsection-heading">All Inputs</h4>
         <span className="dash-muted text-[10px]">{multiples.series.length} inputs</span>
       </div>
       {multiples.error ? (
         <p className="dash-error mt-2 text-xs" role="alert">{multiples.error}</p>
       ) : (
-        <ExpandableChart title="Small multiples" onOpenNewTab={openInNewTab}>
+        <ExpandableChart title="All inputs" onOpenNewTab={openInNewTab}>
           <p className="dash-muted mt-1 text-[10px]">
             Shared y-axis: {formatChartNumber(multiples.globalMin)} – {formatChartNumber(multiples.globalMax)} {unit}
-            {' '}for predicted {t(outputSelectionLabel(outputSelection))}. Click a tile to open it in Sensitivity.
+            {' '}for predicted {t(outputSelectionLabel(outputSelection, tfModel))}. Click a tile to open it in Sensitivity.
           </p>
-          <div className="small-multiples-plot mt-2 grid max-h-96 grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-2 overflow-y-auto pr-1 2xl:max-h-[32rem]">
+          <div className="all-inputs-plot mt-2 grid max-h-96 grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-2 overflow-y-auto pr-1 2xl:max-h-[32rem]">
             {multiples.series.map((s) => {
               const finite = s.points.filter((p) => Number.isFinite(p.y))
               const minX = finite.length ? finite[0].x : 0
@@ -167,9 +168,9 @@ export function OutputSmallMultiplesView({
                   type="button"
                   className="dash-card rounded-md border p-1.5 text-left transition-colors hover:border-[var(--dash-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--dash-accent)]"
                   onClick={() => onOpenInSensitivity(s.id, outputSelection)}
-                  aria-label={`Open ${t(s.id)} in Sensitivity view`}
+                  aria-label={`Open ${featureLabel(inputFeatures.find(f => f.feature.id === s.id)!)} in Sensitivity view`}
                 >
-                  <div className="dash-text truncate text-[10px] font-medium">{t(s.id)}</div>
+                  <div className="dash-text truncate text-[10px] font-medium">{featureLabel(inputFeatures.find(f => f.feature.id === s.id)!)}</div>
                   <svg
                     className="mini-sensitivity-plot mt-1 h-16 w-full"
                     viewBox="0 0 100 40"

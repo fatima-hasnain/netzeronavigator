@@ -1,0 +1,765 @@
+{
+  "building-type": "Primary School",
+  "location": "Victoria, BC",
+  "estimated-floor-area": "6871.0 m2",
+  "photo": "photo.png",
+  "description": "\"This is 1 story typical primary school. It is 4 m tall, has no doors modelled, \nand has a window running along the entire perimeter. \nThe school has 11 spacetypes, each of which is used at least once. The \"main\" part of the building includes the\nlibrary, gym, cafeteria, kitchen, offices, bathrooms, lobby, and mechanical room, each with it's own spacetype. There \nis a main corridor running through this part of the building, and other corridors extending through each of the building's\n\"arms\". All of the classrooms are in these arms and are all spacetype \"PrimarySchool Classroom\". One of the arms also \ncontains the computer room which has its own spacetype.",
+  "tf-models": [
+    {
+      "features": [
+        {
+          "ui": {
+            "order": 2107,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 6,
+            "training-scale": 1,
+            "training-mean": 17.22738808,
+            "training-variance": 0,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "INTERIOR-EQUIPMENT-ELECTRICITY"
+          },
+          "short-name": "Energy Usage - InteriorEquipment - Electricity (eKWh/m2)",
+          "energy-plus-label": "InteriorEquipment:Electricity [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - End Use Breakdown",
+            "id": "RESULTS-END-USE-BREAKDOWN"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 2003,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 2,
+            "training-scale": 4.417885449421522,
+            "training-mean": 13.943482665959268,
+            "training-variance": 19.517711844210403,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "DISTRICT-COOLING-FACILITY"
+          },
+          "short-name": "Energy Consumption - District Cooling (eKWh/m2)",
+          "energy-plus-label": "DistrictCooling:Facility [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - Fuel Use",
+            "id": "RESULTS-FUEL-USE"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 303,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 12,
+            "training-max": 0.8,
+            "training-scale": 0.2038211655333142,
+            "training-mean": 0.4181028573394547,
+            "training-variance": 0.04154306751935866,
+            "training-min": 0.1
+          },
+          "feature": {
+            "id": "GLAZING-SHGC"
+          },
+          "short-name": "Glazing SHGC",
+          "energy-plus-label": "Glazing SHGC",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.4,
+          "long-name": "Glazing Solar Heat Gain Coefficient",
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 306,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 15,
+            "training-max": 0.08,
+            "training-scale": 0.01837383763655591,
+            "training-mean": 0.04723605801557066,
+            "training-variance": 0.00033759790949451846,
+            "training-min": 0.01
+          },
+          "feature": {
+            "id": "FLOOR-THERMAL-MASS"
+          },
+          "short-name": "Floor Thermal Mass",
+          "energy-plus-label": "Floor Thermal Mass [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.015,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 107,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 7,
+            "training-max": 2,
+            "training-scale": 0.5350948058708848,
+            "training-mean": 0.9472332105099327,
+            "training-variance": 0.28632645126999984,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "WEST-SHADING"
+          },
+          "short-name": "West Shading",
+          "energy-plus-label": "West Shading [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.001,
+          "description": "The overhang length above West facing windows, which extend perpendicular from the building. [Additional Info](https://bigladdersoftware.com/epx/docs/8-0/input-output-reference/page-011.html#shadingoverhang)"
+        },
+        {
+          "ui": {
+            "order": 101,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 1,
+            "training-max": 0.99,
+            "training-scale": 0.25169506912666284,
+            "training-mean": 0.47816774949931407,
+            "training-variance": 0.06335040782267559,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "EAST-WINDOW-TO-WALL-RATIO"
+          },
+          "short-name": "East Window to Wall Ratio",
+          "energy-plus-label": "East Window to Wall Ratio [%]",
+          "units": "%",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.4,
+          "description": "The ratio of window area to wall area on East facing walls. [Additional Info](https://www.commercialwindows.org/wwr.php)"
+        },
+        {
+          "ui": {
+            "order": 2105,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 5,
+            "training-scale": 1.5614286476065535,
+            "training-mean": 21.265322223190505,
+            "training-variance": 2.4380594215664306,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "INTERIOR-LIGHTS-ELECTRICITY"
+          },
+          "short-name": "Energy Usage - Interior Lighting - Electricity (eKWh/m2)",
+          "energy-plus-label": "InteriorLights:Electricity [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - End Use Breakdown",
+            "id": "RESULTS-END-USE-BREAKDOWN"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 103,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 3,
+            "training-max": 0.99,
+            "training-scale": 0.2913519336173151,
+            "training-mean": 0.5004817156593597,
+            "training-variance": 0.08488594922254838,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "WEST-WINDOW-TO-WALL-RATIO"
+          },
+          "short-name": "West Window to Wall Ratio",
+          "energy-plus-label": "West Window to Wall Ratio [%]",
+          "units": "%",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.4,
+          "description": "The ratio of window area to wall area on West facing walls. [Additional Info](https://www.commercialwindows.org/wwr.php)"
+        },
+        {
+          "ui": {
+            "order": 300,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 9,
+            "training-max": 60,
+            "training-scale": 16.709800554070437,
+            "training-mean": 33.91987719049575,
+            "training-variance": 279.21743455681263,
+            "training-min": 3.5
+          },
+          "feature": {
+            "id": "WALL-INSULATION"
+          },
+          "short-name": "Wall Insulation",
+          "energy-plus-label": "Wall Insulation [R-Value]",
+          "units": "R-Value",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 14,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 308,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 17,
+            "training-max": 1.5,
+            "training-scale": 0.43716090093530396,
+            "training-mean": 0.761519883521169,
+            "training-variance": 0.19110965330656662,
+            "training-min": 0.015
+          },
+          "feature": {
+            "id": "DESIGN-INFILTRATION-RATE"
+          },
+          "short-name": "Design Infiltration Rate",
+          "energy-plus-label": "Design Infiltration Rate [L/s/s-m2 @ 5Pa]",
+          "units": "L/s/s-m2 @ 5Pa",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.25,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 104,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 4,
+            "training-max": 2,
+            "training-scale": 0.5258587064125669,
+            "training-mean": 1.067932288324608,
+            "training-variance": 0.2765273791098982,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "NORTH-SHADING"
+          },
+          "short-name": "North Shading",
+          "energy-plus-label": "North Shading [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.001,
+          "description": "The overhang length above North facing windows, which extend perpendicular from the building. [Additional Info](https://bigladdersoftware.com/epx/docs/8-0/input-output-reference/page-011.html#shadingoverhang)"
+        },
+        {
+          "ui": {
+            "order": 304,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 13,
+            "training-max": 0.9,
+            "training-scale": 0.15688402675152613,
+            "training-mean": 0.6082948479508501,
+            "training-variance": 0.024612597849773564,
+            "training-min": 0.3
+          },
+          "feature": {
+            "id": "GLAZING-VISIBLE-TRANSMITTANCE"
+          },
+          "short-name": "Glazing Visible Transmittance",
+          "energy-plus-label": "Glazing Visible Transmittance",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.7,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 108,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 8,
+            "training-max": 90,
+            "training-scale": 44.91586877282368,
+            "training-mean": -12.353882955295592,
+            "training-variance": 2017.435267617517,
+            "training-min": -90
+          },
+          "feature": {
+            "id": "ORIENTATION"
+          },
+          "short-name": "Orientation",
+          "energy-plus-label": "Orientation [degrees from north]",
+          "units": "degrees from north",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0,
+          "description": "The orientation of the building as the difference in degrees between 'True North' and 'Building North'. [Additional Info](https://bigladdersoftware.com/epx/docs/8-0/input-output-reference/page-006.html#field-north-axis)"
+        },
+        {
+          "ui": {
+            "order": 105,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 5,
+            "training-max": 2,
+            "training-scale": 0.6313464892634523,
+            "training-mean": 1.0255572183680521,
+            "training-variance": 0.3985983895052864,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "EAST-SHADING"
+          },
+          "short-name": "East Shading",
+          "energy-plus-label": "East Shading [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.001,
+          "description": "The overhang length above East facing windows, which extend perpendicular from the building. [Additional Info](https://bigladdersoftware.com/epx/docs/8-0/input-output-reference/page-011.html#shadingoverhang)"
+        },
+        {
+          "ui": {
+            "order": 2102,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 3,
+            "training-scale": 78.85438599967529,
+            "training-mean": 125.07152765222934,
+            "training-variance": 6218.014191385786,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "HEATING-DISTRICT-HEATING"
+          },
+          "short-name": "Energy Usage - Heating - District Heating (eKWh/m2)",
+          "energy-plus-label": "Heating:DistrictHeating [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - End Use Breakdown",
+            "id": "RESULTS-END-USE-BREAKDOWN"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 302,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 11,
+            "training-max": 5.5,
+            "training-scale": 1.280751350185138,
+            "training-mean": 2.865069090035903,
+            "training-variance": 1.6403240210010537,
+            "training-min": 0.5
+          },
+          "feature": {
+            "id": "GLAZING-U-VALUE"
+          },
+          "short-name": "Glazing U-value",
+          "energy-plus-label": "Glazing U-value [W/m2K]",
+          "units": "W/m2K",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 2.2,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 2002,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 1,
+            "training-scale": 78.85438599967529,
+            "training-mean": 125.07152765222934,
+            "training-variance": 6218.014191385786,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "DISTRICT-HEATING-FACILITY"
+          },
+          "short-name": "Energy Consumption - District Heating (eKWh/m2)",
+          "energy-plus-label": "DistrictHeating:Facility [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - Fuel Use",
+            "id": "RESULTS-FUEL-USE"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 305,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 14,
+            "training-max": 0.1,
+            "training-scale": 0.022470936507611547,
+            "training-mean": 0.06266809415486692,
+            "training-variance": 0.0005049429875291094,
+            "training-min": 0.01
+          },
+          "feature": {
+            "id": "WALL-THERMAL-MASS"
+          },
+          "short-name": "Wall Thermal Mass",
+          "energy-plus-label": "Wall Thermal Mass [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.01,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 2000,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 0,
+            "training-scale": 1.561428647606554,
+            "training-mean": 38.49270030319051,
+            "training-variance": 2.438059421566432,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "ELECTRICITY-FACILITY"
+          },
+          "short-name": "Energy Consumption - Electricity (ekWh/m2)",
+          "energy-plus-label": "Electricity:Facility [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - Fuel Use",
+            "id": "RESULTS-FUEL-USE"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 102,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 2,
+            "training-max": 0.99,
+            "training-scale": 0.3018793724223057,
+            "training-mean": 0.5310468440168725,
+            "training-variance": 0.09113115549408515,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "SOUTH-WINDOW-TO-WALL-RATIO"
+          },
+          "short-name": "South Window to Wall Ratio",
+          "energy-plus-label": "South Window to Wall Ratio [%]",
+          "units": "%",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.4,
+          "description": "The ratio of window area to wall area on South facing walls. [Additional Info](https://www.commercialwindows.org/wwr.php)"
+        },
+        {
+          "ui": {
+            "order": 2104,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 4,
+            "training-scale": 4.417885449421522,
+            "training-mean": 13.943482665959268,
+            "training-variance": 19.517711844210403,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "COOLING-DISTRICT-COOLING"
+          },
+          "short-name": "Energy Usage - Cooling - District Cooling (eKWh/m2)",
+          "energy-plus-label": "Cooling:DistrictCooling [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - End Use Breakdown",
+            "id": "RESULTS-END-USE-BREAKDOWN"
+          },
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 100,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 0,
+            "training-max": 0.99,
+            "training-scale": 0.28071451273225584,
+            "training-mean": 0.5096477870490133,
+            "training-variance": 0.07880063765850784,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "NORTH-WINDOW-TO-WALL-RATIO"
+          },
+          "short-name": "North Window to Wall Ratio",
+          "energy-plus-label": "North Window to Wall Ratio [%]",
+          "units": "%",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.4,
+          "description": "The ratio of window area to wall area on North facing walls. <a href='https://www.commercialwindows.org/wwr.php' target='_blank'>Additional Info</a>"
+        },
+        {
+          "ui": {
+            "order": 2201,
+            "pinned": true,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 7,
+            "training-scale": 79.10430171119646,
+            "training-mean": 177.50769062137908,
+            "training-variance": 6257.490549215999,
+            "output-transform": "linear",
+            "output-offset": 0
+          },
+          "feature": {
+            "id": "TEU"
+          },
+          "short-name": "TEUI (eKWh/m2)",
+          "energy-plus-label": "TEU [ekWh/m2]",
+          "units": "ekWh/m2",
+          "kind": "surrogate-output",
+          "data-type": "continuous",
+          "category": {
+            "name": "Results - Metrics",
+            "id": "RESULTS-METRICS"
+          },
+          "long-name": "Total Energy Use Intensity",
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 301,
+            "visibility": "shown"
+          },
+          "tf": {
+            "position": 10,
+            "training-max": 90,
+            "training-scale": 25.2519198310931,
+            "training-mean": 47.71060877961923,
+            "training-variance": 637.6594551559531,
+            "training-min": 5
+          },
+          "feature": {
+            "id": "ROOF-INSULATION"
+          },
+          "short-name": "Roof Insulation",
+          "energy-plus-label": "Roof Insulation [R-Value]",
+          "units": "R-Value",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 20,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 309,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 18,
+            "training-max": 1,
+            "training-scale": 0.29099616814896684,
+            "training-mean": 0.4720850571564463,
+            "training-variance": 0.0846787698773818,
+            "training-min": 0
+          },
+          "feature": {
+            "id": "INFILTRATION-DYNAMICS-FACTOR"
+          },
+          "short-name": "Infiltration Dynamics Factor",
+          "energy-plus-label": "Infiltration Dynamics Factor",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        },
+        {
+          "ui": {
+            "order": 106,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 6,
+            "training-max": 2,
+            "training-scale": 0.5673406413901081,
+            "training-mean": 1.028263586067295,
+            "training-variance": 0.32187540337293924,
+            "training-min": 0.001
+          },
+          "feature": {
+            "id": "SOUTH-SHADING"
+          },
+          "short-name": "South Shading",
+          "energy-plus-label": "South Shading [m]",
+          "units": "m",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Architectural",
+            "id": "ARCHITECTURAL"
+          },
+          "default": 0.001,
+          "description": "The overhang length above South facing windows, which extend perpendicular from the building. [Additional Info](https://bigladdersoftware.com/epx/docs/8-0/input-output-reference/page-011.html#shadingoverhang)"
+        },
+        {
+          "ui": {
+            "order": 307,
+            "visibility": "hidden"
+          },
+          "tf": {
+            "position": 16,
+            "training-max": 2,
+            "training-scale": 0.5536439265011854,
+            "training-mean": 1.1111627334278373,
+            "training-variance": 0.30652159735164997,
+            "training-min": 0.0001
+          },
+          "feature": {
+            "id": "SLAB-INSULATION"
+          },
+          "short-name": "Slab Insulation",
+          "energy-plus-label": "Slab Insulation [W/mK]",
+          "units": "W/mK",
+          "kind": "surrogate-input",
+          "data-type": "continuous",
+          "category": {
+            "name": "Envelope",
+            "id": "ENVELOPE"
+          },
+          "default": 0.93,
+          "description": "**Insert Description here at future date.** [Additional Info](https://www.goodnewsnetwork.org/)"
+        }
+      ],
+      "path": "tf_model_0/model_js/model.json"
+    }
+  ],
+  "id": "model-11cba4ca3b3a110b",
+  "schema-version": "20201127",
+  "name": "Primary School — Victoria, BC"
+}

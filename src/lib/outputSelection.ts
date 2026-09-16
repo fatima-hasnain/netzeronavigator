@@ -6,6 +6,11 @@ import {
 } from './derivedMetrics'
 import { jToKwh, jToMwh, type EnergyDisplayUnit } from './volumeConversion'
 import type { TfModel } from '../types/manifest'
+import { isJoules, supportsDerived, featureLabel } from './modelDisplay'
+
+export function derivedOptionsFor(model: TfModel) {
+  return supportsDerived(model) ? DERIVED_OPTIONS : []
+}
 
 /** Shared by Sensitivity, Heatmap, and Tornado — the "which output to look at" dropdown. */
 export const DERIVED_OPTIONS = [
@@ -28,14 +33,20 @@ export function displayTensorValue(joules: number, mode: EnergyDisplayUnit): num
 export function outputSelectionUnit(
   outputSelection: OutputSelection,
   energyMode: EnergyDisplayUnit,
+  model?: TfModel,
 ): string {
-  if (outputSelection.startsWith('tensor:')) return energyMode
+  if (outputSelection.startsWith('tensor:')) {
+    const f = model?.features.find(f => f.feature.id === outputSelection.slice(7))
+    return model && !isJoules(f) ? f?.units || '' : energyMode
+  }
   if (outputSelection === 'derived:GHGI') return 'kgCO₂/m²'
   if (outputSelection === 'derived:OPERATING_COST') return '$/m²'
   return 'kWh/m²'
 }
 
-export function outputSelectionLabel(outputSelection: string): string {
+export function outputSelectionLabel(outputSelection: string, model?: TfModel): string {
+  const feature = model?.features.find(f => f.feature.id === outputSelection.replace(/^(tensor|derived):/, ''))
+  if (feature) return featureLabel(feature)
   return outputSelection.replace(/^(tensor|derived):/, '')
 }
 
@@ -49,7 +60,8 @@ export function resolveOutputValue(
 ): number {
   if (outputSelection.startsWith('tensor:')) {
     const outputId = outputSelection.slice('tensor:'.length)
-    return displayTensorValue(prediction[outputId], energyMode)
+    const f = tfModel.features.find(f => f.feature.id === outputId)
+    return isJoules(f) ? displayTensorValue(prediction[outputId], energyMode) : prediction[outputId]
   }
   const rawOutputs = outputsRecordToJ(prediction)
   if (!rawOutputs) return Number.NaN

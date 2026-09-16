@@ -16,12 +16,21 @@ export interface ManifestUi {
 }
 
 export interface ManifestTf {
+  'output-transform'?: 'linear' | 'exp' | 'boxcox'
+  'output-offset'?: number
   position?: number
   'training-mean'?: number
   'training-scale'?: number
   'training-min'?: number
   'training-max'?: number
   'training-variance'?: number
+  /**
+   * Output-only. When present, `rawPredictionToOutputs` applies inverse Box-Cox
+   * (using `training-mean`/`training-scale` as the box-cox-space standardization
+   * mean/scale, per the NZN pipeline's "standardize inside box-cox" convention)
+   * instead of the legacy `Math.exp` de-standardization.
+   */
+  'boxcox-lambda'?: number
 }
 
 export interface ManifestFeature {

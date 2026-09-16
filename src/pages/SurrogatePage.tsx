@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { FeatureTable } from '../components/FeatureTable'
+import { ModelPreview } from '../components/ModelPreview'
 import { SurrogateExploration } from '../components/SurrogateExploration'
 import { tfModelJsonUrl } from '../lib/assetUrls'
 import {
@@ -42,6 +43,7 @@ function SurrogateBody({ surrogateId }: { surrogateId: string }) {
     )
   }
 
+  if (state.status === 'preview') return <ModelPreview entry={state.entry} />
   const manifest = state.data
   return (
     <SurrogateContent
@@ -68,11 +70,12 @@ function SurrogateContent({
     [manifest],
   )
   const selectionKeys = useMemo(() => allSelectionKeys(models), [models])
-  const [activeTfIdx, setActiveTfIdx] = useState(0)
+  const [params, setParams] = useSearchParams()
+  const activeTfIdx = params.has('tf') ? models.findIndex(m => m.path === params.get('tf')) : 0
   const [tab, setTab] = useState<'explorer' | 'info'>('explorer')
   const [configError, setConfigError] = useState<string | null>(null)
 
-  const tf = models[activeTfIdx] ?? models[0]
+  const tf = models[activeTfIdx]
 
   const handleConfigChange = useCallback(
     (id: string, value: string) => {
@@ -85,9 +88,9 @@ function SurrogateContent({
         return
       }
       setConfigError(null)
-      setActiveTfIdx(idx)
+      setParams({ tf: models[idx].path })
     },
-    [tf, models, selectionKeys],
+    [tf, models, selectionKeys, setParams],
   )
 
   const title = manifest.name ?? manifest.id
@@ -112,6 +115,7 @@ function SurrogateContent({
           </span>
         </div>
         <p className="dash-muted mt-1 text-sm">Surrogate model explorer</p>
+        <Link className="dash-link mt-2 inline-block text-sm" to="/">Change model</Link>
       </header>
 
       <div
@@ -165,7 +169,7 @@ function SurrogateContent({
               configError={configError}
             />
           ) : (
-            <p className="dash-muted">No TensorFlow model in manifest.</p>
+            <p className="dash-muted">No model matches the selected configuration. Choose another model.</p>
           )}
         </div>
       )}

@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "test:recovery": "node --test scripts/transfer-recovery.test.mjs"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",

@@ -1,3 +1,4 @@
+import { featureLabel } from '../lib/modelDisplay'
 import { useId, useMemo, useState } from 'react'
 import {
   decimalPlacesForFeatureId,
@@ -90,12 +91,12 @@ ${f.description && typeof f.description === 'string' ? f.description : f.notes &
       {/* Row 1: full label + help, with value and unit right-aligned. */}
       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
         <div className="flex min-w-0 flex-1 items-baseline gap-1">
-          <div className="dash-card-label dash-text text-sm font-medium">{t(id)}</div>
+          <div className="dash-card-label dash-text text-sm font-medium">{featureLabel(f)}</div>
           <button
             type="button"
             className="dash-accent-text shrink-0 rounded p-0.5 text-sm hover:opacity-80"
             title={info}
-            aria-label={`Details for ${t(id)}`}
+            aria-label={`Details for ${featureLabel(f)}`}
           >
             ⓘ
           </button>
@@ -123,7 +124,7 @@ ${f.description && typeof f.description === 'string' ? f.description : f.notes &
             }}
             title={oob ? 'Value outside training range' : undefined}
             aria-invalid={oob}
-            aria-label={`${t(id)} value${unitShown ? ` (${unitShown})` : ''}`}
+            aria-label={`${featureLabel(f)} value${unitShown ? ` (${unitShown})` : ''}`}
           />
           {unitShown ? (
             <span className="dash-muted text-xs">
@@ -145,7 +146,7 @@ ${f.description && typeof f.description === 'string' ? f.description : f.notes &
           max={max}
           step={rangeStepFinal}
           value={vForSlider}
-          aria-label={`${t(id)} (${unitShown || t(id)})`}
+          aria-label={`${featureLabel(f)} (${unitShown || t(id)})`}
           aria-valuemin={min}
           aria-valuemax={max}
           aria-valuenow={value}
@@ -177,7 +178,11 @@ export function InputSlidersPane({
 }: InputSlidersPaneProps) {
   const baseId = useId()
   const groups = useMemo(() => groupTensorInputs(features), [features])
-  const [open, setOpen] = useState<Record<string, boolean>>({})
+  // Default open — a first-time visitor should see draggable sliders immediately,
+  // not a wall of collapsed accordions with nothing to interact with.
+  const [open, setOpen] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(groups.map((g) => [g.title, true])),
+  )
   const allExpanded = groups.length > 0 && groups.every((g) => open[g.title] === true)
 
   return (
