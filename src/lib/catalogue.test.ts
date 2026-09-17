@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterModels, type CatalogueModel } from './catalogue'
+import { filterModels, humanizeOutputName, type CatalogueModel } from './catalogue'
 import { rawPredictionToOutputs } from '../tf/tensorPipeline'
 import { resolveOutputValue, outputSelectionUnit, derivedOptionsFor } from './outputSelection'
 import { formatModelOutput } from './modelDisplay'
@@ -30,5 +30,15 @@ describe('catalogue and model-specific inference', () => {
     expect(outputSelectionUnit('tensor:energy', 'MWh', model)).toBe('ekWh/m2')
     expect(formatModelOutput(125, output, 'MWh').unit).toBe('ekWh/m2')
     expect(derivedOptionsFor(model)).toEqual([])
+  })
+  it('humanizes raw catalogue output names but leaves already-readable ones alone', () => {
+    expect(humanizeOutputName('HEATING_DEMAND')).toBe('Heating Demand')
+    expect(humanizeOutputName('HEATING_NG')).toBe('Heating NG')
+    expect(humanizeOutputName('Electricity:Facility')).toBe('Electricity Facility')
+    expect(humanizeOutputName('DistrictHeating:Facility')).toBe('District Heating Facility')
+    expect(humanizeOutputName('ELECTRICITY-FACILITY')).toBe('Electricity Facility')
+    expect(humanizeOutputName('TEDI')).toBe('TEDI')
+    expect(humanizeOutputName('Aggregate space heating demand')).toBe('Aggregate space heating demand')
+    expect(humanizeOutputName('TEDI (eKWh/m2)')).toBe('TEDI (eKWh/m2)')
   })
 })

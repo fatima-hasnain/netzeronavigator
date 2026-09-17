@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100svh;
@@ -10,59 +14,41 @@ body {
 }
 
 /*
- * Dashboard palettes. Change data-theme on the App shell to one of:
- * glacier (default), viridis, or daylight.
+ * Dashboard palette: Graphite & Indigo. A single, deliberately chosen theme
+ * (not a generic default meant to be overridden) — everything below assumes
+ * this one dark palette rather than staying colour-agnostic.
  */
-[data-theme='glacier'] {
-  --dash-canvas: #141518;
-  --dash-surface: #1d1f23;
-  --dash-surface-raised: #272a30;
-  --dash-border: #494e58;
-  --dash-text: #f1f5f9;
-  --dash-text-soft: #cbd5e1;
-  --dash-text-muted: #94a3b8;
-  --dash-accent: #5eead4;
-  --dash-accent-strong: #0f766e;
-  --dash-accent-soft: #ccfbf1;
+[data-theme='graphite'] {
+  --dash-canvas: #0f1115;
+  --dash-surface: #16181f;
+  --dash-surface-raised: #1e2129;
+  --dash-border: #33384a;
+  --dash-text: #f5f5f7;
+  --dash-text-soft: #d7d8e0;
+  --dash-text-muted: #9a9db0;
+  --dash-accent: #818cf8;
+  --dash-accent-strong: #4f46e5;
+  --dash-accent-soft: #c7d2fe;
   --dash-warning: #fbbf24;
-  --dash-ok: #5eead4;
-  --dash-error: #f87171;
-}
-
-[data-theme='viridis'] {
-  --dash-canvas: #101713;
-  --dash-surface: #17231e;
-  --dash-surface-raised: #203129;
-  --dash-border: #436052;
-  --dash-text: #f4f7f5;
-  --dash-text-soft: #d5e2dc;
-  --dash-text-muted: #9cb4a8;
-  --dash-accent: #5ec962;
-  --dash-accent-strong: #21918c;
-  --dash-accent-soft: #d8f3b2;
-  --dash-warning: #fde725;
-  --dash-ok: #86efac;
-  --dash-error: #fca5a5;
-}
-
-[data-theme='daylight'] {
-  --dash-canvas: #f4f7fa;
-  --dash-surface: #ffffff;
-  --dash-surface-raised: #e8eef5;
-  --dash-border: #9aaabc;
-  --dash-text: #14213d;
-  --dash-text-soft: #263b5e;
-  --dash-text-muted: #52657a;
-  --dash-accent: #006d77;
-  --dash-accent-strong: #00545c;
-  --dash-accent-soft: #d3f0ee;
-  --dash-warning: #9a6700;
-  --dash-ok: #047857;
-  --dash-error: #b91c1c;
+  --dash-ok: #34d399;
+  --dash-error: #fb7185;
+  --dash-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --dash-shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
 }
 
 .dashboard-shell { background: var(--dash-canvas); color: var(--dash-text); }
-.dash-card { border-color: var(--dash-border); background: var(--dash-surface); }
+.dash-card {
+  border-color: var(--dash-border);
+  background: var(--dash-surface);
+  box-shadow: var(--dash-shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.dash-card:hover {
+  border-color: color-mix(in srgb, var(--dash-accent) 45%, var(--dash-border));
+  box-shadow: var(--dash-shadow-md);
+  transform: translateY(-1px);
+}
 .dash-group { border-color: var(--dash-border); background: color-mix(in srgb, var(--dash-surface) 72%, transparent); }
 .dash-divider { border-color: var(--dash-border); }
 .dash-heading { color: var(--dash-text); }
@@ -70,22 +56,37 @@ body {
 .dash-muted { color: var(--dash-text-muted); }
 .dash-accent-text { color: var(--dash-accent-soft); }
 .dash-warning { color: var(--dash-warning); }
-.dash-control { border-color: var(--dash-border); background: var(--dash-canvas); color: var(--dash-text); }
+.dash-control {
+  border-color: var(--dash-border);
+  background: var(--dash-canvas);
+  color: var(--dash-text);
+  transition: border-color 0.15s ease;
+}
 .dash-control:hover { border-color: var(--dash-text-muted); }
 .dash-accent-bg { background: color-mix(in srgb, var(--dash-accent-strong) 38%, transparent); color: var(--dash-accent-soft); }
-.dash-bar { background: var(--dash-accent-strong); }
+.dash-bar { background: linear-gradient(90deg, var(--dash-accent-strong), var(--dash-accent)); }
 .dash-range { accent-color: var(--dash-accent); }
 .dash-range:focus-visible, .dash-control:focus-visible, .dash-select:focus-visible { outline: 2px solid var(--dash-accent); outline-offset: 2px; }
 .dash-oob { border-color: var(--dash-warning); }
 
 /* Panels, chrome and links */
-.dash-panel { border-color: var(--dash-border); background: var(--dash-surface-raised); }
+.dash-panel { border-color: var(--dash-border); background: var(--dash-surface-raised); box-shadow: var(--dash-shadow-sm); }
 .dash-chip { border-color: var(--dash-border); background: var(--dash-surface-raised); color: var(--dash-text-muted); }
-.dash-select { border-color: var(--dash-border); background: var(--dash-canvas); color: var(--dash-text); }
-.dash-link { color: var(--dash-accent); }
-.dash-link:hover { text-decoration: underline; }
-.dash-btn { background: var(--dash-accent-strong); color: var(--dash-accent-soft); }
-.dash-btn:hover { background: var(--dash-accent); color: var(--dash-canvas); }
+.dash-select {
+  border-color: var(--dash-border);
+  background: var(--dash-canvas);
+  color: var(--dash-text);
+  transition: border-color 0.15s ease;
+}
+.dash-link { color: var(--dash-accent); transition: color 0.15s ease; }
+.dash-link:hover { color: var(--dash-accent-soft); text-decoration: underline; }
+.dash-btn {
+  background: var(--dash-accent);
+  color: var(--dash-canvas);
+  transition: background-color 0.15s ease, transform 0.05s ease;
+}
+.dash-btn:hover { background: var(--dash-accent-soft); }
+.dash-btn:active { transform: translateY(1px); }
 
 /* Semantic state */
 .dash-ok { color: var(--dash-ok); }
@@ -100,7 +101,7 @@ body {
 .dash-dot-error { background: var(--dash-error); }
 
 /* Tabs */
-.dash-tab { color: var(--dash-text-muted); }
+.dash-tab { color: var(--dash-text-muted); transition: color 0.15s ease; }
 .dash-tab:hover { color: var(--dash-text); }
 .dash-tab-active { color: var(--dash-text); border-bottom-color: var(--dash-accent); }
 
@@ -111,117 +112,22 @@ body {
 .dash-badge-low { background: color-mix(in srgb, var(--dash-ok) 26%, transparent); color: var(--dash-ok); }
 .dash-badge-high { background: color-mix(in srgb, var(--dash-warning) 26%, transparent); color: var(--dash-warning); }
 .dash-chart-grid { stroke: var(--dash-border); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.dash-chart-line { fill: none; stroke: var(--dash-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.dash-heatmap-legend { background: linear-gradient(90deg, #8060b0, #21918c, #fde725); }
+.dash-chart-line { fill: none; stroke: var(--dash-accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.dash-chart-magnitude { filter: drop-shadow(0 0 0.65px var(--dash-canvas)); stroke-width: 3; }
+.dash-heatmap-legend { background: linear-gradient(90deg, #8060b0, #21918c, #fde725); border: 1px solid var(--dash-border); }
 .dash-section-heading { color: var(--dash-text); font-size: 0.9375rem; line-height: 1.25rem; font-weight: 700; letter-spacing: 0.01em; }
 .dash-subsection-heading { color: var(--dash-text-soft); font-size: 0.75rem; line-height: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .dash-card-label { min-height: 1.25rem; line-height: 1.25rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 
-/* Live palette comparison: shared chart colours, independent interface colours. */
-[data-theme='terracotta'] {
-  --dash-canvas: #f5eee5; --dash-surface: #fffaf3; --dash-surface-raised: #ede0d2;
-  --dash-border: #b6a08c; --dash-text: #38281f; --dash-text-soft: #564033; --dash-text-muted: #715c4d;
-  --dash-accent: #a0442f; --dash-accent-strong: #883721; --dash-accent-soft: #883721;
-  --dash-warning: #8a5300; --dash-ok: #086c60; --dash-error: #b02c30;
+/* A shared neutral plotting surface so charts read consistently against the panel behind them. */
+svg[aria-label^='Sensitivity chart'], svg[aria-label*='heatmap by'] {
+  background: var(--dash-surface-raised);
+  border: 1px solid var(--dash-border);
+  border-radius: 6px;
 }
-[data-theme='aubergine'] {
-  --dash-canvas: #241922; --dash-surface: #342530; --dash-surface-raised: #44313e;
-  --dash-border: #806474; --dash-text: #fff3ea; --dash-text-soft: #eedcd9; --dash-text-muted: #c8b0ba;
-  --dash-accent: #f3b58a; --dash-accent-strong: #9b5c3a; --dash-accent-soft: #ffe0c6;
-  --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
-}
-[data-theme='olive'] {
-  --dash-canvas: #f2f0e5; --dash-surface: #fcfbf4; --dash-surface-raised: #e6e9da;
-  --dash-border: #a0ab91; --dash-text: #293329; --dash-text-soft: #43503d; --dash-text-muted: #5f6955;
-  --dash-accent: #456044; --dash-accent-strong: #354d34; --dash-accent-soft: #354d34;
-  --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
-}
-.theme-comparison { background: var(--dash-surface); border-bottom: 1px solid var(--dash-border); }
-.theme-choice[aria-pressed='true'] { outline: 2px solid var(--dash-accent); outline-offset: 1px; }
-.theme-choice:focus-visible { outline: 3px solid var(--dash-accent); outline-offset: 3px; }
-[data-theme='terracotta'] .dash-btn, [data-theme='olive'] .dash-btn { color: #fffaf3; }
-[data-theme='terracotta'] .dash-badge-neutral, [data-theme='olive'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
-[data-theme='aubergine'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
-/* A constant neutral plotting surface preserves the same colour appearance across palettes. */
-svg[aria-label^='Sensitivity chart'], svg[aria-label*='heatmap by'] { background: #181c22; border: 1px solid #626974; border-radius: 6px; }
-svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #626974; }
-.dash-heatmap-legend { border: 1px solid #626974; }
+svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: var(--dash-text-muted); }
 
-/* Additional selectable interface palettes. */
-[data-theme='sand'] {
- --dash-canvas: #f3ebdd; --dash-surface: #fffcf5; --dash-surface-raised: #e8ddcc;
- --dash-border: #ab9c86; --dash-text: #302e27; --dash-text-soft: #514b40; --dash-text-muted: #6c6356;
- --dash-accent: #176b70; --dash-accent-strong: #12575c; --dash-accent-soft: #12575c;
- --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
-}
-[data-theme='sand'] .dash-btn { color: #fffaf3; }
-[data-theme='sand'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
-[data-theme='espresso'] {
- --dash-canvas: #241c18; --dash-surface: #362a24; --dash-surface-raised: #45352c;
- --dash-border: #876e5c; --dash-text: #fff3e8; --dash-text-soft: #eedbca; --dash-text-muted: #cbb29e;
- --dash-accent: #e4a078; --dash-accent-strong: #8c4f2d; --dash-accent-soft: #fff3e8;
- --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
-}
-[data-theme='espresso'] .dash-btn { color: #fffaf3; }
-[data-theme='espresso'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
-[data-theme='parchment'] {
- --dash-canvas: #f7f1e8; --dash-surface: #fffcf7; --dash-surface-raised: #eee3da;
- --dash-border: #b7a093; --dash-text: #392c2c; --dash-text-soft: #594546; --dash-text-muted: #756060;
- --dash-accent: #873d50; --dash-accent-strong: #702c40; --dash-accent-soft: #702c40;
- --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
-}
-[data-theme='parchment'] .dash-btn { color: #fffaf3; }
-[data-theme='parchment'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
-[data-theme='midnight'] {
- --dash-canvas: #17232b; --dash-surface: #263640; --dash-surface-raised: #30434e;
- --dash-border: #69818e; --dash-text: #f5f0e5; --dash-text-soft: #dce2e3; --dash-text-muted: #afbec5;
- --dash-accent: #d8b46a; --dash-accent-strong: #806127; --dash-accent-soft: #f5f0e5;
- --dash-warning: #f4c76a; --dash-ok: #6cddc4; --dash-error: #ffa2a9;
-}
-[data-theme='midnight'] .dash-btn { color: #fffaf3; }
-[data-theme='midnight'] .dash-badge-neutral { background: #47515d; color: #edf1f5; }
-[data-theme='mist'] {
- --dash-canvas: #edf3ef; --dash-surface: #fafcfa; --dash-surface-raised: #dfeae3;
- --dash-border: #97aca0; --dash-text: #24382d; --dash-text-soft: #41574a; --dash-text-muted: #5a7062;
- --dash-accent: #36705a; --dash-accent-strong: #285941; --dash-accent-soft: #285941;
- --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
-}
-[data-theme='mist'] .dash-btn { color: #fffaf3; }
-[data-theme='mist'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
-[data-theme='porcelain'] {
- --dash-canvas: #f5f3ef; --dash-surface: #ffffff; --dash-surface-raised: #e9e8e5;
- --dash-border: #a5a6ad; --dash-text: #292d3a; --dash-text-soft: #464c60; --dash-text-muted: #636879;
- --dash-accent: #3456b8; --dash-accent-strong: #294598; --dash-accent-soft: #294598;
- --dash-warning: #855500; --dash-ok: #086c60; --dash-error: #ad3434;
-}
-[data-theme='porcelain'] .dash-btn { color: #fffaf3; }
-[data-theme='porcelain'] .dash-badge-neutral { background: #dce1e5; color: #35404b; }
-
-/* Final Midnight & Brass presentation. */
-[data-theme='midnight'] {
- --dash-accent-soft: #edd39a; --dash-ok: #85c6bc; --dash-warning: #e9bc61;
- --dash-chart-surface: #f1eee5;
- color-scheme: dark;
-}
-[data-theme='midnight'] .dash-btn { background: #d8b46a; color: #17232b; }
-[data-theme='midnight'] .dash-btn:hover { background: #edd39a; }
-[data-theme='midnight'] .dash-badge-low { background: #254840; color: #a3d9ce; }
-[data-theme='midnight'] .dash-badge-neutral { background: #3e505e; color: #e1e8ed; }
-[data-theme='midnight'] .dash-badge-high { background: #514326; color: #f3cf81; }
-[data-theme='midnight'] .dash-bar { background: linear-gradient(90deg, #887346, #d8b46a); }
-[data-theme='midnight'] svg[aria-label^='Sensitivity chart'],
-[data-theme='midnight'] svg[aria-label*='heatmap by'] { background: var(--dash-chart-surface); border-color: #a5997d; }
-[data-theme='midnight'] svg[aria-label^='Sensitivity chart'] .dash-chart-grid { stroke: #9f9b90; }
-/* Keep both dark blue and light gold portions distinct on the parchment plot. */
-[data-theme='midnight'] .dash-chart-magnitude { filter: drop-shadow(0 0 0.65px #17232b); stroke-width: 3; }
-[data-theme='midnight'] .dash-heatmap-legend { border-color: #a5997d; }
-
-/* Compact plots and an expanded view of the same data. */
-[data-theme='midnight'] { --dash-chart-surface: var(--dash-surface-raised); }
-[data-theme='midnight'] svg[aria-label^='Sensitivity chart'],
-[data-theme='midnight'] svg[aria-label*='heatmap by'] { background: var(--dash-surface-raised); border-color: var(--dash-border); }
-[data-theme='midnight'] .dash-chart-line { stroke: var(--dash-accent); stroke-width: 2.5; filter: none; }
-.chart-modal { margin: auto; width: min(94vw, 1400px); max-height: 92dvh; padding: 1.5rem; border: 1px solid var(--dash-border); border-radius: 12px; color: var(--dash-text); overflow: auto; }
+.chart-modal { margin: auto; width: min(94vw, 1400px); max-height: 92dvh; padding: 1.5rem; border: 1px solid var(--dash-border); border-radius: 12px; color: var(--dash-text); overflow: auto; box-shadow: var(--dash-shadow-md); }
 .chart-modal::backdrop { background: rgb(5 12 18 / 78%); }
 .chart-modal .sensitivity-plot { height: min(60dvh, 650px); }
 .chart-modal .heatmap-plot { max-height: min(62dvh, 720px); }

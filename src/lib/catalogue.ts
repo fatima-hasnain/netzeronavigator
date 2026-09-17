@@ -49,6 +49,24 @@ export function sourceBucket(model: CatalogueModel): string {
   return 'pilot run export'
 }
 
+/** Output names come from several source pipelines with no shared naming convention:
+ * SNAKE_CASE ids, hyphenated variants, raw EnergyPlus meter names ("Electricity:Facility"),
+ * or already human-written strings ("Aggregate space heating demand"). This is a
+ * best-effort display transform for the catalogue cards, not a lookup table like
+ * i18n/t.ts (which only covers known manifest feature ids and would mangle acronyms
+ * like "TEDI" that don't appear in it). */
+const OUTPUT_NAME_ACRONYMS = new Set(['PV', 'NG', 'DHW', 'HVAC', 'TEDI', 'TEUI', 'TED', 'TEU', 'EUI', 'GHGI'])
+export function humanizeOutputName(raw: string): string {
+  if (/[a-z]/.test(raw) && / /.test(raw)) return raw
+  const spaced = raw.replace(/[:_-]+/g, ' ').replace(/([a-z0-9])([A-Z])/g, '$1 $2').trim()
+  return spaced
+    .split(/\s+/)
+    .map(w => (OUTPUT_NAME_ACRONYMS.has(w.toUpperCase()) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+    .join(' ')
+}
+
+export const MAX_OUTPUT_NAMES_SHOWN = 3
+
 export function filterModels(models: CatalogueModel[], search: string, archetype: string, location: string, status: string) {
   return models.filter(m => (!archetype || normalizeArchetype(m.archetype) === archetype) && (!location || m.location === location) &&
     (!status || m.status === status || m.validationStatus === status) &&
