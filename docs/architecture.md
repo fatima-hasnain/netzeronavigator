@@ -10,7 +10,7 @@ The prediction pipeline is:
 
 ## Model files and discovery
 
-`public/models/` contains each surrogate under its ID, currently `20200224/`. Each directory has `_manifest.json`; model folders contain `model.json` and weight shards.
+Prediction-ready bundles live under `public/models/`, including `20200224/`. Each bundle has `_manifest.json`; model folders contain `model.json` and weight shards. Copying a folder alone does not register a model: the route first checks its entry in `public/models/catalog.json`. Available entries load their manifests; other entries open metadata-only previews. See [Catalogue and model discovery](#catalogue-and-model-discovery) and the [model catalogue guide](MODEL_CATALOGUE.md) for registration and readiness checks.
 
 `src/lib/assetUrls.ts` provides `manifestUrl()` and `tfModelJsonUrl()`. The `/s/:surrogateId` route supplies the model directory name, and the manifest's `tf-models[].path` identifies each `model.json`. `VITE_MODELS_BASE` can redirect these URLs to another host.
 
