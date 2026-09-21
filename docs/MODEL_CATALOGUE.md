@@ -46,10 +46,10 @@ Example conditional estimates: North WWR mean 0.4064497423, scale 0.2040727575; 
 
 ## Regeneration
 
-From the dashboard directory on this installation:
+Optional maintainer task, not an installation step. The committed assets already support normal development and prediction. Regeneration requires a separate NZN pipeline checkout containing the archived source Git ref and the original legacy browser exports; neither source archive is included in this Explorer repository. Replace both example paths below with directories you have obtained separately, then run from the Explorer root:
 
 ```powershell
-npm.cmd run catalog -- --repository ../mitacs-project/NZN --legacy ../NZN/core_interface
+npm.cmd run catalog -- --repository "C:/path/to/pipeline/NZN" --legacy "C:/path/to/legacy/core_interface"
 npm.cmd test
 npm.cmd run test:recovery
 npm.cmd run lint

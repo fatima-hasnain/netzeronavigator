@@ -4,25 +4,26 @@ Net Zero Navigator is a browser-based dashboard for exploring building-energy su
 
 > **Screenshot placeholder:** Add an Explorer screenshot showing the input controls and visualization views here.
 
-## Setup
+## Download and setup
 
-Install Node.js 22.12 or newer, with npm. From the `netzeronavigator` project root, run:
+**Clone the published Explorer branch:** [GitHub: fatima-ui](https://github.com/fatima-hasnain/netzeronavigator/tree/fatima-ui). The default `main` branch does not contain this complete Explorer handover.
+
+Prerequisites: **Git**, **Node.js 22.12 or newer with npm**, and a modern browser. A clean GitHub clone was verified with Node.js 24.20.0 and npm 11.19.0 on Windows. Installers: [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/en/download).
 
 ```bash
-npm install
+git clone --single-branch --branch fatima-ui https://github.com/fatima-hasnain/netzeronavigator.git
+cd netzeronavigator
+npm ci
 npm run dev
 ```
 
-Open **http://localhost:5173** and choose a prediction-ready model from the catalogue. Use **localhost rather than 127.0.0.1**; if Vite reports another port, use that port with localhost.
+Open **http://localhost:5173** and choose a prediction-ready model. Use **localhost rather than 127.0.0.1**; if Vite reports another port, use that port with localhost. Stop with **Ctrl+C**; restart from the project directory with `npm run dev`.
 
-If Windows PowerShell blocks npm because of script execution restrictions, use `npm.cmd`:
+If Windows PowerShell blocks npm scripts, use `npm.cmd ci` and `npm.cmd run dev`; use `npx.cmd` instead of `npx` for checks. No execution-policy change is needed.
 
-```powershell
-npm.cmd install
-npm.cmd run dev
-```
+**All JavaScript libraries are declared in [package.json](package.json); [package-lock.json](package-lock.json) records the exact dependency tree.** `npm ci` installs them together. This browser Explorer does not require Python, pip, EnergyPlus, Git LFS, or an Anthropic API key. Those requirements belong to the separate Streamlit AI dashboard. The five runnable models and their weight shards are included in [public/models](public/models).
 
-Use `npm.cmd` and `npx.cmd` instead of `npm` and `npx` for the development checks below too.
+Read the **[new-laptop and development guide](docs/DEVELOPMENT_SETUP.md)** for updates, library descriptions, production preview, optional configuration, and verification limits. **Security caveat:** the committed dependency tree reported 16 npm audit findings during this handover; see [dependency audit](docs/DEVELOPMENT_SETUP.md#dependency-audit). Dependency pins have not been changed.
 
 ## Features
 
@@ -46,6 +47,8 @@ Use `npm.cmd` and `npx.cmd` instead of `npm` and `npx` for the development check
 | `docs/` | Architecture, model catalogue and validation, and integration guides. |
 
 ## Documentation
+
+- [New-laptop and development setup](docs/DEVELOPMENT_SETUP.md): Clone the right branch, install all libraries, run, update, and verify the Explorer.
 
 - [Architecture](docs/architecture.md): Prediction flow, visualization design, model discovery, and known limitations.
 - [Model catalogue](docs/MODEL_CATALOGUE.md): Model sources, readiness checks, transfer-model recovery, and catalogue regeneration.
